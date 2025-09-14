@@ -4,12 +4,13 @@ namespace App\Models;
 
 use App\Constants\DriverStatus;
 use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Driver extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     const string IMAGE = 'image';
 

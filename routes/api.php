@@ -15,26 +15,28 @@ use App\Http\Controllers\Api\AuthController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return response()->json([
-        'status' => 1,
-        'message' => trans('http-statuses.200'),
-        'data' => new \App\Http\Resources\UserResource($request->user())
-    ]);
-});
+Route::prefix('v1')->group(function () {
 
-
-Route::prefix('auth')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/check-phone', [AuthController::class, 'checkPhone']);
-    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
-        Route::delete('/delete-account', [AuthController::class, 'deleteAccount']);
+    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        return response()->json([
+            'status' => 1,
+            'message' => trans('http-statuses.200'),
+            'data' => new \App\Http\Resources\UserResource($request->user())
+        ]);
     });
+
+
+    Route::prefix('auth')->group(function () {
+        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/check-phone', [AuthController::class, 'checkPhone']);
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get('/logout', [AuthController::class, 'logout']);
+            Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+            Route::delete('/delete-account', [AuthController::class, 'deleteAccount']);
+        });
+    });
+
 });
-
-
 
 

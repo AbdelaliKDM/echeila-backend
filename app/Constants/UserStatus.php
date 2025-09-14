@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Constants\Statuses;
+namespace App\Constants;
 
 use Illuminate\Support\Collection;
 

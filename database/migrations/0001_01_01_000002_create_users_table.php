@@ -1,8 +1,6 @@
 <?php
 
-use App\Constants\Gender;
-use App\Constants\Statuses\UserStatus;
-use App\Support\Enum\UserTypes;
+use App\Constants\UserStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

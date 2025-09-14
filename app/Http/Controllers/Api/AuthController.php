@@ -34,13 +34,12 @@ class AuthController extends Controller
         'device_token' => $request->device_token
       ]);
 
-      $passenger = Passenger::create([
+      Passenger::create([
         'user_id' => $user->id,
       ]);
 
-      if ($request->hasFile(Passenger::IMAGE)) {
-        storeWebPWithSpatie($passenger, $request->file(Passenger::IMAGE), Passenger::IMAGE);
-      }
+      $user->load('passenger', 'driver', 'federation');
+
       return $this->successResponse(new UserResource($user));
 
     } catch (Exception $e) {
@@ -74,13 +73,15 @@ class AuthController extends Controller
 
       $token = $user->createToken($this->random(8))->plainTextToken;
 
+      $user->load('passenger', 'driver', 'federation');
+
       return $this->successResponse([
         'token' => $token,
         'user' => new UserResource($user),
       ]);
 
     } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage(), $e->getCode());
+      return $this->errorResponse($e->getMessage());
     }
   }
 
@@ -137,10 +138,12 @@ class AuthController extends Controller
         'password' => Hash::make($request->new_password)
       ]);
 
+      //$user->tokens()->delete();
+
       return $this->successResponse();
 
     } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage(), $e->getCode());
+      return $this->errorResponse($e->getMessage());
     }
   }
 
@@ -155,7 +158,7 @@ class AuthController extends Controller
       return $this->successResponse();
 
     } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage(), $e->getCode());
+      return $this->errorResponse($e->getMessage());
     }
   }
 }

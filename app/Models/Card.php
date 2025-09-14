@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Card extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     const string FRONT_IMAGE = 'front_image';
     const string BACK_IMAGE = 'back_image';
