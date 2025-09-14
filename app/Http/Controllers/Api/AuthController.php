@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Api\Auth\LoginRequest;
 use App\Http\Requests\Api\Auth\RegisterRequest;
+use Kreait\Firebase\Exception\FirebaseException;
 
 class AuthController extends Controller
 {
@@ -43,7 +44,7 @@ class AuthController extends Controller
       return $this->successResponse(new UserResource($user));
 
     } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage());
+      return $this->errorResponse($e->getMessage(), $e->getCode());
     }
   }
 
@@ -52,14 +53,20 @@ class AuthController extends Controller
     $this->validateRequest($request);
 
     try {
+
       $firebase_user = $this->getFirebaseUser($request->id_token);
+
+      if ($firebase_user instanceof FirebaseException) {
+        throw new Exception($firebase_user->getMessage(), 422);
+      }
+
       $user = User::where('phone', $request->phone)->first();
 
       if (!$user) {
         throw new Exception('User not found', 404);
       }
 
-      if ($firebase_user->phoneNumber != $request->phone) {
+      if ($firebase_user?->phoneNumber != $request->phone) {
         throw new Exception('Phone number does not match with Firebase user', 409);
       }
 
@@ -81,15 +88,15 @@ class AuthController extends Controller
       ]);
 
     } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage());
+      return $this->errorResponse($e->getMessage(), $e->getCode());
     }
   }
 
-    public function logout(Request $request)
+  public function logout(Request $request)
   {
     try {
       $user = $request->user();
-      
+
       if ($user) {
         $request->user()->currentAccessToken()->delete();
         $user->update(['device_token' => null]);
@@ -98,7 +105,7 @@ class AuthController extends Controller
       return $this->successResponse();
 
     } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage());
+      return $this->errorResponse($e->getMessage(), $e->getCode());
     }
   }
 
@@ -116,7 +123,7 @@ class AuthController extends Controller
       ]);
 
     } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage());
+      return $this->errorResponse($e->getMessage(), $e->getCode());
     }
   }
 
@@ -129,7 +136,7 @@ class AuthController extends Controller
 
     try {
       $user = $request->user();
-      
+
       if (!Hash::check($request->old_password, $user->password)) {
         throw new Exception('Old password is incorrect', 401);
       }
@@ -143,7 +150,7 @@ class AuthController extends Controller
       return $this->successResponse();
 
     } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage());
+      return $this->errorResponse($e->getMessage(), $e->getCode());
     }
   }
 
@@ -158,7 +165,7 @@ class AuthController extends Controller
       return $this->successResponse();
 
     } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage());
+      return $this->errorResponse($e->getMessage(), $e->getCode());
     }
   }
 }

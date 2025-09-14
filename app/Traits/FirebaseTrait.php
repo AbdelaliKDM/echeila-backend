@@ -88,22 +88,30 @@ trait FirebaseTrait
 
   protected function getRealtimeData($reference)
   {
-    $factory = (new Factory)
-      ->withServiceAccount(base_path(env('GOOGLE_APPLICATION_CREDENTIALS')))
-      ->withDatabaseUri('https://gs-retour-default-rtdb.firebaseio.com');
 
-    $database = $factory->createDatabase();
-    $reference = $database->getReference($reference);
-    $snapshot = $reference->getSnapshot()->getValue();
-    return $snapshot;
+    try {
+      $factory = (new Factory)
+        ->withServiceAccount(base_path(env('GOOGLE_APPLICATION_CREDENTIALS')))
+        ->withDatabaseUri('https://gs-retour-default-rtdb.firebaseio.com');
+
+      $database = $factory->createDatabase();
+      $reference = $database->getReference($reference);
+      $snapshot = $reference->getSnapshot()->getValue();
+      return $snapshot;
+
+    } catch (FirebaseException $e) {
+      return $e;
+    }
   }
 
-  protected function generateIdToken($uid){
+  protected function generateIdToken($uid)
+  {
+    try {
 
       $auth = Firebase::auth();
       $token = $auth->createCustomToken($uid);
       $response = Http::withUrlParameters(['API_KEY' => env('FIREBASE_API_KEY')])
-      ->post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key={API_KEY}', [
+        ->post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key={API_KEY}', [
           'token' => $token->toString(),
           'returnSecureToken' => true
         ]);
@@ -111,18 +119,30 @@ trait FirebaseTrait
       if ($response->ok()) {
         return $response->json()['idToken'];
       }
+
+    } catch (FirebaseException $e) {
+      return $e;
+    }
   }
 
-  protected function getFirebaseUser($identifier){
-    $auth = Firebase::auth();
+  protected function getFirebaseUser($identifier)
+  {
 
-    if (is_string($identifier) && strpos($identifier, '.') !== false) {
-      $verifiedIdToken = $auth->verifyIdToken($identifier);
-      $uid = $verifiedIdToken->claims()->get('sub');
-    } else {
-      $uid = $identifier;
+    try {
+
+      $auth = Firebase::auth();
+
+      if (is_string($identifier) && strpos($identifier, '.') !== false) {
+        $verifiedIdToken = $auth->verifyIdToken($identifier);
+        $uid = $verifiedIdToken->claims()->get('sub');
+      } else {
+        $uid = $identifier;
+      }
+
+      return $auth->getUser($uid);
+
+    } catch (FirebaseException $e) {
+      return $e;
     }
-
-    return $auth->getUser($uid);
   }
 }
