@@ -39,9 +39,14 @@ class AuthController extends Controller
         'user_id' => $user->id,
       ]);
 
+      $token = $user->createToken($this->random(8))->plainTextToken;
+
       $user->load('passenger', 'driver', 'federation');
 
-      return $this->successResponse(new UserResource($user));
+      return $this->successResponse([
+        'token' => $token,
+        'user' => new UserResource($user),
+      ]);
 
     } catch (Exception $e) {
       return $this->errorResponse($e->getMessage(), $e->getCode());
