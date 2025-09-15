@@ -28,7 +28,7 @@ trait ApiResponseTrait
     return $validator->validated();
   }
 
-  protected function successResponse($data = null, $message = null , $statusCode = 200): JsonResponse
+  protected function successResponse($data = null, $message = null, $statusCode = 200): JsonResponse
   {
     $message = $message ?? trans("http-statuses.{$statusCode}");
 
@@ -82,7 +82,7 @@ trait ApiResponseTrait
 
   protected function errorResponse($message = null, $statusCode = 400): JsonResponse
   {
-
+    $statusCode = empty($statusCode) ? 400 : $statusCode;
     $message = $message ?? trans("http-statuses.{$statusCode}");
 
     return response()->json([

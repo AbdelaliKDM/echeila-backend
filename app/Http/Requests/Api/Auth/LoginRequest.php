@@ -22,9 +22,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => 'required|string',
+            'phone' => 'required|string|regex:/^\+\d{1,3}\d{9}$/|exists:users,phone',
             'password' => 'required|string',
-            'id_token' => 'required|string',
             'device_token' => 'nullable|string',
         ];
     }

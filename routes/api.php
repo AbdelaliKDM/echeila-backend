@@ -30,6 +30,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/register', [AuthController::class, 'register']);
         Route::post('/check-phone', [AuthController::class, 'checkPhone']);
+        Route::post('/forget-password', [AuthController::class, 'forgetPassword']);
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('/logout', [AuthController::class, 'logout']);
             Route::post('/reset-password', [AuthController::class, 'resetPassword']);

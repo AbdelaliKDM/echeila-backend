@@ -29,6 +29,16 @@ class AuthController extends Controller
 
     try {
 
+      $firebase_user = $this->getFirebaseUser($request->id_token);
+
+      if ($firebase_user instanceof FirebaseException) {
+        throw new Exception($firebase_user->getMessage(), 422);
+      }
+
+      if ($firebase_user?->phoneNumber != $request->phone) {
+        throw new Exception('Phone number does not match with Firebase user', 409);
+      }
+
       $user = User::create([
         'phone' => $request->phone,
         'password' => Hash::make($request->password),
@@ -41,7 +51,7 @@ class AuthController extends Controller
 
       $token = $user->createToken($this->random(8))->plainTextToken;
 
-      $user->load('passenger', 'driver', 'federation');
+      $user->refresh()->load('passenger', 'driver', 'federation');
 
       return $this->successResponse([
         'token' => $token,
@@ -59,21 +69,7 @@ class AuthController extends Controller
 
     try {
 
-      $firebase_user = $this->getFirebaseUser($request->id_token);
-
-      if ($firebase_user instanceof FirebaseException) {
-        throw new Exception($firebase_user->getMessage(), 422);
-      }
-
       $user = User::where('phone', $request->phone)->first();
-
-      if (!$user) {
-        throw new Exception('User not found', 404);
-      }
-
-      if ($firebase_user?->phoneNumber != $request->phone) {
-        throw new Exception('Phone number does not match with Firebase user', 409);
-      }
 
       if (!Hash::check($request->password, $user->password)) {
         throw new Exception('Invalid credentials', 401);
@@ -144,6 +140,40 @@ class AuthController extends Controller
 
       if (!Hash::check($request->old_password, $user->password)) {
         throw new Exception('Old password is incorrect', 401);
+      }
+
+      $user->update([
+        'password' => Hash::make($request->new_password)
+      ]);
+
+      //$user->tokens()->delete();
+
+      return $this->successResponse();
+
+    } catch (Exception $e) {
+      return $this->errorResponse($e->getMessage(), $e->getCode());
+    }
+  }
+
+    public function forgetPassword(Request $request)
+  {
+    $request->validate([
+      'id_token' => 'required|string',
+      'new_password' => 'required|string|min:6|confirmed'
+    ]);
+
+    try {
+
+      $firebase_user = $this->getFirebaseUser($request->id_token);
+
+      if ($firebase_user instanceof FirebaseException) {
+        throw new Exception($firebase_user->getMessage(), 422);
+      }
+
+      $user = User::where('phone', $firebase_user->phoneNumber)->first();
+
+      if (!$user) {
+        throw new Exception('User not found', 404);
       }
 
       $user->update([
