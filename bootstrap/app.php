@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
     $middleware->api([
       \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+      \App\Http\Middleware\SetLocaleFromHeader::class,
     ]);
   })
   ->withExceptions(function (Exceptions $exceptions) {

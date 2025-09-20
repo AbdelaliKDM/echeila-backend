@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasGoogleTranslationTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class VehicleModel extends Model
 {
-    use HasFactory;
+    use HasFactory, HasGoogleTranslationTrait;
 
     protected $table = 'models';
     
@@ -18,6 +19,10 @@ class VehicleModel extends Model
 
     protected $casts = [
         'name' => 'json',
+    ];
+
+    protected array $translatable = [
+        'name',
     ];
 
     public function brand()

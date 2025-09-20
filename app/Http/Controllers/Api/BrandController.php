@@ -3,31 +3,30 @@
 namespace App\Http\Controllers\Api;
 
 use Exception;
-use App\Models\Wilaya;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponseTrait;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\WilayaResource;
+use App\Http\Resources\BrandResource;
 
-class WilayaController extends Controller
+class BrandController extends Controller
 {
     use ApiResponseTrait;
 
     /**
-     * Get all wilayas
+     * Get all brands
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
         try {
-            $wilayas = Wilaya::all();
+            $brands = Brand::all();
 
-            return $this->successResponse(WilayaResource::collection($wilayas));
+            return $this->successResponse(BrandResource::collection($brands));
 
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), $e->getCode());
         }
     }
-
 }

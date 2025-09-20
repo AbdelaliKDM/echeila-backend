@@ -7,6 +7,7 @@ use App\Models\SeatPrice;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponseTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SeatPriceResource;
 
 class SeatPriceController extends Controller
 {
@@ -22,7 +23,7 @@ class SeatPriceController extends Controller
         try {
             $seatPrices = SeatPrice::with(['startingWilaya', 'arrivalWilaya'])->get();
 
-            return $this->successResponse($seatPrices);
+            return $this->successResponse(SeatPriceResource::collection($seatPrices));
 
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), $e->getCode());
@@ -42,7 +43,7 @@ class SeatPriceController extends Controller
         try {
             $seatPrice = SeatPrice::with(['startingWilaya', 'arrivalWilaya'])->where('starting_wilaya_id', $startingWilayaId)->where('arrival_wilaya_id', $arrivalWilayaId)->firstOrFail();
 
-            return $this->successResponse($seatPrice);
+            return $this->successResponse(new SeatPriceResource($seatPrice));
 
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), $e->getCode());

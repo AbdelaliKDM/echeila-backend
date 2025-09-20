@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\WilayaController;
 use App\Http\Controllers\Api\SeatPriceController;
+use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Api\VehicleModelController;
+use App\Http\Controllers\Api\ColorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +52,21 @@ Route::prefix('v1')->group(function () {
     Route::prefix('seat-prices')->group(function () {
         Route::get('/', [SeatPriceController::class, 'index']);
         Route::get('/{startingWilayaId}/{arrivalWilayaId}', [SeatPriceController::class, 'show']);
+    });
+
+    // Brand routes
+    Route::prefix('brands')->group(function () {
+        Route::get('/', [BrandController::class, 'index']);
+    });
+
+    // Vehicle Model routes
+    Route::prefix('models')->group(function () {
+        Route::get('/', [VehicleModelController::class, 'index']);
+    });
+
+    // Color routes
+    Route::prefix('colors')->group(function () {
+        Route::get('/', [ColorController::class, 'index']);
     });
 
 });

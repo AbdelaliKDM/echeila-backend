@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasGoogleTranslationTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Wilaya extends Model
 {
-    use HasFactory;
+    use HasFactory, HasGoogleTranslationTrait;
 
     protected $fillable = [
         'name',
@@ -19,6 +20,10 @@ class Wilaya extends Model
         'name' => 'json',
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
+    ];
+
+    protected array $translatable = [
+        'name',
     ];
 
     public function startingSeatPrices()
