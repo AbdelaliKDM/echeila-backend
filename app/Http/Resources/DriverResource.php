@@ -25,8 +25,12 @@ class DriverResource extends JsonResource
             'status' => $this->status,
             'image' => $this->getFirstMediaUrl('image'),
             'federation' => new FederationResource($this->whenLoaded('federation')),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'vehicle' => new VehicleResource($this->whenLoaded('vehicle')),
+            'services' => ServiceResource::collection($this->whenLoaded('services')),
+            'cards' => CardResource::collection($this->whenLoaded('cards')),
+            
+            //'created_at' => $this->created_at,
+            //'updated_at' => $this->updated_at,
         ];
     }
 }

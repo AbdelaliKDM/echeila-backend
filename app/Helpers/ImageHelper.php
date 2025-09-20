@@ -1,19 +1,20 @@
 <?php
 
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Encoders\WebpEncoder;
+use Intervention\Image\Laravel\Facades\Image;
 use Symfony\Component\HttpFoundation\File\File; // Parent of UploadedFile
 
 if (!function_exists('storeWebPWithSpatie')) {
-    function storeWebPWithSpatie($model, File $file, string $collection = 'default', int $quality = 85): mixed
+    function storeWebPWithSpatie($model, File $file, string $collection = 'default'): mixed
     {
         if (!file_exists($file->getRealPath())) {
             return null;
         }
 
         try {
-            $webp = Image::make($file->getRealPath())->encode('webp', $quality);
+            $webp = Image::read($file->getRealPath())->encode(new WebpEncoder());
         } catch (\Exception $e) {
             return null;
         }
@@ -36,14 +37,14 @@ if (!function_exists('storeWebPWithSpatie')) {
 }
 
 if (!function_exists('storeWebP')) {
-    function storeWebP(File $file, string $directory = 'uploads', int $quality = 85): ?string
+    function storeWebP(File $file, string $directory = 'uploads'): ?string
     {
         if (!file_exists($file->getRealPath())) {
             return null;
         }
 
         try {
-            $webp = Image::make($file->getRealPath())->encode('webp', $quality);
+            $webp = Image::read($file->getRealPath())->encode(new WebpEncoder());
         } catch (\Exception $e) {
             return null;
         }

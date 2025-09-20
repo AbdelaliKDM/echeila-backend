@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\SeatPriceController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\VehicleModelController;
 use App\Http\Controllers\Api\ColorController;
+use App\Http\Controllers\Api\PassengerController;
+use App\Http\Controllers\Api\DriverController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +45,7 @@ Route::prefix('v1')->group(function () {
         });
     });
 
+
     // Wilaya routes
     Route::prefix('wilayas')->group(function () {
         Route::get('/', [WilayaController::class, 'index']);
@@ -67,6 +70,21 @@ Route::prefix('v1')->group(function () {
     // Color routes
     Route::prefix('colors')->group(function () {
         Route::get('/', [ColorController::class, 'index']);
+    });
+
+
+        // Protected routes
+    Route::middleware('auth:sanctum')->group(function () {
+        // Passenger routes
+        Route::prefix('passengers')->group(function () {
+            Route::patch('/', [PassengerController::class, 'update']);
+        });
+
+        // Driver routes
+        Route::prefix('drivers')->group(function () {
+            Route::post('/', [DriverController::class, 'store']);
+            Route::patch('/', [DriverController::class, 'update']);
+        });
     });
 
 });
