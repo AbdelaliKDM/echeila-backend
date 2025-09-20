@@ -14,16 +14,15 @@ trait ImageUpload
      * @param mixed $model The model instance (must use Spatie MediaLibrary)
      * @param File|UploadedFile $file The image file to upload
      * @param string $collection The media collection name (default: 'default')
-     * @param int $quality WebP quality (default: 85)
      * @return mixed The created media instance or null on failure
      */
-    public function uploadImage($model, $file, string $collection = 'image', int $quality = 85)
+    public function uploadImage($model, $file, string $collection = 'image')
     {
         if (!$file instanceof File) {
             return null;
         }
 
-        return storeWebPWithSpatie($model, $file, $collection, $quality);
+        return storeWebPWithSpatie($model, $file, $collection);
     }
 
     /**
@@ -33,10 +32,9 @@ trait ImageUpload
      * @param Request $request The HTTP request instance
      * @param string $fieldName The request field name containing the file
      * @param string $collection The media collection name (default: 'default')
-     * @param int $quality WebP quality (default: 85)
      * @return mixed The created media instance or null on failure
      */
-    public function uploadImageFromRequest($model, Request $request, string $fieldName = 'image', string $collection = 'image', int $quality = 85)
+    public function uploadImageFromRequest($model, Request $request, string $fieldName = 'image', string $collection = 'image')
     {
         if (!$request->hasFile($fieldName)) {
             return null;
@@ -48,7 +46,7 @@ trait ImageUpload
             return null;
         }
 
-        return $this->uploadImage($model, $file, $collection, $quality);
+        return $this->uploadImage($model, $file, $collection);
     }
 
     /**
@@ -58,15 +56,14 @@ trait ImageUpload
      * @param Request $request The HTTP request instance
      * @param array $fieldNames Array of request field names containing files
      * @param string $collection The media collection name (default: 'default')
-     * @param int $quality WebP quality (default: 85)
      * @return array Array of created media instances
      */
-    public function uploadMultipleImagesFromRequest($model, Request $request, array $fieldNames, string $collection = 'default', int $quality = 85): array
+    public function uploadMultipleImagesFromRequest($model, Request $request, array $fieldNames, string $collection = 'default'): array
     {
         $uploadedMedia = [];
 
         foreach ($fieldNames as $fieldName) {
-            $media = $this->uploadImageFromRequest($model, $request, $fieldName, $collection, $quality);
+            $media = $this->uploadImageFromRequest($model, $request, $fieldName, $collection);
             if ($media) {
                 $uploadedMedia[$fieldName] = $media;
             }
@@ -80,16 +77,15 @@ trait ImageUpload
      *
      * @param File|UploadedFile $file The image file to upload
      * @param string $directory Storage directory (default: 'uploads')
-     * @param int $quality WebP quality (default: 85)
      * @return string|null The stored file path or null on failure
      */
-    public function uploadImageToStorage($file, string $directory = 'uploads', int $quality = 85): ?string
+    public function uploadImageToStorage($file, string $directory = 'uploads'): ?string
     {
         if (!$file instanceof File) {
             return null;
         }
 
-        return storeWebP($file, $directory, $quality);
+        return storeWebP($file, $directory);
     }
 
     /**
@@ -98,10 +94,9 @@ trait ImageUpload
      * @param Request $request The HTTP request instance
      * @param string $fieldName The request field name containing the file
      * @param string $directory Storage directory (default: 'uploads')
-     * @param int $quality WebP quality (default: 85)
      * @return string|null The stored file path or null on failure
      */
-    public function uploadImageFromRequestToStorage(Request $request, string $fieldName, string $directory = 'uploads', int $quality = 85): ?string
+    public function uploadImageFromRequestToStorage(Request $request, string $fieldName, string $directory = 'uploads'): ?string
     {
         if (!$request->hasFile($fieldName)) {
             return null;
@@ -113,6 +108,6 @@ trait ImageUpload
             return null;
         }
 
-        return $this->uploadImageToStorage($file, $directory, $quality);
+        return $this->uploadImageToStorage($file, $directory);
     }
 }
