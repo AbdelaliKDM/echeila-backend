@@ -60,6 +60,11 @@ class Driver extends Model implements HasMedia
         return $this->hasMany(Trip::class);
     }
 
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+
     public function transactions()
     {
         return $this->morphMany(Transaction::class, 'entity');
