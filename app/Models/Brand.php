@@ -11,6 +11,10 @@ class Brand extends Model
 
     protected $fillable = ['name'];
 
+    protected $casts = [
+        'name' => 'json',
+    ];
+
     public function models()
     {
         return $this->hasMany(VehicleModel::class);

@@ -14,6 +14,10 @@ class Color extends Model
         'code',
     ];
 
+    protected $casts = [
+        'name' => 'json',
+    ];
+
     public function vehicles()
     {
         return $this->hasMany(Vehicle::class);

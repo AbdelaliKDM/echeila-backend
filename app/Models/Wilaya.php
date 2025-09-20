@@ -16,6 +16,7 @@ class Wilaya extends Model
     ];
 
     protected $casts = [
+        'name' => 'json',
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
     ];
