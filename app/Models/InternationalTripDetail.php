@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Constants\ArrivalPlace;
+use App\Constants\Direction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,8 +12,8 @@ class InternationalTripDetail extends Model
 
     protected $fillable = [
         'trip_id',
+        'direction',
         'starting_place',
-        'arrival_place',
         'starting_time',
         'arrival_time',
         'total_seats',

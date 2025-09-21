@@ -22,6 +22,8 @@ return [
     'water_transport' => 'نقل المياه',
     'paid_driving' => 'القيادة المدفوعة',
     'international_trip' => 'رحلة دولية',
+    'mrt_trip' => 'رحلة موريتانيا',
+    'esp_trip' => 'رحلة إسبانيا',
 
     // Ride Type
     'shared' => 'مشتركة',
@@ -50,6 +52,10 @@ return [
     // Arrival Place
     'mauritania' => 'موريتانيا',
     'spain' => 'إسبانيا',
+
+    // Direction
+    'from' => 'من',
+    'to' => 'إلى',
 
     // Transaction Type
     'reservation' => 'حجز',

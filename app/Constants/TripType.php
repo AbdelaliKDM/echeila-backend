@@ -11,7 +11,8 @@ class TripType
     const CARGO_TRANSPORT = 'cargo_transport';
     const WATER_TRANSPORT = 'water_transport';
     const PAID_DRIVING = 'paid_driving';
-    const INTERNATIONAL_TRIP = 'international_trip';
+    const MRT_TRIP = 'mrt_trip';
+    const ESP_TRIP = 'esp_trip';
 
     public static function all(): array
     {
@@ -21,7 +22,8 @@ class TripType
             self::CARGO_TRANSPORT,
             self::WATER_TRANSPORT,
             self::PAID_DRIVING,
-            self::INTERNATIONAL_TRIP,
+            self::MRT_TRIP,
+            self::ESP_TRIP,
         ];
     }
 
@@ -33,7 +35,8 @@ class TripType
             self::CARGO_TRANSPORT => __('app.cargo_transport'),
             self::WATER_TRANSPORT => __('app.water_transport'),
             self::PAID_DRIVING => __('app.paid_driving'),
-            self::INTERNATIONAL_TRIP => __('app.international_trip'),
+            self::MRT_TRIP => __('app.mrt_trip'),
+            self::ESP_TRIP => __('app.esp_trip'),
         ];
     }
 
@@ -45,7 +48,8 @@ class TripType
             self::CARGO_TRANSPORT => 'info',
             self::WATER_TRANSPORT => 'secondary',
             self::PAID_DRIVING => 'success',
-            self::INTERNATIONAL_TRIP => 'dark',
+            self::MRT_TRIP => 'dark',
+            self::ESP_TRIP => 'danger',
         ];
     }
 

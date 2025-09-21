@@ -22,6 +22,8 @@ return [
     'water_transport' => 'Transport d\'eau',
     'paid_driving' => 'Conduite payée',
     'international_trip' => 'Voyage international',
+    'mrt_trip' => 'Voyage en Mauritanie',
+    'esp_trip' => 'Voyage en Espagne',
 
     // Ride Type
     'shared' => 'Partagé',
@@ -50,6 +52,10 @@ return [
     // Arrival Place
     'mauritania' => 'Mauritanie',
     'spain' => 'Espagne',
+
+    // Direction
+    'from' => 'De',
+    'to' => 'Vers',
 
     // Transaction Type
     'reservation' => 'Réservation',
