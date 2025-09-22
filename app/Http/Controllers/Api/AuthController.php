@@ -122,8 +122,8 @@ class AuthController extends Controller
         'driver.federation',
         'driver.services',
         'driver.cards',
-        'vehicle.color',
-        'vehicle.model.brand'
+        'driver.vehicle.color',
+        'driver.vehicle.model.brand'
       );
 
       return $this->successResponse(new UserResource($user));
