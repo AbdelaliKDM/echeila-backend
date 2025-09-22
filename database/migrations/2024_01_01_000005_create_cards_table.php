@@ -13,6 +13,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('driver_id')->constrained()->onDelete('cascade');
             $table->enum('type', CardType::all());
+            $table->string('number')->unique();
             $table->timestamp('expiration_date');
             $table->timestamps();
         });

@@ -76,6 +76,7 @@ class DriverController extends Controller
             $nationalIdCard = Card::create([
                 'driver_id' => $driver->id,
                 'type' => CardType::NATIONAL_ID,
+                'number' => $request->input('cards.national_id.number'),
                 'expiration_date' => $request->input('cards.national_id.expiration_date'),
             ]);
 
@@ -92,6 +93,7 @@ class DriverController extends Controller
             $drivingLicenseCard = Card::create([
                 'driver_id' => $driver->id,
                 'type' => CardType::DRIVING_LICENSE,
+                'number' => $request->input('cards.driving_license.number'),
                 'expiration_date' => $request->input('cards.driving_license.expiration_date'),
             ]);
 

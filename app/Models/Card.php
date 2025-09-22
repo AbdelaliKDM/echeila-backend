@@ -17,6 +17,7 @@ class Card extends Model implements HasMedia
     protected $fillable = [
         'driver_id',
         'type',
+        'number',
         'expiration_date',
     ];
 
