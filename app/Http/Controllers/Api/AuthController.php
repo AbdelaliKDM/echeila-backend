@@ -110,6 +110,29 @@ class AuthController extends Controller
     }
   }
 
+  public function user(Request $request)
+  {
+    try {
+
+      $user = $request->user();
+
+      $user->load(
+        'passenger',
+        'federation',
+        'driver.federation',
+        'driver.services',
+        'driver.cards',
+        'vehicle.color',
+        'vehicle.model.brand'
+      );
+
+      return $this->successResponse(new UserResource($user));
+
+    } catch (Exception $e) {
+      return $this->errorResponse($e->getMessage(), $e->getCode());
+    }
+  }
+
   public function checkPhone(Request $request)
   {
     $request->validate([
@@ -155,7 +178,7 @@ class AuthController extends Controller
     }
   }
 
-    public function forgetPassword(Request $request)
+  public function forgetPassword(Request $request)
   {
     $request->validate([
       'id_token' => 'required|string',

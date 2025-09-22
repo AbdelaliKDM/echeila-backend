@@ -3,13 +3,14 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\WilayaController;
-use App\Http\Controllers\Api\SeatPriceController;
 use App\Http\Controllers\Api\BrandController;
-use App\Http\Controllers\Api\VehicleModelController;
 use App\Http\Controllers\Api\ColorController;
-use App\Http\Controllers\Api\PassengerController;
 use App\Http\Controllers\Api\DriverController;
+use App\Http\Controllers\Api\WilayaController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\PassengerController;
+use App\Http\Controllers\Api\SeatPriceController;
+use App\Http\Controllers\Api\VehicleModelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,13 +25,7 @@ use App\Http\Controllers\Api\DriverController;
 
 Route::prefix('v1')->group(function () {
 
-    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-        return response()->json([
-            'status' => 1,
-            'message' => trans('http-statuses.200'),
-            'data' => new \App\Http\Resources\UserResource($request->user())
-        ]);
-    });
+    Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
 
     // Auth routes
     Route::prefix('auth')->group(function () {
@@ -43,6 +38,11 @@ Route::prefix('v1')->group(function () {
             Route::post('/reset-password', [AuthController::class, 'resetPassword']);
             Route::delete('/delete-account', [AuthController::class, 'deleteAccount']);
         });
+    });
+
+    // Temp Dashboard Routes
+    Route::prefix('dashbaord')->group(function () {
+        Route::post('/driver/update-status', [DashboardController::class, 'updateDriverStatus']);
     });
 
 
@@ -73,7 +73,7 @@ Route::prefix('v1')->group(function () {
     });
 
 
-        // Protected routes
+    // Protected routes
     Route::middleware('auth:sanctum')->group(function () {
         // Passenger routes
         Route::prefix('passengers')->group(function () {
