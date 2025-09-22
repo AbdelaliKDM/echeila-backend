@@ -18,6 +18,7 @@ class CardResource extends JsonResource
             'id' => $this->id,
             'driver_id' => $this->driver_id,
             'type' => $this->type,
+            'number' => $this->number,
             'expiration_date' => $this->expiration_date?->format('Y-m-d'),
             'front_image' => $this->getFirstMediaUrl('front_image'),
             'back_image' => $this->getFirstMediaUrl('back_image'),
