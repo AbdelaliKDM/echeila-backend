@@ -27,7 +27,7 @@ class DriverController extends Controller
     public function store(CreateDriverRequest $request): JsonResponse
     {
 
-        $this->validateRequest($request);
+        $validated = $this->validateRequest($request);
 
         try {
             DB::beginTransaction();

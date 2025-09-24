@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\DriverController;
+use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\WilayaController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\PassengerController;
@@ -84,6 +85,11 @@ Route::prefix('v1')->group(function () {
         Route::prefix('drivers')->group(function () {
             Route::post('/', [DriverController::class, 'store']);
             Route::patch('/', [DriverController::class, 'update']);
+        });
+
+        Route::prefix('trips')->group(function () {
+            Route::post('/{type}', [TripController::class, 'store']);
+            Route::get('/{type}', [TripController::class, 'index']);
         });
     });
 

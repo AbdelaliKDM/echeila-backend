@@ -29,4 +29,8 @@ class RegisterRequest extends FormRequest
         ];
     }
 
+      public function validateResolved()
+  {
+  }
+
 }

@@ -24,7 +24,7 @@ class PassengerController extends Controller
     public function update(UpdatePassengerRequest $request)
     {
 
-        $data = $this->validateRequest($request);
+        $validated = $this->validateRequest($request);
 
         try {
             $user = auth()->user();
@@ -40,7 +40,7 @@ class PassengerController extends Controller
                 $this->uploadImageFromRequest($passenger, $request);
             }
 
-            $passenger->update($data);
+            $passenger->update($validated);
             $passenger->refresh();
 
             return $this->successResponse(new PassengerResource($passenger));

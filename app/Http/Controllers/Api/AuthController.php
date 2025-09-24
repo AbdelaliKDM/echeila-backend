@@ -25,7 +25,7 @@ class AuthController extends Controller
 
   public function register(RegisterRequest $request)
   {
-    $this->validateRequest($request);
+    $validated = $this->validateRequest($request);
 
     try {
 
@@ -65,7 +65,7 @@ class AuthController extends Controller
 
   public function login(LoginRequest $request)
   {
-    $this->validateRequest($request);
+    $validated = $this->validateRequest($request);
 
     try {
 
@@ -135,7 +135,7 @@ class AuthController extends Controller
 
   public function checkPhone(Request $request)
   {
-    $request->validate([
+    $validated = $this->validateRequest($request, [
       'phone' => 'required|string'
     ]);
 
@@ -153,7 +153,7 @@ class AuthController extends Controller
 
   public function resetPassword(Request $request)
   {
-    $request->validate([
+    $validated = $this->validateRequest($request,[
       'old_password' => 'required|string',
       'new_password' => 'required|string|min:6|confirmed'
     ]);
@@ -180,7 +180,7 @@ class AuthController extends Controller
 
   public function forgetPassword(Request $request)
   {
-    $request->validate([
+    $validated = $this->validateRequest($request, [
       'id_token' => 'required|string',
       'new_password' => 'required|string|min:6|confirmed'
     ]);

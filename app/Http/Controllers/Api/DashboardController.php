@@ -18,7 +18,7 @@ class DashboardController extends Controller
 
   public function updateDriverStatus(Request $request)
   {
-    $request->validate([
+    $validated = $request->validate([
       'driver_id' => 'required|exists:drivers,id',
       'status' => 'required|in:'. DriverStatus::all()
     ]);

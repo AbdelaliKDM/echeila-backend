@@ -28,4 +28,8 @@ class UpdatePassengerRequest extends FormRequest
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
+
+    public function validateResolved()
+    {
+    }
 }
