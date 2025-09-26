@@ -22,6 +22,8 @@ class Trip extends Model
         'type',
         'status',
         'note',
+        'detailable_id',
+        'detailable_type',
     ];
 
     // Relationships
@@ -60,19 +62,15 @@ class Trip extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    // Polymorphic relationship to trip details
+    public function detailable()
+    {
+        return $this->morphTo();
+    }
+
+    // Legacy method for backward compatibility
     public function details()
     {
-        $class = match ($this->type) {
-            TripType::TAXI_RIDE => TaxiRideDetail::class,
-            TripType::CAR_RESCUE => CarRescueDetail::class,
-            TripType::CARGO_TRANSPORT => CargoTransportDetail::class,
-            TripType::WATER_TRANSPORT => WaterTransportDetail::class,
-            TripType::PAID_DRIVING => PaidDrivingDetail::class,
-            TripType::MRT_TRIP => InternationalTripDetail::class,
-            TripType::ESP_TRIP => InternationalTripDetail::class,
-            default => null,
-        };
-
-        return $class ? $this->hasOne($class) : null;
+        return $this->detailable();
     }
 }

@@ -85,7 +85,9 @@ class CreateTripRequest extends FormRequest
         return [
             // Trip details
             'driver_id' => 'required|exists:drivers,id',
-            'breakdown_point' => 'required|exists:locations,id',
+            'breakdown_point.longitude' => 'required|numeric|between:-180,180',
+            'breakdown_point.latitude' => 'required|numeric|between:-90,90',
+            'breakdown_point.name' => 'required|string|max:255',
             'delivery_time' => 'required|date|after:now',
             'malfunction_type' => ['required', 'string', Rule::in(MalfunctionType::all())],
         ];
@@ -96,7 +98,9 @@ class CreateTripRequest extends FormRequest
         return [
             // Trip details
             'driver_id' => 'required|exists:drivers,id',
-            'delivery_point' => 'required|exists:locations,id',
+            'delivery_point.longitude' => 'required|numeric|between:-180,180',
+            'delivery_point.latitude' => 'required|numeric|between:-90,90',
+            'delivery_point.name' => 'required|string|max:255',
             'delivery_time' => 'required|date|after:now',
 
             // Cargo details
@@ -112,7 +116,9 @@ class CreateTripRequest extends FormRequest
         return [
             // Trip details
             'driver_id' => 'required|exists:drivers,id',
-            'delivery_point' => 'required|exists:locations,id',
+            'delivery_point.longitude' => 'required|numeric|between:-180,180',
+            'delivery_point.latitude' => 'required|numeric|between:-90,90',
+            'delivery_point.name' => 'required|string|max:255',
             'delivery_time' => 'required|date|after:now',
             'water_type' => ['required', 'string', Rule::in(WaterType::all())],
             'quantity' => 'required|numeric|min:0.1',

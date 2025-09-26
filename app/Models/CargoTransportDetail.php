@@ -10,7 +10,6 @@ class CargoTransportDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'trip_id',
         'delivery_point',
         'delivery_time',
     ];
@@ -22,7 +21,7 @@ class CargoTransportDetail extends Model
     // Relationships
     public function trip()
     {
-        return $this->belongsTo(Trip::class);
+        return $this->morphOne(Trip::class, 'detailable');
     }
 
     public function deliveryLocation()

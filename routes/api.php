@@ -42,7 +42,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Temp Dashboard Routes
-    Route::prefix('dashbaord')->group(function () {
+    Route::prefix('dashboard')->group(function () {
         Route::post('/driver/update-status', [DashboardController::class, 'updateDriverStatus']);
     });
 

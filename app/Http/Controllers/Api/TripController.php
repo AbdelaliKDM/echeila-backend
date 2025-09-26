@@ -67,10 +67,12 @@ class TripController extends Controller
                 return $this->errorResponse('Invalid trip type', 400);
             }
 
-            $trip = $this->tripService->createTrip($type, $validated);
+            $trip = $this->tripService->createTrip($type, $validated, auth()->user());
+
+            $trip->load(['details', 'clients', 'cargos']);
 
             return $this->successResponse(
-                new TripResource($trip->load(['details', 'clients.client', 'cargos.cargo'])),
+                new TripResource($trip),
                 'Trip created successfully',
                 201
             );

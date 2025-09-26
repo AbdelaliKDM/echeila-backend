@@ -11,7 +11,6 @@ class PaidDrivingDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'trip_id',
         'starting_point',
         'arrival_point',
         'starting_time',
@@ -25,7 +24,7 @@ class PaidDrivingDetail extends Model
     // Relationships
     public function trip()
     {
-        return $this->belongsTo(Trip::class);
+        return $this->morphOne(Trip::class, 'detailable');
     }
 
     public function startingLocation()

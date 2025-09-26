@@ -11,7 +11,6 @@ class InternationalTripDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'trip_id',
         'direction',
         'starting_place',
         'starting_time',
@@ -29,7 +28,7 @@ class InternationalTripDetail extends Model
     // Relationships
     public function trip()
     {
-        return $this->belongsTo(Trip::class);
+        return $this->morphOne(Trip::class, 'detailable');
     }
 
     public function startingLocation()

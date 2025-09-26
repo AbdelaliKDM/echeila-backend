@@ -11,7 +11,6 @@ return new class extends Migration
     {
         Schema::create('international_trip_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('trip_id')->constrained()->onDelete('cascade');
             $table->enum('direction', Direction::all());
             $table->string('starting_place')->nullable();
             $table->timestamp('starting_time');

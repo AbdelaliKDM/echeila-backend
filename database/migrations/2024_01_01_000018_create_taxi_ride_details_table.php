@@ -11,7 +11,6 @@ return new class extends Migration
     {
         Schema::create('taxi_ride_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('trip_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('starting_point_id');
             $table->string('starting_point_type');
             $table->unsignedBigInteger('arrival_point_id');

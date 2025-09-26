@@ -20,7 +20,7 @@ class DashboardController extends Controller
   {
     $validated = $request->validate([
       'driver_id' => 'required|exists:drivers,id',
-      'status' => 'required|in:'. DriverStatus::all()
+      'status' => 'required|in:'. implode(',', DriverStatus::all())
     ]);
 
     try {

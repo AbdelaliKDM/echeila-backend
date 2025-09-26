@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('cargos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('passenger_id')->constrained()->onDelete('cascade');
             $table->text('description')->nullable();
             $table->decimal('weight', 8, 2)->nullable();
             $table->timestamps();

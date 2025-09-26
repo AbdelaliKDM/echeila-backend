@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('cargo_transport_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('trip_id')->constrained()->onDelete('cascade');
             $table->foreignId('delivery_point')->constrained('locations')->onDelete('cascade');
             $table->timestamp('delivery_time');
             $table->timestamps();

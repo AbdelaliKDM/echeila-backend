@@ -11,7 +11,6 @@ return new class extends Migration
     {
         Schema::create('car_rescue_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('trip_id')->constrained()->onDelete('cascade');
             $table->foreignId('breakdown_point')->constrained('locations')->onDelete('cascade');
             $table->timestamp('delivery_time');
             $table->enum('malfunction_type', MalfunctionType::all());

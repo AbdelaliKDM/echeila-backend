@@ -11,7 +11,6 @@ class TaxiRideDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'trip_id',
         'starting_point_id',
         'starting_point_type',
         'arrival_point_id',
@@ -22,7 +21,7 @@ class TaxiRideDetail extends Model
     // Relationships
     public function trip()
     {
-        return $this->belongsTo(Trip::class);
+        return $this->morphOne(Trip::class, 'detailable');
     }
 
     // Polymorphic relationships - starting/arrival points can be location or wilaya

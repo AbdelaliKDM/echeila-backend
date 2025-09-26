@@ -33,21 +33,42 @@ class TripService
             // Determine driver_id based on trip type
             $driverId = $this->handleDriver($tripType, $data, $user);
 
-            // Create the main trip
+            // Create trip details first
+            $detailsModel = $this->handleTripDetails($tripType, $data, $user);
+
+            // Create the main trip with polymorphic relationship
             $trip = Trip::create([
                 'driver_id' => $driverId,
                 'type' => $tripType,
                 'status' => TripStatus::PENDING,
                 'note' => $data['note'] ?? null,
+                'detailable_id' => $detailsModel->id,
+                'detailable_type' => get_class($detailsModel),
             ]);
-
-            $this->createTripDetails($trip, $tripType, $data);
 
             // Add current user as client for non-international trips
             $this->handleClient($trip, $tripType, $data, $user);
+            
+            // Handle cargo creation and relationship for cargo transport trips
+            $this->handleCargo($trip, $tripType, $data, $user);
 
             return $trip;
         });
+    }
+
+    /**
+     * Create trip-specific details based on trip type
+     */
+    protected function handleTripDetails(string $tripType, array $data, User $user)
+    {
+        return match ($tripType) {
+            TripType::TAXI_RIDE => $this->createTaxiRideDetail($data),
+            TripType::CAR_RESCUE => $this->createCarRescueDetail($data),
+            TripType::CARGO_TRANSPORT => $this->createCargoTransportDetail($data),
+            TripType::WATER_TRANSPORT => $this->createWaterTransportDetail($data),
+            TripType::PAID_DRIVING => $this->createPaidDrivingDetail($data),
+            TripType::MRT_TRIP, TripType::ESP_TRIP => $this->createInternationalTripDetail($data),
+        };
     }
 
     /**
@@ -87,27 +108,41 @@ class TripService
         
     }
 
-
-    /**
-     * Create trip-specific details based on trip type
+   /**
+     * Handle cargo creation and relationship for cargo transport trips
      */
-    protected function createTripDetails(Trip $trip, string $tripType, array $data): void
+    protected function handleCargo(Trip $trip, string $tripType, array $data, User $user): void
     {
-        match ($tripType) {
-            TripType::TAXI_RIDE => $this->createTaxiRideDetail($trip, $data),
-            TripType::CAR_RESCUE => $this->createCarRescueDetail($trip, $data),
-            TripType::CARGO_TRANSPORT => $this->createCargoTransportDetail($trip, $data),
-            TripType::WATER_TRANSPORT => $this->createWaterTransportDetail($trip, $data),
-            TripType::PAID_DRIVING => $this->createPaidDrivingDetail($trip, $data),
-            TripType::MRT_TRIP, TripType::ESP_TRIP => $this->createInternationalTripDetail($trip, $data),
-            default => null,
-        };
+        if ($tripType === TripType::CARGO_TRANSPORT) {
+            // Create the cargo record with description, weight, and passenger_id
+            $cargo = Cargo::create([
+                'description' => $data['cargo']['description'],
+                'weight' => $data['cargo']['weight'],
+                'passenger_id' => $user->passenger->id,
+            ]);
+
+            // Handle cargo images if provided
+            if (isset($data['cargo']['images']) && is_array($data['cargo']['images'])) {
+                foreach ($data['cargo']['images'] as $image) {
+                    $cargo->addMediaFromRequest('cargo.images.*')
+                        ->toMediaCollection(Cargo::IMAGES);
+                }
+            }
+
+            // Create trip cargo relationship
+            TripCargo::create([
+                'trip_id' => $trip->id,
+                'cargo_id' => $cargo->id,
+                'total_fees' => $data['total_fees'] ?? 0,
+            ]);
+        }
     }
+
 
     /**
      * Create taxi ride details
      */
-    protected function createTaxiRideDetail(Trip $trip, array $data): void
+    protected function createTaxiRideDetail(array $data): TaxiRideDetail
     {
         $rideType = $data['ride_type'];
 
@@ -125,8 +160,7 @@ class TripService
                 'longitude' => $data['arrival_point']['longitude'],
             ]);
 
-            TaxiRideDetail::create([
-                'trip_id' => $trip->id,
+            return TaxiRideDetail::create([
                 'starting_point_id' => $startingLocation->id,
                 'starting_point_type' => Location::class,
                 'arrival_point_id' => $arrivalLocation->id,
@@ -135,8 +169,7 @@ class TripService
             ]);
         } else {
             // For shared rides, use wilaya IDs
-            TaxiRideDetail::create([
-                'trip_id' => $trip->id,
+            return TaxiRideDetail::create([
                 'starting_point_id' => $data['starting_point_id'],
                 'starting_point_type' => 'App\\Models\\Wilaya',
                 'arrival_point_id' => $data['arrival_point_id'],
@@ -149,11 +182,17 @@ class TripService
     /**
      * Create car rescue details
      */
-    protected function createCarRescueDetail(Trip $trip, array $data): void
+    protected function createCarRescueDetail(array $data): CarRescueDetail
     {
-        CarRescueDetail::create([
-            'trip_id' => $trip->id,
-            'breakdown_point' => $data['breakdown_point'],
+        // Create Location record from coordinate data
+        $breakdownLocation = Location::create([
+            'name' => $data['breakdown_point']['name'],
+            'latitude' => $data['breakdown_point']['latitude'],
+            'longitude' => $data['breakdown_point']['longitude'],
+        ]);
+
+        return CarRescueDetail::create([
+            'breakdown_point' => $breakdownLocation->id,
             'delivery_time' => $data['delivery_time'],
             'malfunction_type' => $data['malfunction_type'],
         ]);
@@ -162,12 +201,13 @@ class TripService
     /**
      * Create cargo transport details
      */
-    protected function createCargoTransportDetail(Trip $trip, array $data): void
+    protected function createCargoTransportDetail(array $data, User $user): CargoTransportDetail
     {
-        // Create the cargo record with description and weight
+        // Create the cargo record with description, weight, and passenger_id
         $cargo = Cargo::create([
             'description' => $data['cargo']['description'],
             'weight' => $data['cargo']['weight'],
+            'passenger_id' => $user->passenger->id,
         ]);
 
         // Handle cargo images if provided
@@ -178,29 +218,36 @@ class TripService
             }
         }
 
+        // Create Location record from coordinate data
+        $deliveryLocation = Location::create([
+            'name' => $data['delivery_point']['name'],
+            'latitude' => $data['delivery_point']['latitude'],
+            'longitude' => $data['delivery_point']['longitude'],
+        ]);
+
         // Create the cargo transport detail
-        CargoTransportDetail::create([
-            'trip_id' => $trip->id,
-            'delivery_point' => $data['delivery_point'],
+        $cargoTransportDetail = CargoTransportDetail::create([
+            'delivery_point' => $deliveryLocation->id,
             'delivery_time' => $data['delivery_time'],
         ]);
 
-        // Create trip cargo relationship
-        TripCargo::create([
-            'trip_id' => $trip->id,
-            'cargo_id' => $cargo->id,
-            'total_fees' => $data['total_fees'] ?? 0,
-        ]);
+        return $cargoTransportDetail;
     }
 
     /**
      * Create water transport details
      */
-    protected function createWaterTransportDetail(Trip $trip, array $data): void
+    protected function createWaterTransportDetail(array $data): WaterTransportDetail
     {
-        WaterTransportDetail::create([
-            'trip_id' => $trip->id,
-            'delivery_point' => $data['delivery_point'],
+        // Create Location record from coordinate data
+        $deliveryLocation = Location::create([
+            'name' => $data['delivery_point']['name'],
+            'latitude' => $data['delivery_point']['latitude'],
+            'longitude' => $data['delivery_point']['longitude'],
+        ]);
+
+        return WaterTransportDetail::create([
+            'delivery_point' => $deliveryLocation->id,
             'delivery_time' => $data['delivery_time'],
             'water_type' => $data['water_type'],
             'quantity' => $data['quantity'],
@@ -210,7 +257,7 @@ class TripService
     /**
      * Create paid driving details
      */
-    protected function createPaidDrivingDetail(Trip $trip, array $data): void
+    protected function createPaidDrivingDetail(array $data): PaidDrivingDetail
     {
         // Create Location records from coordinate data
         $startingLocation = Location::create([
@@ -225,8 +272,7 @@ class TripService
             'longitude' => $data['arrival_point']['longitude'],
         ]);
 
-        PaidDrivingDetail::create([
-            'trip_id' => $trip->id,
+        return PaidDrivingDetail::create([
             'starting_point' => $startingLocation->id,
             'arrival_point' => $arrivalLocation->id,
             'starting_time' => $data['starting_time'],
@@ -237,10 +283,9 @@ class TripService
     /**
      * Create international trip details
      */
-    protected function createInternationalTripDetail(Trip $trip, array $data): void
+    protected function createInternationalTripDetail(array $data): InternationalTripDetail
     {
-        InternationalTripDetail::create([
-            'trip_id' => $trip->id,
+        return InternationalTripDetail::create([
             'direction' => $data['direction'],
             'starting_place' => $data['starting_place'],
             'starting_time' => $data['starting_time'],

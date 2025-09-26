@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('client_type');
             $table->integer('number_of_seats');
             $table->decimal('total_fees', 10, 2);
-            $table->text('note');
+            $table->text('note')->nullable();
             $table->timestamps();
             
             $table->index(['client_id', 'client_type']);

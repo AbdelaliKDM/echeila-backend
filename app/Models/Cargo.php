@@ -14,6 +14,7 @@ class Cargo extends Model implements HasMedia
     const string IMAGES = 'images';
 
     protected $fillable = [
+        'passenger_id',
         'description',
         'weight',
     ];
@@ -30,5 +31,10 @@ class Cargo extends Model implements HasMedia
     public function tripCargos()
     {
         return $this->hasMany(TripCargo::class);
+    }
+
+    public function passenger()
+    {
+        return $this->belongsTo(Passenger::class);
     }
 }
