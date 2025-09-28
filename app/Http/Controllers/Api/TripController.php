@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Exception;
 use App\Models\Trip;
 use App\Constants\TripType;
+use App\Constants\TripStatus;
 use App\Services\TripService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TripResource;
 use App\Http\Requests\Api\Trip\CreateTripRequest;
+use App\Http\Requests\Api\Trip\UpdateTripRequest;
 
 class TripController extends Controller
 {
@@ -170,6 +172,100 @@ class TripController extends Controller
                 'Trip created successfully',
                 201
             );
+
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Update a trip (only by driver)
+     */
+    public function update(UpdateTripRequest $request, Trip $trip): JsonResponse
+    {
+        try {
+            $user = auth()->user();
+            $driver = $user->driver;
+
+            if (!$driver) {
+                return $this->errorResponse('Driver profile not found', 403);
+            }
+
+            // Verify the driver owns this trip
+            if ($trip->driver_id !== $driver->id) {
+                return $this->errorResponse('Unauthorized to update this trip', 403);
+            }
+
+            $validated = $this->validateRequest($request);
+            $tripType = $trip->type;
+
+            // For international trips, check if details can be updated
+            if (in_array($tripType, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
+                $detailsData = array_intersect_key($validated, array_flip([
+                    'direction', 'starting_place', 'starting_time', 'arrival_time', 'total_seats', 'seat_price'
+                ]));
+
+                if (!empty($detailsData)) {
+                    // Check if starting time has passed
+                    if ($trip->detailable && $trip->detailable->starting_time <= now()) {
+                        return $this->errorResponse('Cannot update international trip details after starting time', 400);
+                    }
+                }
+            }
+
+            $updatedTrip = $this->tripService->updateTrip($trip, $validated, $tripType);
+
+            return $this->successResponse(
+                new TripResource($updatedTrip),
+                'Trip updated successfully'
+            );
+
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Delete a trip (only international trips with restrictions)
+     */
+    public function destroy(Trip $trip): JsonResponse
+    {
+        try {
+            $user = auth()->user();
+            $driver = $user->driver;
+
+            if (!$driver) {
+                return $this->errorResponse('Driver profile not found', 403);
+            }
+
+            // Verify the driver owns this trip
+            if ($trip->driver_id !== $driver->id) {
+                return $this->errorResponse('Unauthorized to delete this trip', 403);
+            }
+
+            $tripType = $trip->type;
+
+            // Only allow deletion of international trips
+            if (!in_array($tripType, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
+                return $this->errorResponse('Only international trips can be deleted', 400);
+            }
+
+            // Check if starting time has passed
+            if ($trip->detailable && $trip->detailable->starting_time <= now()) {
+                return $this->errorResponse('Cannot delete international trip after starting time', 400);
+            }
+
+            // Check if trip has clients or cargos
+            $hasClients = $trip->clients()->exists();
+            $hasCargos = $trip->cargos()->exists();
+
+            if ($hasClients || $hasCargos) {
+                return $this->errorResponse('Cannot delete trip with existing clients or cargos', 400);
+            }
+
+            $this->tripService->deleteTrip($trip);
+
+            return $this->successResponse(null, 'Trip deleted successfully');
 
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);

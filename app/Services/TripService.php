@@ -746,4 +746,107 @@ class TripService
 
         return $query->orderBy('created_at', 'desc');
     }
+
+    /**
+     * Update a trip
+     */
+    public function updateTrip(Trip $trip, array $data, string $tripType): Trip
+    {
+        return DB::transaction(function () use ($trip, $data, $tripType) {
+            // Update main trip fields
+            $tripData = array_intersect_key($data, array_flip(['status', 'note']));
+            if (!empty($tripData)) {
+                $trip->update($tripData);
+            }
+
+            // Update trip details for international trips if provided
+            if (in_array($tripType, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
+                $detailsData = array_intersect_key($data, array_flip([
+                    'direction', 'starting_place', 'starting_time', 'arrival_time', 'total_seats', 'seat_price'
+                ]));
+
+                if (!empty($detailsData) && $trip->detailable) {
+                    $trip->detailable->update($detailsData);
+                }
+            }
+
+            // Load relevant relationships based on trip type
+            switch ($tripType) {
+                case TripType::TAXI_RIDE:
+                    $trip->load([
+                        'driver',
+                        'client.client.user',
+                        'detailable.startingPoint',
+                        'detailable.arrivalPoint'
+                    ]);
+                    break;
+
+                case TripType::CAR_RESCUE:
+                    $trip->load([
+                        'driver',
+                        'client.client.user',
+                        'detailable.breakdownPoint'
+                    ]);
+                    break;
+
+                case TripType::CARGO_TRANSPORT:
+                    $trip->load([
+                        'driver',
+                        'client.client.user',
+                        'cargos.cargo',
+                        'detailable.deliveryPoint'
+                    ]);
+                    break;
+
+                case TripType::WATER_TRANSPORT:
+                    $trip->load([
+                        'driver',
+                        'client.client.user',
+                        'detailable.deliveryPoint'
+                    ]);
+                    break;
+
+                case TripType::PAID_DRIVING:
+                    $trip->load([
+                        'driver',
+                        'client.client.user',
+                        'detailable.startingPoint',
+                        'detailable.arrivalPoint'
+                    ]);
+                    break;
+
+                case TripType::MRT_TRIP:
+                case TripType::ESP_TRIP:
+                    $trip->load([
+                        'driver',
+                        'clients.client.user',
+                        'cargos.cargo',
+                        'detailable'
+                    ]);
+                    break;
+
+                default:
+                    $trip->load(['driver', 'detailable']);
+                    break;
+            }
+
+            return $trip;
+        });
+    }
+
+    /**
+     * Delete a trip
+     */
+    public function deleteTrip(Trip $trip): bool
+    {
+        return DB::transaction(function () use ($trip) {
+            // Delete the trip details first (polymorphic relationship)
+            if ($trip->detailable) {
+                $trip->detailable->delete();
+            }
+
+            // Delete the trip itself
+            return $trip->delete();
+        });
+    }
 }
