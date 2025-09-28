@@ -43,7 +43,7 @@ class TripController extends Controller
 
             // Determine if user is accessing as driver or passenger based on route
             $isDriverRoute = $request->route()->getPrefix() === 'api/v1/driver';
-            
+
             if ($isDriverRoute) {
                 $trips = $this->getDriverTrips($type, $filters, $user);
             } else {
@@ -63,13 +63,13 @@ class TripController extends Controller
     protected function getDriverTrips(string $type, array $filters, $user)
     {
         $driver = $user->driver;
-        
+
         if (!$driver) {
             throw new Exception('Driver profile not found');
         }
 
         $query = $this->tripService->getDriverTrips($type, $filters, $driver->id);
-        
+
         return $query->paginate(15);
     }
 
@@ -79,13 +79,13 @@ class TripController extends Controller
     protected function getPassengerTrips(string $type, array $filters, $user)
     {
         $passenger = $user->passenger;
-        
+
         if (!$passenger) {
             throw new Exception('Passenger profile not found');
         }
 
         $query = $this->tripService->getPassengerTrips($type, $filters, $passenger->id);
-        
+
         return $query->paginate(15);
     }
 
@@ -142,7 +142,7 @@ class TripController extends Controller
                 if ($request->has('direction')) {
                     $filters['direction'] = $request->input('direction');
                 }
-                
+
                 if ($request->has('type') && in_array($request->input('type'), ['cargo', 'client'])) {
                     $filters['type'] = $request->input('type');
                 }
@@ -203,7 +203,12 @@ class TripController extends Controller
             // For international trips, check if details can be updated
             if (in_array($tripType, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
                 $detailsData = array_intersect_key($validated, array_flip([
-                    'direction', 'starting_place', 'starting_time', 'arrival_time', 'total_seats', 'seat_price'
+                    'direction',
+                    'starting_place',
+                    'starting_time',
+                    'arrival_time',
+                    'total_seats',
+                    'seat_price'
                 ]));
 
                 if (!empty($detailsData)) {
@@ -222,7 +227,7 @@ class TripController extends Controller
             );
 
         } catch (Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), $e->getCode());
         }
     }
 
@@ -276,11 +281,12 @@ class TripController extends Controller
     /**
      * Get available international trips
      */
-    public function available(AvailableTripsRequest $request): JsonResponse
+    public function available(AvailableTripsRequest $request)
     {
+        $validated = $this->validateRequest($request);
+
         try {
-            $validated = $this->validateRequest($request);
-            
+
             $availableTrips = $this->tripService->getAvailableInternationalTrips(
                 $validated['trip_type'],
                 $validated['starting_time'],
@@ -288,12 +294,11 @@ class TripController extends Controller
             );
 
             return $this->successResponse(
-                TripResource::collection($availableTrips),
-                'Available trips retrieved successfully'
+                TripResource::collection($availableTrips)
             );
 
         } catch (Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), $e->getCode());
         }
     }
 }

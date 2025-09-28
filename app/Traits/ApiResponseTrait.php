@@ -82,7 +82,7 @@ trait ApiResponseTrait
 
   protected function errorResponse($message = null, $statusCode = 400): JsonResponse
   {
-    $statusCode = empty($statusCode) ? 400 : $statusCode;
+    $statusCode = (!trans()->has("http-statuses.{$statusCode}")) ? 400 : $statusCode;
     $message = $message ?? trans("http-statuses.{$statusCode}");
 
     return response()->json([

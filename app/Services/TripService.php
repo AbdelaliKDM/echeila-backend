@@ -519,9 +519,6 @@ class TripService
             ->whereIn('type', [TripType::MRT_TRIP, TripType::ESP_TRIP])
             ->with([
                 'driver',
-                'clients.client.user',
-                'cargos.cargo',
-                'detailable.startingPlace'
             ]);
 
         // Apply common filters
@@ -705,10 +702,7 @@ class TripService
         }
 
         $query->with([
-            'driver',
-            'clients.client.user',
-            'cargos.cargo',
-            'detailable.startingPlace'
+            'driver'
         ]);
 
         // Apply common filters
@@ -857,17 +851,24 @@ class TripService
     {
         return Trip::where('type', $tripType)
             ->where('status', TripStatus::PENDING)
-            ->whereHas('detailable', function ($query) use ($startingTime) {
-                $query->where('starting_time', '>', now())
-                      ->where('starting_time', '>=', $startingTime);
-            })
             ->with([
                 'driver',
                 'clients',
                 'detailable'
             ])
             ->get()
-            ->filter(function ($trip) use ($requiredSeats) {
+            ->filter(function ($trip) use ($startingTime, $requiredSeats) {
+                // Check if trip has detailable (international trip details)
+                if (!$trip->detailable) {
+                    return false;
+                }
+                
+                // Check datetime conditions
+                $tripStartingTime = $trip->detailable->starting_time;
+                if ($tripStartingTime <= now() || $tripStartingTime < $startingTime) {
+                    return false;
+                }
+                
                 // Calculate available seats
                 $totalSeats = $trip->detailable->total_seats;
                 $bookedSeats = $trip->clients->sum('number_of_seats');
@@ -876,6 +877,7 @@ class TripService
                 // Add available_seats to the trip object for response
                 $trip->available_seats = $availableSeats;
                 
+                // Check if enough seats are available
                 return $availableSeats >= $requiredSeats;
             });
     }
