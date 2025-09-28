@@ -368,4 +368,382 @@ class TripService
             ]);
         }
     }
+
+    /**
+     * Get trips by type with filters for drivers
+     */
+    public function getDriverTrips(string $tripType, array $filters, int $driverId)
+    {
+        return match ($tripType) {
+            TripType::TAXI_RIDE => $this->getTaxiRideTrips($filters, $driverId),
+            TripType::CAR_RESCUE => $this->getCarRescueTrips($filters, $driverId),
+            TripType::CARGO_TRANSPORT => $this->getCargoTransportTrips($filters, $driverId),
+            TripType::WATER_TRANSPORT => $this->getWaterTransportTrips($filters, $driverId),
+            TripType::PAID_DRIVING => $this->getPaidDrivingTrips($filters, $driverId),
+            TripType::MRT_TRIP, TripType::ESP_TRIP => $this->getInternationalTrips($filters, $driverId),
+        };
+    }
+
+    /**
+     * Get trips by type with filters for passengers
+     */
+    public function getPassengerTrips(string $tripType, array $filters, int $passengerId)
+    {
+        return match ($tripType) {
+            TripType::TAXI_RIDE => $this->getTaxiRideTripsForPassenger($filters, $passengerId),
+            TripType::CAR_RESCUE => $this->getCarRescueTripsForPassenger($filters, $passengerId),
+            TripType::CARGO_TRANSPORT => $this->getCargoTransportTripsForPassenger($filters, $passengerId),
+            TripType::WATER_TRANSPORT => $this->getWaterTransportTripsForPassenger($filters, $passengerId),
+            TripType::PAID_DRIVING => $this->getPaidDrivingTripsForPassenger($filters, $passengerId),
+            TripType::MRT_TRIP, TripType::ESP_TRIP => $this->getInternationalTripsForPassenger($filters, $passengerId),
+        };
+    }
+
+    /**
+     * Get taxi ride trips for drivers
+     */
+    protected function getTaxiRideTrips(array $filters, int $driverId)
+    {
+        $query = Trip::where('driver_id', $driverId)
+            ->where('type', TripType::TAXI_RIDE)
+            ->with([
+                'driver',
+                'clients.client.user',
+                'detailable.startingPoint',
+                'detailable.arrivalPoint'
+            ]);
+
+        // Apply taxi ride specific filters
+        if (isset($filters['type']) && in_array($filters['type'], ['shared', 'private'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('ride_type', $filters['type']);
+            });
+        }
+
+        return $this->applyCommonFilters($query, $filters);
+    }
+
+    /**
+     * Get car rescue trips for drivers
+     */
+    protected function getCarRescueTrips(array $filters, int $driverId)
+    {
+        $query = Trip::where('driver_id', $driverId)
+            ->where('type', TripType::CAR_RESCUE)
+            ->with([
+                'driver',
+                'clients.client.user',
+                'detailable.breakdownPoint'
+            ]);
+
+        // Apply car rescue specific filters
+        if (isset($filters['malfunction_type']) && in_array($filters['malfunction_type'], ['tire', 'fuel', 'battery', 'other'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('malfunction_type', $filters['malfunction_type']);
+            });
+        }
+
+        return $this->applyCommonFilters($query, $filters);
+    }
+
+    /**
+     * Get cargo transport trips for drivers
+     */
+    protected function getCargoTransportTrips(array $filters, int $driverId)
+    {
+        $query = Trip::where('driver_id', $driverId)
+            ->where('type', TripType::CARGO_TRANSPORT)
+            ->with([
+                'driver',
+                'clients.client.user',
+                'cargos.cargo',
+                'detailable.deliveryPoint'
+            ]);
+
+        return $this->applyCommonFilters($query, $filters);
+    }
+
+    /**
+     * Get water transport trips for drivers
+     */
+    protected function getWaterTransportTrips(array $filters, int $driverId)
+    {
+        $query = Trip::where('driver_id', $driverId)
+            ->where('type', TripType::WATER_TRANSPORT)
+            ->with([
+                'driver',
+                'clients.client.user',
+                'detailable.deliveryPoint'
+            ]);
+
+        // Apply water transport specific filters
+        if (isset($filters['water_type']) && in_array($filters['water_type'], ['drink', 'tea'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('water_type', $filters['water_type']);
+            });
+        }
+
+        return $this->applyCommonFilters($query, $filters);
+    }
+
+    /**
+     * Get paid driving trips for drivers
+     */
+    protected function getPaidDrivingTrips(array $filters, int $driverId)
+    {
+        $query = Trip::where('driver_id', $driverId)
+            ->where('type', TripType::PAID_DRIVING)
+            ->with([
+                'driver',
+                'clients.client.user',
+                'detailable.startingPoint',
+                'detailable.arrivalPoint'
+            ]);
+
+        // Apply paid driving specific filters
+        if (isset($filters['vehicle_type']) && in_array($filters['vehicle_type'], ['car', 'truck'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('vehicle_type', $filters['vehicle_type']);
+            });
+        }
+
+        return $this->applyCommonFilters($query, $filters);
+    }
+
+    /**
+     * Get international trips for drivers (MRT_TRIP and ESP_TRIP)
+     */
+    protected function getInternationalTrips(array $filters, int $driverId)
+    {
+        $query = Trip::where('driver_id', $driverId)
+            ->whereIn('type', [TripType::MRT_TRIP, TripType::ESP_TRIP])
+            ->with([
+                'driver',
+                'clients.client.user',
+                'cargos.cargo',
+                'detailable.startingPlace'
+            ]);
+
+        // Apply common filters
+        $query = $this->applyCommonFilters($query, $filters);
+
+        // Apply international-specific filters
+        if (isset($filters['direction'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('direction', $filters['direction']);
+            });
+        }
+
+        if (isset($filters['type']) && in_array($filters['type'], ['cargo', 'client'])) {
+            if ($filters['type'] === 'cargo') {
+                $query->whereHas('cargos');
+            } elseif ($filters['type'] === 'client') {
+                $query->whereHas('clients');
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * Get taxi ride trips for passengers
+     */
+    protected function getTaxiRideTripsForPassenger(array $filters, int $passengerId)
+    {
+        $query = Trip::where('type', TripType::TAXI_RIDE)
+            ->whereHas('clients', function ($q) use ($passengerId) {
+                $q->where('client_id', $passengerId)
+                  ->where('client_type', Passenger::class);
+            })
+            ->with([
+                'driver',
+                'clients.client.user',
+                'detailable.startingPoint',
+                'detailable.arrivalPoint'
+            ]);
+
+        // Apply taxi ride specific filters
+        if (isset($filters['type']) && in_array($filters['type'], ['shared', 'private'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('ride_type', $filters['type']);
+            });
+        }
+
+        return $this->applyCommonFilters($query, $filters);
+    }
+
+    /**
+     * Get car rescue trips for passengers
+     */
+    protected function getCarRescueTripsForPassenger(array $filters, int $passengerId)
+    {
+        $query = Trip::where('type', TripType::CAR_RESCUE)
+            ->whereHas('clients', function ($q) use ($passengerId) {
+                $q->where('client_id', $passengerId)
+                  ->where('client_type', Passenger::class);
+            })
+            ->with([
+                'driver',
+                'clients.client.user',
+                'detailable.breakdownPoint'
+            ]);
+
+        // Apply car rescue specific filters
+        if (isset($filters['malfunction_type']) && in_array($filters['malfunction_type'], ['tire', 'fuel', 'battery', 'other'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('malfunction_type', $filters['malfunction_type']);
+            });
+        }
+
+        return $this->applyCommonFilters($query, $filters);
+    }
+
+    /**
+     * Get cargo transport trips for passengers
+     */
+    protected function getCargoTransportTripsForPassenger(array $filters, int $passengerId)
+    {
+        $query = Trip::where('type', TripType::CARGO_TRANSPORT)
+            ->whereHas('clients', function ($q) use ($passengerId) {
+                $q->where('client_id', $passengerId)
+                  ->where('client_type', Passenger::class);
+            })
+            ->with([
+                'driver',
+                'clients.client.user',
+                'cargos.cargo',
+                'detailable.deliveryPoint'
+            ]);
+
+        return $this->applyCommonFilters($query, $filters);
+    }
+
+    /**
+     * Get water transport trips for passengers
+     */
+    protected function getWaterTransportTripsForPassenger(array $filters, int $passengerId)
+    {
+        $query = Trip::where('type', TripType::WATER_TRANSPORT)
+            ->whereHas('clients', function ($q) use ($passengerId) {
+                $q->where('client_id', $passengerId)
+                  ->where('client_type', Passenger::class);
+            })
+            ->with([
+                'driver',
+                'clients.client.user',
+                'detailable.deliveryPoint'
+            ]);
+
+        // Apply water transport specific filters
+        if (isset($filters['water_type']) && in_array($filters['water_type'], ['drink', 'tea'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('water_type', $filters['water_type']);
+            });
+        }
+
+        return $this->applyCommonFilters($query, $filters);
+    }
+
+    /**
+     * Get paid driving trips for passengers
+     */
+    protected function getPaidDrivingTripsForPassenger(array $filters, int $passengerId)
+    {
+        $query = Trip::where('type', TripType::PAID_DRIVING)
+            ->whereHas('clients', function ($q) use ($passengerId) {
+                $q->where('client_id', $passengerId)
+                  ->where('client_type', Passenger::class);
+            })
+            ->with([
+                'driver',
+                'clients.client.user',
+                'detailable.startingPoint',
+                'detailable.arrivalPoint'
+            ]);
+
+        // Apply paid driving specific filters
+        if (isset($filters['vehicle_type']) && in_array($filters['vehicle_type'], ['car', 'truck'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('vehicle_type', $filters['vehicle_type']);
+            });
+        }
+
+        return $this->applyCommonFilters($query, $filters);
+    }
+
+    /**
+     * Get international trips for passengers
+     */
+    protected function getInternationalTripsForPassenger(array $filters, int $passengerId)
+    {
+        $query = Trip::whereIn('type', [TripType::MRT_TRIP, TripType::ESP_TRIP]);
+
+        // Apply type-specific filtering first
+        if (isset($filters['type']) && in_array($filters['type'], ['cargo', 'client'])) {
+            if ($filters['type'] === 'cargo') {
+                // Only trips where passenger is cargo owner
+                $query->whereHas('cargos.cargo', function ($q) use ($passengerId) {
+                    $q->where('passenger_id', $passengerId);
+                });
+            } elseif ($filters['type'] === 'client') {
+                // Only trips where passenger is a client
+                $query->whereHas('clients', function ($q) use ($passengerId) {
+                    $q->where('client_id', $passengerId)
+                      ->where('client_type', Passenger::class);
+                });
+            }
+        } else {
+            // No type filter - show trips where passenger is either client or cargo owner
+            $query->where(function ($q) use ($passengerId) {
+                $q->whereHas('clients', function ($subQ) use ($passengerId) {
+                    $subQ->where('client_id', $passengerId)
+                         ->where('client_type', Passenger::class);
+                })->orWhereHas('cargos.cargo', function ($subQ) use ($passengerId) {
+                    $subQ->where('passenger_id', $passengerId);
+                });
+            });
+        }
+
+        $query->with([
+            'driver',
+            'clients.client.user',
+            'cargos.cargo',
+            'detailable.startingPlace'
+        ]);
+
+        // Apply common filters
+        $query = $this->applyCommonFilters($query, $filters);
+
+        // Apply international-specific filters
+        if (isset($filters['direction'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('direction', $filters['direction']);
+            });
+        }
+
+        return $query;
+    }
+
+    /**
+     * Apply common filters (status and created_at) to query
+     */
+    protected function applyCommonFilters($query, array $filters)
+    {
+        // Apply status filter
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        // Apply created_at filter
+        if (isset($filters['created_at'])) {
+            if (isset($filters['created_at']['from'])) {
+                $query->whereDate('created_at', '>=', $filters['created_at']['from']);
+            }
+            if (isset($filters['created_at']['to'])) {
+                $query->whereDate('created_at', '<=', $filters['created_at']['to']);
+            }
+        }
+
+        return $query->orderBy('created_at', 'desc');
+    }
 }
