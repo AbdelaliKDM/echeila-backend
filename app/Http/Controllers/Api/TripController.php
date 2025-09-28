@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TripResource;
 use App\Http\Requests\Api\Trip\CreateTripRequest;
 use App\Http\Requests\Api\Trip\UpdateTripRequest;
+use App\Http\Requests\Api\Trip\AvailableTripsRequest;
 
 class TripController extends Controller
 {
@@ -266,6 +267,30 @@ class TripController extends Controller
             $this->tripService->deleteTrip($trip);
 
             return $this->successResponse(null, 'Trip deleted successfully');
+
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Get available international trips
+     */
+    public function available(AvailableTripsRequest $request): JsonResponse
+    {
+        try {
+            $validated = $this->validateRequest($request);
+            
+            $availableTrips = $this->tripService->getAvailableInternationalTrips(
+                $validated['trip_type'],
+                $validated['starting_time'],
+                $validated['number_of_seats']
+            );
+
+            return $this->successResponse(
+                TripResource::collection($availableTrips),
+                'Available trips retrieved successfully'
+            );
 
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);

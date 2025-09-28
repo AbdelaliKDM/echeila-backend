@@ -849,4 +849,34 @@ class TripService
             return $trip->delete();
         });
     }
+
+    /**
+     * Get available international trips based on criteria
+     */
+    public function getAvailableInternationalTrips(string $tripType, string $startingTime, int $requiredSeats)
+    {
+        return Trip::where('type', $tripType)
+            ->where('status', TripStatus::PENDING)
+            ->whereHas('detailable', function ($query) use ($startingTime) {
+                $query->where('starting_time', '>', now())
+                      ->where('starting_time', '>=', $startingTime);
+            })
+            ->with([
+                'driver',
+                'clients',
+                'detailable'
+            ])
+            ->get()
+            ->filter(function ($trip) use ($requiredSeats) {
+                // Calculate available seats
+                $totalSeats = $trip->detailable->total_seats;
+                $bookedSeats = $trip->clients->sum('number_of_seats');
+                $availableSeats = $totalSeats - $bookedSeats;
+                
+                // Add available_seats to the trip object for response
+                $trip->available_seats = $availableSeats;
+                
+                return $availableSeats >= $requiredSeats;
+            });
+    }
 }

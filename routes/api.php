@@ -93,6 +93,7 @@ Route::prefix('v1')->group(function () {
             Route::post('/{type}', [TripController::class, 'store']);
             Route::patch('/{id}', [TripController::class, 'update']);
             Route::delete('/{id}', [TripController::class, 'destroy']);
+            Route::post('/available', [TripController::class, 'available']);
         });
 
 

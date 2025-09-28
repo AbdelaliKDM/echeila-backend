@@ -25,6 +25,9 @@ class TripResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             
+            // Include available seats if calculated (for available trips API)
+            'available_seats' => $this->when(isset($this->available_seats), $this->available_seats),
+            
             // Include details using polymorphic relationship with dedicated resources
             'details' => $this->when($this->detailable, function () {
                 return $this->formatTripDetails();
