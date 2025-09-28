@@ -11,7 +11,7 @@ class CarRescueDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'breakdown_point',
+        'breakdown_point_id',
         'delivery_time',
         'malfunction_type',
     ];
@@ -26,8 +26,8 @@ class CarRescueDetail extends Model
         return $this->morphOne(Trip::class, 'detailable');
     }
 
-    public function breakdownLocation()
+    public function breakdownPoint()
     {
-        return $this->belongsTo(Location::class, 'breakdown_point');
+        return $this->belongsTo(Location::class, 'breakdown_point_id');
     }
 }

@@ -11,7 +11,7 @@ class WaterTransportDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'delivery_point',
+        'delivery_point_id',
         'delivery_time',
         'water_type',
         'quantity',
@@ -28,8 +28,8 @@ class WaterTransportDetail extends Model
         return $this->morphOne(Trip::class, 'detailable');
     }
 
-    public function deliveryLocation()
+    public function deliveryPoint()
     {
-        return $this->belongsTo(Location::class, 'delivery_point');
+        return $this->belongsTo(Location::class, 'delivery_point_id');
     }
 }

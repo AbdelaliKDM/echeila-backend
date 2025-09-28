@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PassengerResource extends JsonResource
+class InternationalTripDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,12 @@ class PassengerResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'birth_date' => $this->birth_date,
-            'image' => $this->getFirstMediaUrl('image'),
+            'direction' => $this->direction,
+            'starting_place' => $this->starting_place,
+            'starting_time' => $this->starting_time,
+            'arrival_time' => $this->arrival_time,
+            'total_seats' => $this->total_seats,
+            'seat_price' => $this->seat_price,
             //'created_at' => $this->created_at,
             //'updated_at' => $this->updated_at,
         ];

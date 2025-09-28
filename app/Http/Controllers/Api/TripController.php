@@ -69,8 +69,6 @@ class TripController extends Controller
 
             $trip = $this->tripService->createTrip($type, $validated, auth()->user());
 
-            $trip->load(['details', 'clients', 'cargos']);
-
             return $this->successResponse(
                 new TripResource($trip),
                 'Trip created successfully',

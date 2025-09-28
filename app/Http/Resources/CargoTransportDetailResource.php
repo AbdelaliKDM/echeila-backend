@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PassengerResource extends JsonResource
+class CargoTransportDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,13 +16,13 @@ class PassengerResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'birth_date' => $this->birth_date,
-            'image' => $this->getFirstMediaUrl('image'),
+            //'delivery_point_id' => $this->delivery_point_id,
+            'delivery_time' => $this->delivery_time,
             //'created_at' => $this->created_at,
             //'updated_at' => $this->updated_at,
+            
+            // Include location relationship
+            'delivery_point' => new LocationResource($this->whenLoaded('deliveryPoint')),
         ];
     }
 }

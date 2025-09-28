@@ -31,8 +31,4 @@ class InternationalTripDetail extends Model
         return $this->morphOne(Trip::class, 'detailable');
     }
 
-    public function startingLocation()
-    {
-        return $this->belongsTo(Location::class, 'starting_place');
-    }
 }

@@ -50,4 +50,12 @@ class Passenger extends Model implements HasMedia
     {
         return $this->hasMany(LostAndFound::class);
     }
+
+    public function getFullnameAttribute(){
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getPhoneAttribute(){
+        return $this->user->phone;
+    }
 }

@@ -42,6 +42,11 @@ class Trip extends Model
         return $this->hasMany(TripClient::class);
     }
 
+    public function cargo()
+    {
+        return $this->hasMOne(TripCargo::class);
+    }
+
     public function cargos()
     {
         return $this->hasMany(TripCargo::class);

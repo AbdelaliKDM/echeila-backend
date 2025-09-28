@@ -25,76 +25,45 @@ class TripResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             
-            // Include details using polymorphic relationship
+            // Include details using polymorphic relationship with dedicated resources
             'details' => $this->when($this->detailable, function () {
                 return $this->formatTripDetails();
             }),
-            
-            // Include clients
-            'clients' => TripClientResource::collection($this->whenLoaded('clients')),
-            
-            // Include cargos (for cargo transport)
-            'cargos' => TripCargoResource::collection($this->whenLoaded('cargos')),
-            
+
             // Include driver information
             'driver' => new DriverResource($this->whenLoaded('driver')),
+
+            // Include passenger for all trip types except international trips
+            'client' => $this->when(
+                !in_array($this->type, [TripType::MRT_TRIP, TripType::ESP_TRIP]) && $this->relationLoaded('client'),
+                new TripClientResource($this->client)
+            ),
+            
+            // Include cargos only for cargo transport trips
+            'cargo' => $this->when(
+                $this->type === TripType::CARGO_TRANSPORT,
+                TripCargoResource::collection($this->whenLoaded('cargo'))
+            ),
         ];
     }
 
     /**
-     * Format trip details based on trip type
+     * Format trip details using dedicated resources based on trip type
      */
-    protected function formatTripDetails(): array
+    protected function formatTripDetails()
     {
         if (!$this->detailable) {
-            return [];
+            return null;
         }
 
-        $details = $this->detailable->toArray();
-        
-        // Add type-specific formatting
-        switch ($this->type) {
-            case TripType::TAXI_RIDE:
-                return [
-                    ...$details,
-                    'starting_point' => $this->detailable->startingPoint,
-                    'arrival_point' => $this->detailable->arrivalPoint,
-                ];
-                
-            case TripType::CAR_RESCUE:
-                return [
-                    ...$details,
-                    'breakdown_location' => $this->detailable->breakdownLocation,
-                ];
-                
-            case TripType::CARGO_TRANSPORT:
-                return [
-                    ...$details,
-                    'delivery_location' => $this->detailable->deliveryLocation,
-                ];
-                
-            case TripType::WATER_TRANSPORT:
-                return [
-                    ...$details,
-                    'delivery_location' => $this->detailable->deliveryLocation,
-                ];
-                
-            case TripType::PAID_DRIVING:
-                return [
-                    ...$details,
-                    'starting_location' => $this->detailable->startingLocation,
-                    'arrival_location' => $this->detailable->arrivalLocation,
-                ];
-                
-            case TripType::MRT_TRIP:
-            case TripType::ESP_TRIP:
-                return [
-                    ...$details,
-                    'starting_location' => $this->detailable->startingLocation,
-                ];
-                
-            default:
-                return $details;
-        }
+        return match ($this->type) {
+            TripType::TAXI_RIDE => new TaxiRideDetailResource($this->detailable),
+            TripType::CAR_RESCUE => new CarRescueDetailResource($this->detailable),
+            TripType::CARGO_TRANSPORT => new CargoTransportDetailResource($this->detailable),
+            TripType::WATER_TRANSPORT => new WaterTransportDetailResource($this->detailable),
+            TripType::PAID_DRIVING => new PaidDrivingDetailResource($this->detailable),
+            TripType::MRT_TRIP, TripType::ESP_TRIP => new InternationalTripDetailResource($this->detailable),
+            default => $this->detailable->toArray(),
+        };
     }
 }

@@ -11,9 +11,8 @@ return new class extends Migration
     {
         Schema::create('paid_driving_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('trip_id')->constrained()->onDelete('cascade');
-            $table->foreignId('starting_point')->constrained('locations')->onDelete('cascade');
-            $table->foreignId('arrival_point')->constrained('locations')->onDelete('cascade');
+            $table->foreignId('starting_point_id')->constrained('locations')->onDelete('cascade');
+            $table->foreignId('arrival_point_id')->constrained('locations')->onDelete('cascade');
             $table->timestamp('starting_time');
             $table->enum('vehicle_type', VehicleType::all());
             $table->timestamps();

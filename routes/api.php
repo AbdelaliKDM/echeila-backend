@@ -44,6 +44,8 @@ Route::prefix('v1')->group(function () {
     // Temp Dashboard Routes
     Route::prefix('dashboard')->group(function () {
         Route::post('/driver/update-status', [DashboardController::class, 'updateDriverStatus']);
+
+        Route::post('/charge-wallet', [DashboardController::class, 'chargeWallet']);
     });
 
 
@@ -89,8 +91,21 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('trips')->group(function () {
             Route::post('/{type}', [TripController::class, 'store']);
-            Route::get('/{type}', [TripController::class, 'index']);
+            Route::patch('/{id}', [TripController::class, 'update']);
         });
+
+
+        Route::prefix('passenger')->group(function () {
+            Route::get('/trips/{type}', [TripController::class, 'index']);
+            //Route::get('/transactions', [TransactionController::class, 'index']);
+        });
+
+        Route::prefix('driver')->group(function () {
+            Route::get('/trips/{type}', [TripController::class, 'index']);
+            //Route::get('/transactions', [TransactionController::class, 'index']);
+        });
+
+        
     });
 
 });

@@ -52,6 +52,63 @@ class TripService
             // Handle cargo creation and relationship for cargo transport trips
             $this->handleCargo($trip, $tripType, $data, $user);
 
+            // Load relevant relationships based on trip type
+            switch ($tripType) {
+                case TripType::TAXI_RIDE:
+                    $trip->load([
+                        'driver',
+                        'client.client.user',
+                        'detailable.startingPoint',
+                        'detailable.arrivalPoint'
+                    ]);
+                    break;
+
+                case TripType::CAR_RESCUE:
+                    $trip->load([
+                        'driver',
+                        'client.client.user',
+                        'detailable.breakdownPoint'
+                    ]);
+                    break;
+
+                case TripType::CARGO_TRANSPORT:
+                    $trip->load([
+                        'driver',
+                        'client.client.user',
+                        'cargo',
+                        'detailable.deliveryPoint'
+                    ]);
+                    break;
+
+                case TripType::WATER_TRANSPORT:
+                    $trip->load([
+                        'driver',
+                        'client.client.user',
+                        'detailable.deliveryPoint'
+                    ]);
+                    break;
+
+                case TripType::PAID_DRIVING:
+                    $trip->load([
+                        'driver',
+                        'client.client.user',
+                        'detailable.startingPoint',
+                        'detailable.arrivalPoint'
+                    ]);
+                    break;
+
+                case TripType::MRT_TRIP:
+                case TripType::ESP_TRIP:
+                    $trip->load([
+                        'driver',
+                    ]);
+                    break;
+
+                default:
+                    $trip->load(['driver', 'detailable']);
+                    break;
+            }
+
             return $trip;
         });
     }
@@ -192,7 +249,7 @@ class TripService
         ]);
 
         return CarRescueDetail::create([
-            'breakdown_point' => $breakdownLocation->id,
+            'breakdown_point_id' => $breakdownLocation->id,
             'delivery_time' => $data['delivery_time'],
             'malfunction_type' => $data['malfunction_type'],
         ]);
@@ -201,22 +258,8 @@ class TripService
     /**
      * Create cargo transport details
      */
-    protected function createCargoTransportDetail(array $data, User $user): CargoTransportDetail
+    protected function createCargoTransportDetail(array $data): CargoTransportDetail
     {
-        // Create the cargo record with description, weight, and passenger_id
-        $cargo = Cargo::create([
-            'description' => $data['cargo']['description'],
-            'weight' => $data['cargo']['weight'],
-            'passenger_id' => $user->passenger->id,
-        ]);
-
-        // Handle cargo images if provided
-        if (isset($data['cargo']['images']) && is_array($data['cargo']['images'])) {
-            foreach ($data['cargo']['images'] as $image) {
-                $cargo->addMediaFromRequest('cargo.images.*')
-                    ->toMediaCollection(Cargo::IMAGES);
-            }
-        }
 
         // Create Location record from coordinate data
         $deliveryLocation = Location::create([
@@ -227,7 +270,7 @@ class TripService
 
         // Create the cargo transport detail
         $cargoTransportDetail = CargoTransportDetail::create([
-            'delivery_point' => $deliveryLocation->id,
+            'delivery_point_id' => $deliveryLocation->id,
             'delivery_time' => $data['delivery_time'],
         ]);
 
@@ -247,7 +290,7 @@ class TripService
         ]);
 
         return WaterTransportDetail::create([
-            'delivery_point' => $deliveryLocation->id,
+            'delivery_point_id' => $deliveryLocation->id,
             'delivery_time' => $data['delivery_time'],
             'water_type' => $data['water_type'],
             'quantity' => $data['quantity'],
@@ -273,8 +316,8 @@ class TripService
         ]);
 
         return PaidDrivingDetail::create([
-            'starting_point' => $startingLocation->id,
-            'arrival_point' => $arrivalLocation->id,
+            'starting_point_id' => $startingLocation->id,
+            'arrival_point_id' => $arrivalLocation->id,
             'starting_time' => $data['starting_time'],
             'vehicle_type' => $data['vehicle_type'],
         ]);
