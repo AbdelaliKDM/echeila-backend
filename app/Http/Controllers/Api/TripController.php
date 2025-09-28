@@ -182,11 +182,12 @@ class TripController extends Controller
     /**
      * Update a trip (only by driver)
      */
-    public function update(UpdateTripRequest $request, Trip $trip): JsonResponse
+    public function update(UpdateTripRequest $request, $id): JsonResponse
     {
         try {
             $user = auth()->user();
             $driver = $user->driver;
+            $trip = Trip::findOrFail($id);
 
             if (!$driver) {
                 return $this->errorResponse('Driver profile not found', 403);
@@ -234,11 +235,12 @@ class TripController extends Controller
     /**
      * Delete a trip (only international trips with restrictions)
      */
-    public function destroy(Trip $trip): JsonResponse
+    public function destroy($id): JsonResponse
     {
         try {
             $user = auth()->user();
             $driver = $user->driver;
+            $trip = Trip::findOrFail($id);
 
             if (!$driver) {
                 return $this->errorResponse('Driver profile not found', 403);

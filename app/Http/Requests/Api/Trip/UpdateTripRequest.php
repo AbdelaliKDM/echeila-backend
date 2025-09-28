@@ -21,20 +21,17 @@ class UpdateTripRequest extends FormRequest
 
     public function rules(): array
     {
-        $baseRules = [
-            'status' => ['required', 'string', Rule::in(TripStatus::all())],
+        return [
+            'status' => ['nullable', 'string', Rule::in(TripStatus::all())],
             'note' => 'nullable|string|max:1000',
+            'direction' => ['nullable', 'string', Rule::in(Direction::all())],
+            'starting_place' => 'nullable|string|max:255',
+            'starting_time' => 'nullable|date|after:now',
+            'arrival_time' => 'nullable|date|after:starting_time',
+            'total_seats' => 'nullable|integer|min:1|max:50',
+            'seat_price' => 'nullable|numeric|min:0',
         ];
 
-        // Get trip from route model binding to determine type
-        $trip = $this->route('trip');
-        
-        // Add trip-specific rules for international trips only if before starting time
-        if ($trip && in_array($trip->type, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
-            return array_merge($baseRules, $this->getInternationalTripUpdateRules());
-        }
-
-        return $baseRules;
     }
 
         public function validateResolved()
@@ -44,12 +41,7 @@ class UpdateTripRequest extends FormRequest
     protected function getInternationalTripUpdateRules(): array
     {
         return [
-            'direction' => ['sometimes', 'string', Rule::in(Direction::all())],
-            'starting_place' => 'sometimes|string|max:255',
-            'starting_time' => 'sometimes|date|after:now',
-            'arrival_time' => 'sometimes|date|after:starting_time',
-            'total_seats' => 'sometimes|integer|min:1|max:50',
-            'seat_price' => 'sometimes|numeric|min:0',
+            
         ];
     }
 }
