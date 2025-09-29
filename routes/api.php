@@ -3,14 +3,16 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\DriverController;
-use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\WilayaController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\PassengerController;
 use App\Http\Controllers\Api\SeatPriceController;
+use App\Http\Controllers\Api\TripCargoController;
+use App\Http\Controllers\Api\TripClientController;
 use App\Http\Controllers\Api\VehicleModelController;
 
 /*
@@ -93,9 +95,25 @@ Route::prefix('v1')->group(function () {
             Route::post('/{type}', [TripController::class, 'store']);
             Route::patch('/{id}', [TripController::class, 'update']);
             Route::delete('/{id}', [TripController::class, 'destroy']);
+            Route::post('/available', [TripController::class, 'available']);
         });
 
-        Route::post('/available-trips', [TripController::class, 'available']);
+        // TripClient routes
+        Route::prefix('trip-clients')->group(function () {
+            Route::get('/', [TripClientController::class, 'index']);
+            Route::post('/', [TripClientController::class, 'store']);
+            Route::delete('/{tripClient}', [TripClientController::class, 'destroy']);
+        });
+
+        // TripCargo routes
+        Route::prefix('trip-cargos')->group(function () {
+            Route::get('/', [TripCargoController::class, 'index']);
+            Route::post('/', [TripCargoController::class, 'store']);
+            Route::delete('/{tripCargo}', [TripCargoController::class, 'destroy']);
+        });
+
+        // Remove the duplicate available-trips route
+        // Route::post('/available-trips', [TripController::class, 'available']);
 
 
         Route::prefix('passenger')->group(function () {

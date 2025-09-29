@@ -21,6 +21,9 @@ class CargoResource extends JsonResource
             'image' => $this->getFirstMediaUrl('image'),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            
+            // Include passenger information
+            'passenger' => new PassengerResource($this->whenLoaded('passenger')),
         ];
     }
 }
