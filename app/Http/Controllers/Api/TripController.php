@@ -35,7 +35,7 @@ class TripController extends Controller
         try {
             // Validate trip type
             if (!in_array($type, TripType::all())) {
-                return $this->errorResponse('Invalid trip type', 400);
+                throw new Exception('Invalid trip type');
             }
 
             $user = auth()->user();
@@ -53,7 +53,7 @@ class TripController extends Controller
             return $this->successResponse(TripResource::collection($trips));
 
         } catch (Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), $e->getCode());
         }
     }
 
@@ -163,19 +163,17 @@ class TripController extends Controller
         try {
             // Validate trip type
             if (!in_array($type, TripType::all())) {
-                return $this->errorResponse('Invalid trip type', 400);
+                throw new Exception('Invalid trip type');
             }
 
             $trip = $this->tripService->createTrip($type, $validated, auth()->user());
 
             return $this->successResponse(
-                new TripResource($trip),
-                'Trip created successfully',
-                201
+                new TripResource($trip)
             );
 
         } catch (Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), $e->getCode());
         }
     }
 
@@ -190,12 +188,12 @@ class TripController extends Controller
             $trip = Trip::findOrFail($id);
 
             if (!$driver) {
-                return $this->errorResponse('Driver profile not found', 403);
+                throw new Exception('Driver profile not found');
             }
 
             // Verify the driver owns this trip
             if ($trip->driver_id !== $driver->id) {
-                return $this->errorResponse('Unauthorized to update this trip', 403);
+                throw new Exception('Unauthorized to update this trip', 403);
             }
 
             $validated = $this->validateRequest($request);
@@ -215,7 +213,7 @@ class TripController extends Controller
                 if (!empty($detailsData)) {
                     // Check if starting time has passed
                     if ($trip->detailable && $trip->detailable->starting_time <= now()) {
-                        return $this->errorResponse('Cannot update international trip details after starting time', 400);
+                        throw new Exception('Cannot update international trip details after starting time', 400);
                     }
                 }
             }
@@ -223,8 +221,7 @@ class TripController extends Controller
             $updatedTrip = $this->tripService->updateTrip($trip, $validated, $tripType);
 
             return $this->successResponse(
-                new TripResource($updatedTrip),
-                'Trip updated successfully'
+                new TripResource($updatedTrip)
             );
 
         } catch (Exception $e) {
@@ -243,24 +240,24 @@ class TripController extends Controller
             $trip = Trip::findOrFail($id);
 
             if (!$driver) {
-                return $this->errorResponse('Driver profile not found', 403);
+                throw new Exception('Driver profile not found');
             }
 
             // Verify the driver owns this trip
             if ($trip->driver_id !== $driver->id) {
-                return $this->errorResponse('Unauthorized to delete this trip', 403);
+                throw new Exception('Unauthorized to delete this trip', 403);
             }
 
             $tripType = $trip->type;
 
             // Only allow deletion of international trips
             if (!in_array($tripType, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
-                return $this->errorResponse('Only international trips can be deleted', 400);
+                throw new Exception('Only international trips can be deleted');
             }
 
             // Check if starting time has passed
             if ($trip->detailable && $trip->detailable->starting_time <= now()) {
-                return $this->errorResponse('Cannot delete international trip after starting time', 400);
+                throw new Exception('Cannot delete international trip after starting time');
             }
 
             // Check if trip has clients or cargos
@@ -268,15 +265,15 @@ class TripController extends Controller
             $hasCargos = $trip->cargos()->exists();
 
             if ($hasClients || $hasCargos) {
-                return $this->errorResponse('Cannot delete trip with existing clients or cargos', 400);
+                throw new Exception('Cannot delete trip with existing clients or cargos');
             }
 
             $this->tripService->deleteTrip($trip);
 
-            return $this->successResponse(null, 'Trip deleted successfully');
+            return $this->successResponse();
 
         } catch (Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), $e->getCode());
         }
     }
 

@@ -50,11 +50,14 @@ class AuthController extends Controller
       ]);
 
       $token = $user->createToken($this->random(8))->plainTextToken;
+      
+      $uid = $firebase_user->uid;
 
       $user->refresh()->load('passenger', 'driver', 'federation');
 
       return $this->successResponse([
         'token' => $token,
+        'uid' => $uid,
         'user' => new UserResource($user),
       ]);
 
@@ -79,12 +82,15 @@ class AuthController extends Controller
         $user->update(['device_token' => $request->device_token]);
       }
 
+      $uid = $this->getFirebaseUserByPhone($request->phone)?->uid;
+
       $token = $user->createToken($this->random(8))->plainTextToken;
 
       $user->load('passenger', 'driver', 'federation');
 
       return $this->successResponse([
         'token' => $token,
+        'uid' => $uid,
         'user' => new UserResource($user),
       ]);
 

@@ -145,4 +145,18 @@ trait FirebaseTrait
       return $e;
     }
   }
+
+  public function getFirebaseUserByPhone($phone)
+  {
+    try {
+
+      $auth = Firebase::auth();
+      $user = $auth->getUserByPhoneNumber($phone);
+
+      return $user;
+
+    } catch (FirebaseException $e) {
+      return $e;
+    }
+  }
 }

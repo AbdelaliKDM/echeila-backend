@@ -45,7 +45,7 @@ class TripClientController extends Controller
             );
 
         } catch (Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
+            return $this->errorResponse($e->getMessage(), $e->getCode());
         }
     }
 
@@ -82,7 +82,7 @@ class TripClientController extends Controller
             } else {
                 // Use current user's passenger as client
                 if (!$user->passenger) {
-                    return $this->errorResponse('User must have a passenger profile to book a trip', 400);
+                    throw new Exception('User must have a passenger profile to book a trip');
                 }
 
                 $clientId = $user->passenger->id;
@@ -133,7 +133,7 @@ class TripClientController extends Controller
             }
 
             if (!$isClient && !$isDriver) {
-                return $this->errorResponse('Unauthorized to delete this trip client', 403);
+                throw new Exception('Unauthorized to delete this trip client', 403);
             }
 
             $tripClient->delete();

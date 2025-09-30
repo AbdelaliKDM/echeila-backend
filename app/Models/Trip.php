@@ -44,7 +44,7 @@ class Trip extends Model
 
     public function cargo()
     {
-        return $this->hasMOne(TripCargo::class);
+        return $this->hasOne(TripCargo::class);
     }
 
     public function cargos()

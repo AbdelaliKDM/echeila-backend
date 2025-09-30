@@ -69,7 +69,7 @@ class TripCargoController extends Controller
 
             // Check if user has passenger profile
             if (!$user->passenger) {
-                return $this->errorResponse('User must have a passenger profile to add cargo', 400);
+                throw new Exception('User must have a passenger profile to add cargo');
             }
 
             DB::beginTransaction();
@@ -133,7 +133,7 @@ class TripCargoController extends Controller
             }
 
             if (!$isCargoOwner && !$isDriver) {
-                return $this->errorResponse('Unauthorized to delete this trip cargo', 403);
+                throw new Exception('Unauthorized to delete this trip cargo', 403);
             }
 
             $tripCargo->delete();
