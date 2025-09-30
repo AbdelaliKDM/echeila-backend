@@ -22,8 +22,8 @@ class TripResource extends JsonResource
             //'type_name' => TripType::get_name($this->type),
             'status' => $this->status,
             'note' => $this->note,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            //'created_at' => $this->created_at,
+            //'updated_at' => $this->updated_at,
             
             // Include available seats if calculated (for available trips API)
             'available_seats' => $this->when(isset($this->available_seats), $this->available_seats),
@@ -45,7 +45,7 @@ class TripResource extends JsonResource
             // Include cargos only for cargo transport trips
             'cargo' => $this->when(
                 $this->type === TripType::CARGO_TRANSPORT,
-                TripCargoResource::collection($this->whenLoaded('cargo'))
+                new TripCargoResource($this->whenLoaded('cargo'))
             ),
         ];
     }

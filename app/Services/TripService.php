@@ -75,7 +75,7 @@ class TripService
                     $trip->load([
                         'driver',
                         'client.client.user',
-                        'cargo',
+                        'cargo.cargo',
                         'detailable.deliveryPoint'
                     ]);
                     break;
