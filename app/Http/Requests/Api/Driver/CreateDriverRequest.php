@@ -21,7 +21,7 @@ class CreateDriverRequest extends FormRequest
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'birth_date' => 'required|date|before:today',
-            'email' => 'required|email',
+            'email' => 'nullable|email',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
 
             // Vehicle fields

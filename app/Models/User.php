@@ -19,10 +19,10 @@ class User extends Authenticatable
    * @var array<int, string>
    */
   protected $fillable = [
+    'username',
     'phone',
     'password',
     'status',
-    'balance',
     'device_token'
   ];
 
@@ -57,9 +57,9 @@ class User extends Authenticatable
     return $this->hasOne(Driver::class);
   }
 
-  public function transactions()
+  public function wallet()
   {
-    return $this->morphMany(Transaction::class, 'entity');
+    return $this->hasOne(Wallet::class);
   }
 
 }

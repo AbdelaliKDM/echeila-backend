@@ -11,8 +11,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'entity_id',
-        'entity_type',
+        'wallet_id',
         'trip_id',
         'type',
         'amount',
@@ -28,9 +27,8 @@ class Transaction extends Model
         return $this->belongsTo(Trip::class);
     }
 
-    // Polymorphic relationship - entity can be passenger, driver, or federation
-    public function entity()
+    public function wallet()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Wallet::class);
     }
 }

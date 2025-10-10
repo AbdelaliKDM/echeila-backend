@@ -8,16 +8,16 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('lost_and_founds', function (Blueprint $table) {
+        Schema::create('wallets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('passenger_id')->constrained()->onDelete('cascade');
-            $table->text('description');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->decimal('balance')->default(0.00);
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('lost_and_founds');
+        Schema::dropIfExists('wallets');
     }
 };

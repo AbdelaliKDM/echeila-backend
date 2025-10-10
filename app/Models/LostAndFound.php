@@ -14,7 +14,6 @@ class LostAndFound extends Model implements HasMedia
     const string IMAGE = 'image';
 
     protected $fillable = [
-        'trip_id',
         'passenger_id',
         'description',
     ];
@@ -26,10 +25,6 @@ class LostAndFound extends Model implements HasMedia
     }
 
     // Relationships
-    public function trip()
-    {
-        return $this->belongsTo(Trip::class);
-    }
 
     public function passenger()
     {

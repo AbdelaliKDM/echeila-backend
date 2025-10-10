@@ -41,19 +41,20 @@ class AuthController extends Controller
 
       $user = User::create([
         'phone' => $request->phone,
+        'username' => uuid_create(),
         'password' => Hash::make($request->password),
         'device_token' => $request->device_token
       ]);
 
-      Passenger::create([
-        'user_id' => $user->id,
-      ]);
+      $user->passenger()->create();
+
+      $user->wallet()->create();
 
       $token = $user->createToken($this->random(8))->plainTextToken;
       
       $uid = $firebase_user->uid;
 
-      $user->refresh()->load('passenger', 'driver', 'federation');
+      $user->refresh()->load('wallet', 'passenger', 'driver', 'federation');
 
       return $this->successResponse([
         'token' => $token,
@@ -86,7 +87,7 @@ class AuthController extends Controller
 
       $token = $user->createToken($this->random(8))->plainTextToken;
 
-      $user->load('passenger', 'driver', 'federation');
+      $user->load('wallet', 'passenger', 'driver', 'federation');
 
       return $this->successResponse([
         'token' => $token,
@@ -123,6 +124,7 @@ class AuthController extends Controller
       $user = $request->user();
 
       $user->load(
+        'wallet',
         'passenger',
         'federation',
         'driver.federation',

@@ -14,8 +14,8 @@ return new class extends Migration {
     Schema::create('users', function (Blueprint $table) {
       $table->id();
       $table->string('phone')->unique();
+      $table->string('username')->unique();
       $table->string('password');
-      $table->decimal('balance', 10, 2)->default(0.00);
       $table->string('device_token')->nullable();
       $table->enum('status', UserStatus::all())->default(UserStatus::default());
       $table->rememberToken();
