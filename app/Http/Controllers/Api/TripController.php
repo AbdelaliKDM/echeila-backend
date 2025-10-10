@@ -70,7 +70,7 @@ class TripController extends Controller
 
         $query = $this->tripService->getDriverTrips($type, $filters, $driver->id);
 
-        return $query->paginate(15);
+        return $query->paginate(10);
     }
 
     /**
@@ -86,7 +86,7 @@ class TripController extends Controller
 
         $query = $this->tripService->getPassengerTrips($type, $filters, $passenger->id);
 
-        return $query->paginate(15);
+        return $query->paginate(10);
     }
 
     /**

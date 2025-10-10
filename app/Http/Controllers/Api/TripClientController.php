@@ -38,7 +38,7 @@ class TripClientController extends Controller
 
             $tripClients = $trip->clients()
                 ->with(['client'])
-                ->paginate(15);
+                ->paginate(10);
 
             return $this->successResponse(
                 TripClientResource::collection($tripClients)

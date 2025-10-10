@@ -39,7 +39,7 @@ class TripCargoController extends Controller
 
             $tripCargos = $trip->cargos()
                 ->with(['cargo.passenger'])
-                ->paginate(15);
+                ->paginate(10);
 
             return $this->successResponse(
                 TripCargoResource::collection($tripCargos)

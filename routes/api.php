@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\SeatPriceController;
 use App\Http\Controllers\Api\TripCargoController;
 use App\Http\Controllers\Api\TripClientController;
 use App\Http\Controllers\Api\VehicleModelController;
+use App\Http\Controllers\Api\LostAndFoundController;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,8 +128,10 @@ Route::prefix('v1')->group(function () {
         });
 
         
+        // Lost and Found routes
+        Route::prefix('lost-and-found')->group(function () {
+            Route::get('/', [LostAndFoundController::class, 'index']);
+            Route::post('/', [LostAndFoundController::class, 'store']);
+        });
     });
-
 });
-
-
