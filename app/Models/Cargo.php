@@ -11,7 +11,7 @@ class Cargo extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
-    const string IMAGES = 'images';
+    const IMAGES = 'images';
 
     protected $fillable = [
         'passenger_id',

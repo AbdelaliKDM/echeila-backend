@@ -11,9 +11,9 @@ class Vehicle extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
-    const string IMAGE = 'image';
+    const IMAGE = 'image';
 
-    const string PERMIT = 'permit';
+    const PERMIT = 'permit';
 
     protected $fillable = [
         'driver_id',

@@ -12,7 +12,7 @@ class Driver extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
-    const string IMAGE = 'image';
+    const IMAGE = 'image';
 
     protected $fillable = [
         'user_id',

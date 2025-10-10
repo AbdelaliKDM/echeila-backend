@@ -11,8 +11,8 @@ class Card extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
-    const string FRONT_IMAGE = 'front_image';
-    const string BACK_IMAGE = 'back_image';
+    const FRONT_IMAGE = 'front_image';
+    const BACK_IMAGE = 'back_image';
 
     protected $fillable = [
         'driver_id',

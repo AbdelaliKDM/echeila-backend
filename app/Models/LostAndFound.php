@@ -11,7 +11,7 @@ class LostAndFound extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
-    const string IMAGE = 'image';
+    const IMAGE = 'image';
 
     protected $fillable = [
         'passenger_id',

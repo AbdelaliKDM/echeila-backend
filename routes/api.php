@@ -1,20 +1,19 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\ColorController;
-use App\Http\Controllers\Api\DriverController;
-use App\Http\Controllers\Api\WilayaController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\DriverController;
+use App\Http\Controllers\Api\LostAndFoundController;
 use App\Http\Controllers\Api\PassengerController;
 use App\Http\Controllers\Api\SeatPriceController;
 use App\Http\Controllers\Api\TripCargoController;
 use App\Http\Controllers\Api\TripClientController;
+use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\VehicleModelController;
-use App\Http\Controllers\Api\LostAndFoundController;
+use App\Http\Controllers\Api\WilayaController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +50,6 @@ Route::prefix('v1')->group(function () {
         Route::post('/charge-wallet', [DashboardController::class, 'chargeWallet']);
     });
 
-
     // Wilaya routes
     Route::prefix('wilayas')->group(function () {
         Route::get('/', [WilayaController::class, 'index']);
@@ -77,7 +75,6 @@ Route::prefix('v1')->group(function () {
     Route::prefix('colors')->group(function () {
         Route::get('/', [ColorController::class, 'index']);
     });
-
 
     // Protected routes
     Route::middleware('auth:sanctum')->group(function () {
@@ -116,22 +113,26 @@ Route::prefix('v1')->group(function () {
         // Remove the duplicate available-trips route
         // Route::post('/available-trips', [TripController::class, 'available']);
 
-
         Route::prefix('passenger')->group(function () {
             Route::get('/trips/{type}', [TripController::class, 'index']);
-            //Route::get('/transactions', [TransactionController::class, 'index']);
+            // Route::get('/transactions', [TransactionController::class, 'index']);
         });
 
         Route::prefix('driver')->group(function () {
             Route::get('/trips/{type}', [TripController::class, 'index']);
-            //Route::get('/transactions', [TransactionController::class, 'index']);
+            // Route::get('/transactions', [TransactionController::class, 'index']);
         });
 
-        
         // Lost and Found routes
         Route::prefix('lost-and-found')->group(function () {
             Route::get('/', [LostAndFoundController::class, 'index']);
             Route::post('/', [LostAndFoundController::class, 'store']);
         });
+
+        // Trip Review routes
+        Route::prefix('trip-reviews')->group(function () {
+            Route::post('/', [TripReviewController::class, 'store']);
+        });
     });
+    
 });
