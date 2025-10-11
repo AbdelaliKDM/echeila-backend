@@ -4,26 +4,6 @@ namespace App\Constants;
 
 class NotificationMessages
 {
-    const EXAMINATION_PAYMENT = 'examination_payment';
-    const WALLET_CHARGING = 'wallet_charging';
-    const WALLET_DEDUCTION = 'wallet_deduction';
-    const APPOINTMENT_CONFIRMATION = 'appointment_confirmation';
-    const APPOINTMENT_CANCELLATION = 'appointment_cancellation';
-    const APPOINTMENT_COMPLETION = 'appointment_completion';
-    const FAMILY_MEMBER_ADDED = 'family_member_added';
-    const MEDICAL_VISIT_ADDED = 'medical_visit_added';
-
-    //custom notification messages
-    const TEST_NOTIFICATION = 'test_notification';
-    const NEW_UPDATE = 'new_update';
-
-    // order messages
-    const ORDER_PENDING = 'order_pending';
-    const ORDER_ACCEPTED = 'order_accepted';
-    const ORDER_CANCELED = 'order_canceled';
-    const ORDER_ONGOING = 'order_ongoing';
-    const ORDER_DELIVERED = 'order_delivered';
-
     // Admin notifications
     const ADMIN_NOTIFICATION = 'admin_notification';
     

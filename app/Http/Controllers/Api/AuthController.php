@@ -2,236 +2,236 @@
 
 namespace App\Http\Controllers\Api;
 
-use Exception;
-use App\Models\User;
-use App\Models\Passenger;
-use App\Traits\RandomTrait;
-use App\Helpers\ImageHelper;
-use Illuminate\Http\Request;
-use App\Traits\FirebaseTrait;
-use App\Traits\ApiResponseTrait;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Api\Auth\LoginRequest;
 use App\Http\Requests\Api\Auth\RegisterRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use App\Traits\ApiResponseTrait;
+use App\Traits\FirebaseTrait;
+use App\Traits\RandomTrait;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Kreait\Firebase\Exception\FirebaseException;
 
 class AuthController extends Controller
 {
+    use ApiResponseTrait, FirebaseTrait, RandomTrait;
 
-  use ApiResponseTrait, FirebaseTrait, RandomTrait;
+    public function register(RegisterRequest $request)
+    {
+        $validated = $this->validateRequest($request);
 
-  public function register(RegisterRequest $request)
-  {
-    $validated = $this->validateRequest($request);
+        try {
 
-    try {
+            $firebase_user = $this->getFirebaseUser($request->id_token);
 
-      $firebase_user = $this->getFirebaseUser($request->id_token);
+            if ($firebase_user instanceof FirebaseException) {
+                throw new Exception($firebase_user->getMessage(), 422);
+            }
 
-      if ($firebase_user instanceof FirebaseException) {
-        throw new Exception($firebase_user->getMessage(), 422);
-      }
+            if ($firebase_user?->phoneNumber != $request->phone) {
+                throw new Exception('Phone number does not match with Firebase user', 409);
+            }
 
-      if ($firebase_user?->phoneNumber != $request->phone) {
-        throw new Exception('Phone number does not match with Firebase user', 409);
-      }
+            do {
+                $username = 'ECH-'.now()->format('y')."-{$this->random(6, 'uppercase_alphanumeric')}";
+            } while (User::where('username', $username)->exists());
 
-      $user = User::create([
-        'phone' => $request->phone,
-        'username' => uuid_create(),
-        'password' => Hash::make($request->password),
-        'device_token' => $request->device_token
-      ]);
+            $user = User::create([
+                'phone' => $request->phone,
+                'username' => $username,
+                'password' => Hash::make($request->password),
+                'device_token' => $request->device_token,
+            ]);
 
-      $user->passenger()->create();
+            $user->passenger()->create();
 
-      $user->wallet()->create();
+            $user->wallet()->create();
 
-      $token = $user->createToken($this->random(8))->plainTextToken;
-      
-      $uid = $firebase_user->uid;
+            $token = $user->createToken($this->random(8))->plainTextToken;
 
-      $user->refresh()->load('wallet', 'passenger', 'driver', 'federation');
+            $uid = $firebase_user->uid;
 
-      return $this->successResponse([
-        'token' => $token,
-        'uid' => $uid,
-        'user' => new UserResource($user),
-      ]);
+            $user->refresh()->load('wallet', 'passenger', 'driver', 'federation');
 
-    } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage(), $e->getCode());
+            return $this->successResponse([
+                'token' => $token,
+                'uid' => $uid,
+                'user' => new UserResource($user),
+            ]);
+
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
     }
-  }
 
-  public function login(LoginRequest $request)
-  {
-    $validated = $this->validateRequest($request);
+    public function login(LoginRequest $request)
+    {
+        $validated = $this->validateRequest($request);
 
-    try {
+        try {
 
-      $user = User::where('phone', $request->phone)->first();
+            $user = User::where('phone', $request->phone)->first();
 
-      if (!Hash::check($request->password, $user->password)) {
-        throw new Exception('Invalid credentials', 401);
-      }
+            if (! Hash::check($request->password, $user->password)) {
+                throw new Exception('Invalid credentials', 401);
+            }
 
-      if ($request->filled('device_token')) {
-        $user->update(['device_token' => $request->device_token]);
-      }
+            if ($request->filled('device_token')) {
+                $user->update(['device_token' => $request->device_token]);
+            }
 
-      $uid = $this->getFirebaseUserByPhone($request->phone)?->uid;
+            $uid = $this->getFirebaseUserByPhone($request->phone)?->uid;
 
-      $token = $user->createToken($this->random(8))->plainTextToken;
+            $token = $user->createToken($this->random(8))->plainTextToken;
 
-      $user->load('wallet', 'passenger', 'driver', 'federation');
+            $user->load('wallet', 'passenger', 'driver', 'federation');
 
-      return $this->successResponse([
-        'token' => $token,
-        'uid' => $uid,
-        'user' => new UserResource($user),
-      ]);
+            return $this->successResponse([
+                'token' => $token,
+                'uid' => $uid,
+                'user' => new UserResource($user),
+            ]);
 
-    } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage(), $e->getCode());
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
     }
-  }
 
-  public function logout(Request $request)
-  {
-    try {
-      $user = $request->user();
+    public function logout(Request $request)
+    {
+        try {
+            $user = $request->user();
 
-      if ($user) {
-        $request->user()->currentAccessToken()->delete();
-        $user->update(['device_token' => null]);
-      }
+            if ($user) {
+                $request->user()->currentAccessToken()->delete();
+                $user->update(['device_token' => null]);
+            }
 
-      return $this->successResponse();
+            return $this->successResponse();
 
-    } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage(), $e->getCode());
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
     }
-  }
 
-  public function user(Request $request)
-  {
-    try {
+    public function user(Request $request)
+    {
+        try {
 
-      $user = $request->user();
+            $user = $request->user();
 
-      $user->load(
-        'wallet',
-        'passenger',
-        'federation',
-        'driver.federation',
-        'driver.services',
-        'driver.cards',
-        'driver.vehicle.color',
-        'driver.vehicle.model.brand'
-      );
+            $user->load(
+                'wallet',
+                'passenger',
+                'federation',
+                'driver.federation',
+                'driver.services',
+                'driver.cards',
+                'driver.vehicle.color',
+                'driver.vehicle.model.brand'
+            );
 
-      return $this->successResponse(new UserResource($user));
+            return $this->successResponse(new UserResource($user));
 
-    } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage(), $e->getCode());
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
     }
-  }
 
-  public function checkPhone(Request $request)
-  {
-    $validated = $this->validateRequest($request, [
-      'phone' => 'required|string'
-    ]);
+    public function checkPhone(Request $request)
+    {
+        $validated = $this->validateRequest($request, [
+            'phone' => 'required|string',
+        ]);
 
-    try {
+        try {
 
-      return $this->successResponse([
-        'exists' => User::where('phone', $request->phone)->exists(),
-        'phone' => $request->phone
-      ]);
+            return $this->successResponse([
+                'exists' => User::where('phone', $request->phone)->exists(),
+                'phone' => $request->phone,
+            ]);
 
-    } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage(), $e->getCode());
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
     }
-  }
 
-  public function resetPassword(Request $request)
-  {
-    $validated = $this->validateRequest($request,[
-      'old_password' => 'required|string',
-      'new_password' => 'required|string|min:6|confirmed'
-    ]);
+    public function resetPassword(Request $request)
+    {
+        $validated = $this->validateRequest($request, [
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|min:6|confirmed',
+        ]);
 
-    try {
-      $user = $request->user();
+        try {
+            $user = $request->user();
 
-      if (!Hash::check($request->old_password, $user->password)) {
-        throw new Exception('Old password is incorrect', 401);
-      }
+            if (! Hash::check($request->old_password, $user->password)) {
+                throw new Exception('Old password is incorrect', 401);
+            }
 
-      $user->update([
-        'password' => Hash::make($request->new_password)
-      ]);
+            $user->update([
+                'password' => Hash::make($request->new_password),
+            ]);
 
-      //$user->tokens()->delete();
+            // $user->tokens()->delete();
 
-      return $this->successResponse();
+            return $this->successResponse();
 
-    } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage(), $e->getCode());
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
     }
-  }
 
-  public function forgetPassword(Request $request)
-  {
-    $validated = $this->validateRequest($request, [
-      'id_token' => 'required|string',
-      'new_password' => 'required|string|min:6|confirmed'
-    ]);
+    public function forgetPassword(Request $request)
+    {
+        $validated = $this->validateRequest($request, [
+            'id_token' => 'required|string',
+            'new_password' => 'required|string|min:6|confirmed',
+        ]);
 
-    try {
+        try {
 
-      $firebase_user = $this->getFirebaseUser($request->id_token);
+            $firebase_user = $this->getFirebaseUser($request->id_token);
 
-      if ($firebase_user instanceof FirebaseException) {
-        throw new Exception($firebase_user->getMessage(), 422);
-      }
+            if ($firebase_user instanceof FirebaseException) {
+                throw new Exception($firebase_user->getMessage(), 422);
+            }
 
-      $user = User::where('phone', $firebase_user->phoneNumber)->first();
+            $user = User::where('phone', $firebase_user->phoneNumber)->first();
 
-      if (!$user) {
-        throw new Exception('User not found', 404);
-      }
+            if (! $user) {
+                throw new Exception('User not found', 404);
+            }
 
-      $user->update([
-        'password' => Hash::make($request->new_password)
-      ]);
+            $user->update([
+                'password' => Hash::make($request->new_password),
+            ]);
 
-      //$user->tokens()->delete();
+            // $user->tokens()->delete();
 
-      return $this->successResponse();
+            return $this->successResponse();
 
-    } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage(), $e->getCode());
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
     }
-  }
 
-  public function deleteAccount(Request $request)
-  {
-    try {
+    public function deleteAccount(Request $request)
+    {
+        try {
 
-      $user = $request->user();
-      $user->tokens()->delete();
-      $user->delete();
+            $user = $request->user();
+            $user->tokens()->delete();
+            $user->delete();
 
-      return $this->successResponse();
+            return $this->successResponse();
 
-    } catch (Exception $e) {
-      return $this->errorResponse($e->getMessage(), $e->getCode());
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
     }
-  }
 }

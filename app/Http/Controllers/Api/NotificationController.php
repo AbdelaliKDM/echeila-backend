@@ -9,7 +9,7 @@ use App\Traits\ApiResponseTrait;
 use App\Http\Controllers\Controller;
 
 
-class NotificationsController extends Controller
+class NotificationController extends Controller
 {
   use ApiResponseTrait;
 
@@ -17,12 +17,9 @@ class NotificationsController extends Controller
   {
     try {
       $user = auth()->user();
-      $notifications = $user->notifications()->orderBy('created_at', 'desc');
-      if (request()->boolean('paginate')) {
-        $notifications = $notifications->paginate($request->get('per_page', 10));
-      } else {
-        $notifications = $notifications->get();
-      }
+
+      $notifications = $user->notifications()->latest()->paginate(10);
+      
       return $this->successResponse(
         data: NotificationResource::collection($notifications),
       );
@@ -35,13 +32,8 @@ class NotificationsController extends Controller
   {
     try {
       $user = auth()->user();
-      $unreadNotifications = $user->unreadNotifications()->orderBy('created_at', 'desc');
 
-      if (request()->boolean('paginate')) {
-        $unreadNotifications = $unreadNotifications->paginate($request->get('per_page', 10));
-      } else {
-        $unreadNotifications = $unreadNotifications->get();
-      }
+      $unreadNotifications = $user->unreadNotifications()->latest()->paginate(10);
 
       return $this->successResponse(
         data: NotificationResource::collection($unreadNotifications),
@@ -55,12 +47,12 @@ class NotificationsController extends Controller
   {
     try {
       $user = auth()->user();
+
       $notification = $user->notifications()->findOrFail($id);
+
       $notification->markAsRead();
-      return $this->successResponse(
-        message: 'Notification marked as read successfully.',
-        data: new NotificationResource($notification)
-      );
+      
+      return $this->successResponse(new NotificationResource($notification));
     } catch (Exception $e) {
       return $this->errorResponse($e->getMessage(), 500);
     }

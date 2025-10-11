@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\LostAndFoundController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassengerController;
 use App\Http\Controllers\Api\SeatPriceController;
 use App\Http\Controllers\Api\TripCargoController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Api\TripClientController;
 use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\VehicleModelController;
 use App\Http\Controllers\Api\WilayaController;
+use App\Http\Controllers\Api\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -93,8 +95,10 @@ Route::prefix('v1')->group(function () {
             Route::post('/{type}', [TripController::class, 'store']);
             Route::patch('/{id}', [TripController::class, 'update']);
             Route::delete('/{id}', [TripController::class, 'destroy']);
-            Route::post('/available', [TripController::class, 'available']);
+            //Route::post('/available', [TripController::class, 'available']);
         });
+
+        Route::post('/available-trips', [TripController::class, 'available']);
 
         // TripClient routes
         Route::prefix('trip-clients')->group(function () {
@@ -110,17 +114,13 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{tripCargo}', [TripCargoController::class, 'destroy']);
         });
 
-        // Remove the duplicate available-trips route
-        // Route::post('/available-trips', [TripController::class, 'available']);
-
         Route::prefix('passenger')->group(function () {
             Route::get('/trips/{type}', [TripController::class, 'index']);
-            // Route::get('/transactions', [TransactionController::class, 'index']);
         });
 
         Route::prefix('driver')->group(function () {
             Route::get('/trips/{type}', [TripController::class, 'index']);
-            // Route::get('/transactions', [TransactionController::class, 'index']);
+
         });
 
         // Lost and Found routes
@@ -133,6 +133,17 @@ Route::prefix('v1')->group(function () {
         Route::prefix('trip-reviews')->group(function () {
             Route::post('/', [TripReviewController::class, 'store']);
         });
+
+        Route::prefix('transactions')->group(function () {
+            Route::get('/', [TransactionController::class, 'index']);
+        });
+
+        // Notification routes
+        Route::prefix('notifications')->group(function () {
+            Route::get('/', [NotificationController::class, 'index']);
+            Route::get('/unread', [NotificationController::class, 'unread']);
+            Route::post('/read/{id}', [NotificationController::class, 'markAsRead']);
+        });
     });
-    
+
 });
