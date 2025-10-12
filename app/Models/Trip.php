@@ -51,7 +51,7 @@ class Trip extends Model
             'id',
             'id',
             'client_id'
-        )->where('client_type', TripType::PASSENGER);
+        )->where('client_type', Passenger::class);
     }
 
     public function cargo()
