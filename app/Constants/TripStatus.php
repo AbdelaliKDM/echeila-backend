@@ -9,7 +9,7 @@ class TripStatus
     const PENDING = 'pending';
     const ONGOING = 'ongoing';
     const COMPLETED = 'completed';
-    const CANCELLED = 'cancelled';
+    const CANCELED = 'canceled';
 
     public static function all(): array
     {
@@ -17,7 +17,7 @@ class TripStatus
             self::PENDING,
             self::ONGOING,
             self::COMPLETED,
-            self::CANCELLED,
+            self::CANCELED,
         ];
     }
 
@@ -27,7 +27,7 @@ class TripStatus
             self::PENDING => __('app.pending'),
             self::ONGOING => __('app.ongoing'),
             self::COMPLETED => __('app.completed'),
-            self::CANCELLED => __('app.cancelled'),
+            self::CANCELED => __('app.canceled'),
         ];
     }
 
@@ -37,7 +37,7 @@ class TripStatus
             self::PENDING => 'warning',
             self::ONGOING => 'info',
             self::COMPLETED => 'success',
-            self::CANCELLED => 'danger',
+            self::CANCELED => 'danger',
         ];
     }
 

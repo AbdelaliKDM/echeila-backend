@@ -43,7 +43,7 @@ return [
     'accepted' => 'Accepted',
     'ongoing' => 'Ongoing',
     'completed' => 'Completed',
-    'cancelled' => 'Cancelled',
+    'canceled' => 'Canceled',
 
     // Vehicle Type
     'car' => 'Car',
