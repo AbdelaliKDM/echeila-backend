@@ -22,14 +22,14 @@ class CreateDriverRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'birth_date' => 'required|date|before:today',
             'email' => 'nullable|email',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:8192',
 
             // Vehicle fields
             'vehicle.model_id' => 'required|exists:models,id',
             'vehicle.color_id' => 'required|exists:colors,id',
             'vehicle.production_year' => 'required|integer|min:1900|max:' . date('Y'),
             'vehicle.plate_number' => 'required|string|max:255|unique:vehicles,plate_number',
-            'vehicle.image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'vehicle.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:8192',
             'vehicle.permit' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
 
             // Services (array of trip types)
@@ -39,13 +39,13 @@ class CreateDriverRequest extends FormRequest
             // Cards
             'cards.national_id.number' => 'required|string|max:255|unique:cards,number',
             'cards.national_id.expiration_date' => 'required|date|after:today',
-            'cards.national_id.front_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'cards.national_id.back_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'cards.national_id.front_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:8192',
+            'cards.national_id.back_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:8192',
 
             'cards.driving_license.number' => 'required|string|max:255|unique:cards,number',
             'cards.driving_license.expiration_date' => 'required|date|after:today',
-            'cards.driving_license.front_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'cards.driving_license.back_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'cards.driving_license.front_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:8192',
+            'cards.driving_license.back_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:8192',
         ];
     }
 

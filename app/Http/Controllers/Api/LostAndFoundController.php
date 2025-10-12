@@ -28,7 +28,7 @@ class LostAndFoundController extends Controller
     {
         $validated = $this->validateRequest($request, [
                 'description' => 'required|string',
-                'image' => 'required|image',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:8192',
             ]);
 
         try {
