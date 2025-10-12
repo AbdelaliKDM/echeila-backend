@@ -7,13 +7,17 @@ use App\Models\Trip;
 use App\Models\Cargo;
 use App\Models\TripCargo;
 use App\Constants\TripType;
+use App\Models\Transaction;
 use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
+use App\Constants\TransactionType;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Constants\NotificationMessages;
 use App\Http\Resources\TripCargoResource;
+use App\Notifications\NewMessageNotification;
 use App\Http\Requests\Api\TripCargo\StoreTripCargoRequest;
 
 class TripCargoController extends Controller

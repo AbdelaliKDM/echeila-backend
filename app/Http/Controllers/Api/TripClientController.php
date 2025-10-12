@@ -15,7 +15,9 @@ use Illuminate\Http\JsonResponse;
 use App\Constants\TransactionType;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Constants\NotificationMessages;
 use App\Http\Resources\TripClientResource;
+use App\Notifications\NewMessageNotification;
 use App\Http\Requests\Api\TripClient\StoreTripClientRequest;
 
 class TripClientController extends Controller
