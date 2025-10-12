@@ -97,7 +97,7 @@ class Trip extends Model
             return null;
         }
 
-        $totalSeats = $this->detailable ? $this->detailable->number_of_seats : 0;
+        $totalSeats = $this->detailable ? $this->detailable->total_seats : 0;
         $bookedSeats = $this->clients()->sum('number_of_seats');
 
         return max(0, $totalSeats - $bookedSeats);
