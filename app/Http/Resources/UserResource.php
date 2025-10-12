@@ -19,7 +19,6 @@ class UserResource extends JsonResource
       'username' => $this->username,
       'phone' => $this->phone,
       'status' => $this->status,
-      'balance' => $this->balance,
       'wallet' => new WalletResource($this->whenLoaded('wallet')),
       'passenger' => new PassengerResource($this->whenLoaded('passenger')),
       'federation' => new FederationResource($this->whenLoaded('federation')),

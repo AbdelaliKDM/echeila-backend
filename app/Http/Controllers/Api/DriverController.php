@@ -9,11 +9,14 @@ use App\Models\Service;
 use App\Models\Vehicle;
 use App\Constants\CardType;
 use App\Traits\ImageUpload;
+use App\Constants\DriverStatus;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DriverResource;
+use App\Constants\NotificationMessages;
+use App\Notifications\NewMessageNotification;
 use App\Http\Requests\Api\Driver\CreateDriverRequest;
 use App\Http\Requests\Api\Driver\UpdateDriverRequest;
 
@@ -105,6 +108,12 @@ class DriverController extends Controller
             if ($request->hasFile('cards.driving_license.back_image')) {
                 $this->uploadImageFromRequest($drivingLicenseCard, $request, 'cards.driving_license.back_image', Card::BACK_IMAGE);
             }
+
+            // Send notification
+            $driver->user->notify(new NewMessageNotification(
+                NotificationMessages::DRIVER_PENDING,
+                ['status' => DriverStatus::PENDING]
+            ));
 
             DB::commit();
 

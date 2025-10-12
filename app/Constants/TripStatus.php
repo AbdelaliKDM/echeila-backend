@@ -7,7 +7,6 @@ use Illuminate\Support\Collection;
 class TripStatus
 {
     const PENDING = 'pending';
-    const ACCEPTED = 'accepted';
     const ONGOING = 'ongoing';
     const COMPLETED = 'completed';
     const CANCELLED = 'cancelled';
@@ -16,7 +15,6 @@ class TripStatus
     {
         return [
             self::PENDING,
-            self::ACCEPTED,
             self::ONGOING,
             self::COMPLETED,
             self::CANCELLED,
@@ -27,7 +25,6 @@ class TripStatus
     {
         return [
             self::PENDING => __('app.pending'),
-            self::ACCEPTED => __('app.accepted'),
             self::ONGOING => __('app.ongoing'),
             self::COMPLETED => __('app.completed'),
             self::CANCELLED => __('app.cancelled'),
@@ -38,8 +35,7 @@ class TripStatus
     {
         return [
             self::PENDING => 'warning',
-            self::ACCEPTED => 'info',
-            self::ONGOING => 'primary',
+            self::ONGOING => 'info',
             self::COMPLETED => 'success',
             self::CANCELLED => 'danger',
         ];

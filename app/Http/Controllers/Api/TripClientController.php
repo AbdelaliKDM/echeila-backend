@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Constants\TripType;
 use Exception;
 use App\Models\Trip;
-use App\Models\TripClient;
-use App\Models\Passenger;
 use App\Models\Guest;
-use App\Traits\ApiResponseTrait;
+use App\Models\Passenger;
+use App\Models\TripClient;
+use App\Constants\TripType;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
+use App\Constants\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TripClientResource;
 use App\Http\Requests\Api\TripClient\StoreTripClientRequest;
@@ -57,13 +59,21 @@ class TripClientController extends Controller
         $validated = $this->validateRequest($request);
 
         try {
+
+            DB::beginTransaction();
+
             $user = auth()->user();
 
             // Get trip and calculate total fees
-            $trip = Trip::with('detailable')->findOrFail($validated['trip_id']);
+            $trip = Trip::with('detailable', 'driver.user.wallet')->findOrFail($validated['trip_id']);
+            $driver = $trip->driver;
 
             if (in_array($trip->type, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
                 throw new Exception('This trip in not an international trip');
+            }
+
+            if($validated['number_of_seats'] > $trip->available_seats) {
+                throw new Exception('Not enough available seats');
             }
 
             $seatPrice = $trip->detailable->seat_price;
@@ -79,17 +89,58 @@ class TripClientController extends Controller
 
                 $clientId = $guest->id;
                 $clientType = Guest::class;
+
             } else {
                 // Use current user's passenger as client
                 if (!$user->passenger) {
                     throw new Exception('User must have a passenger profile to book a trip');
                 }
 
+                if ($trip->clients()->where('client_id', $user->passenger->id)->where('client_type', Passenger::class)->exists()) {
+                    throw new Exception('User is already booked on this trip');
+                }
+
+                if($totalFees > $user->wallet->balance) {
+                    throw new Exception('Insufficient wallet balance');
+                }
+                // Deduct from user wallet
+                $user->wallet->decrement('balance', $totalFees);
+                $driver->user->wallet->increment('balance', $totalFees);
+
+                // Create transaction record
+                $passengerTransaction = Transaction::create([
+                    'wallet_id' => $user->wallet->id,
+                    'trip_id' => $validated['trip_id'],
+                    'type' => TransactionType::RESERVATION,
+                    'amount' => -abs($totalFees),
+                ]);
+
+                $driverTransaction = Transaction::create([
+                    'wallet_id' => $driver->user->wallet->id,
+                    'trip_id' => $validated['trip_id'],
+                    'type' => TransactionType::RESERVATION,
+                    'amount' => abs($totalFees),
+                ]);
+
+            
+             // Send notifications
+            $user->notify(new NewMessageNotification(
+                NotificationMessages::TRANSACTION_RESERVATION,
+                ['amount' => $totalFees, 'balance' => $user->wallet->balance]
+            ));
+
+            $driver->user->notify(new NewMessageNotification(
+                NotificationMessages::TRANSACTION_RESERVATION,
+                ['amount' => $totalFees, 'balance' => $driver->user->wallet->balance]
+            ));
+
                 $clientId = $user->passenger->id;
                 $clientType = Passenger::class;
+
+
             }
 
-            // Create trip client
+                // Create trip client
             $tripClient = TripClient::create([
                 'trip_id' => $validated['trip_id'],
                 'client_id' => $clientId,
@@ -99,6 +150,8 @@ class TripClientController extends Controller
                 'note' => $validated['note'] ?? null,
             ]);
 
+            DB::commit();
+
             $tripClient->load(['trip', 'client']);
 
             return $this->successResponse(
@@ -106,6 +159,7 @@ class TripClientController extends Controller
             );
 
         } catch (Exception $e) {
+            DB::rollBack();
             return $this->errorResponse($e->getMessage(), $e->getCode());
         }
     }
@@ -116,9 +170,12 @@ class TripClientController extends Controller
     public function destroy($id): JsonResponse
     {
         try {
+
+            DB::beginTransaction();
             // Check if the authenticated user is the client or the trip driver
             $user = auth()->user();
             $tripClient = TripClient::findOrFail($id);
+
             $isClient = false;
             $isDriver = false;
 
@@ -136,11 +193,58 @@ class TripClientController extends Controller
                 throw new Exception('Unauthorized to delete this trip client', 403);
             }
 
+            $trip = Trip::with('detailable', 'driver.user.wallet')->findOrFail($tripClient->trip_id);
+
+            if (in_array($trip->type, [TripType::MRT_TRIP, TripType::ESP_TRIP]) && $tripClient->client_type === Passenger::class) {
+                if ($user->driver && $user->wallet->balance < $tripClient->total_fees) {
+                    throw new Exception('Insufficient wallet balance for refund');
+                }
+
+                $totalFees = $tripClient->total_fees;
+                $driver = $trip->driver;
+                $passenger = $tripClient->client;
+
+                // Refund to client wallet
+                $passenger->user->wallet->increment('balance', $totalFees);
+                $driver->user->wallet->decrement('balance', $totalFees);
+
+                // Create transaction record
+                $passengerTransaction = Transaction::create([
+                    'wallet_id' => $passenger->user->wallet->id,
+                    'trip_id' => $trip->id,
+                    'type' => TransactionType::REFUND,
+                    'amount' => abs($totalFees),
+                ]);
+
+                $driverTransaction = Transaction::create([
+                    'wallet_id' => $driver->user->wallet->id,
+                    'trip_id' => $trip->id,
+                    'type' => TransactionType::REFUND,
+                    'amount' => -abs($totalFees),
+                ]);
+
+                // Send notifications
+            $passenger->user->notify(new NewMessageNotification(
+                NotificationMessages::TRANSACTION_REFUND,
+                ['amount' => $totalFees, 'balance' => $passenger->user->wallet->balance]
+            ));
+
+            $driver->user->notify(new NewMessageNotification(
+                NotificationMessages::TRANSACTION_REFUND,
+                ['amount' => $totalFees, 'balance' => $driver->user->wallet->balance]
+            ));
+                
+            }
+
+        
             $tripClient->delete();
+
+            DB::commit();
 
             return $this->successResponse();
 
         } catch (Exception $e) {
+            DB::rollBack();
             return $this->errorResponse($e->getMessage(), $e->getCode());
         }
     }

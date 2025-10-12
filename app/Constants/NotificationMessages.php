@@ -108,4 +108,24 @@ class NotificationMessages
             self::TRANSACTION_SERVICE => __('messages.bodies.transaction_service', $replace, $locale),
         ];
     }
+
+    public static function customNotifications(): array
+    {
+        return [
+            self::ADMIN_NOTIFICATION,
+            self::SYSTEM_UPDATE,
+        ];
+    }
+
+    public static function title(string $key, string $locale): string
+    {
+        $titles = self::titles($locale);
+        return $titles[$key] ?? 'Notification';
+    }
+
+    public static function body(string $key, string $locale, array $replace = []): string
+    {
+        $bodies = self::bodies($locale, $replace);
+        return $bodies[$key] ?? 'You have a new notification';
+    }
 }

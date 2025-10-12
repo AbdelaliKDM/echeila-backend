@@ -42,6 +42,18 @@ class Trip extends Model
         return $this->hasMany(TripClient::class);
     }
 
+    public function passenger()
+    {
+        return $this->hasOneThrough(
+            Passenger::class,
+            TripClient::class,
+            'trip_id',
+            'id',
+            'id',
+            'client_id'
+        )->where('client_type', TripType::PASSENGER);
+    }
+
     public function cargo()
     {
         return $this->hasOne(TripCargo::class);
@@ -77,5 +89,17 @@ class Trip extends Model
     public function details()
     {
         return $this->detailable();
+    }
+
+    public function getAvailableSeatsAttribute()
+    {
+        if (!in_array($this->type, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
+            return null;
+        }
+
+        $totalSeats = $this->detailable ? $this->detailable->number_of_seats : 0;
+        $bookedSeats = $this->clients()->sum('number_of_seats');
+
+        return max(0, $totalSeats - $bookedSeats);
     }
 }

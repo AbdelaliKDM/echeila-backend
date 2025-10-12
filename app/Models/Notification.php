@@ -21,16 +21,4 @@ class Notification extends BaseDatabaseNotification
         'data' => 'array',
         'read_at' => 'datetime',
     ];
-
-    public function getTitleAttribute()
-    {
-        return app()->isLocale('fr') ? $this->data['title']['fr'] ?? ''
-                : (app()->isLocale('ar') ? $this->data['title']['ar'] : $this->data['title']['en'] ?? '');
-    }
-
-    public function getBodyAttribute()
-    {
-        return app()->isLocale('fr') ? $this->data['body']['fr'] ?? ''
-        : (app()->isLocale('ar') ? $this->data['body']['ar'] : $this->data['body']['en'] ?? '');
-    }
 }

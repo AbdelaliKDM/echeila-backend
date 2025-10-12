@@ -20,7 +20,9 @@ use App\Models\PaidDrivingDetail;
 use Illuminate\Support\Facades\DB;
 use App\Models\CargoTransportDetail;
 use App\Models\WaterTransportDetail;
+use App\Constants\NotificationMessages;
 use App\Models\InternationalTripDetail;
+use App\Notifications\NewMessageNotification;
 
 class TripService
 {
@@ -31,14 +33,14 @@ class TripService
     {
         return DB::transaction(function () use ($tripType, $data, $user) {
             // Determine driver_id based on trip type
-            $driverId = $this->handleDriver($tripType, $data, $user);
+            $driver = $this->handleDriver($tripType, $data, $user);
 
             // Create trip details first
             $detailsModel = $this->handleTripDetails($tripType, $data, $user);
 
             // Create the main trip with polymorphic relationship
             $trip = Trip::create([
-                'driver_id' => $driverId,
+                'driver_id' => $driver->id,
                 'type' => $tripType,
                 'status' => TripStatus::PENDING,
                 'note' => $data['note'] ?? null,
@@ -51,6 +53,14 @@ class TripService
             
             // Handle cargo creation and relationship for cargo transport trips
             $this->handleCargo($trip, $tripType, $data, $user);
+
+            if(!in_array($tripType, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
+                // Send notification
+                $driver->user->notify(new NewMessageNotification(
+                    NotificationMessages::TRIP_PENDING,
+                    ['trip_id' => $trip->id, 'trip_type' => $tripType]
+                ));
+            }
 
             // Load relevant relationships based on trip type
             switch ($tripType) {
@@ -143,7 +153,7 @@ class TripService
             throw new Exception("This driver does not provide {$tripType} service");
         }
 
-        return $driver->id;
+        return $driver;
     }
 
     /**
@@ -751,6 +761,18 @@ class TripService
             $tripData = array_intersect_key($data, array_flip(['status', 'note']));
             if (!empty($tripData)) {
                 $trip->update($tripData);
+
+                if ($trip->wasChanged('status') && !in_array($tripType, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
+                    // Notify driver of status change
+                    $trip->passenger?->user->notify(new NewMessageNotification(
+                        match($trip->status) {
+                            TripStatus::CANCELED => NotificationMessages::TRIP_CANCELED,
+                            TripStatus::ONGOING => NotificationMessages::TRIP_ONGOING,
+                            TripStatus::COMPLETED => NotificationMessages::TRIP_COMPLETED,
+                        },
+                        ['trip_id' => $trip->id, 'new_status' => $trip->status]
+                    ));
+                }
             }
 
             // Update trip details for international trips if provided

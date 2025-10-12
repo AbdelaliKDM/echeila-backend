@@ -56,54 +56,86 @@ class TripCargoController extends Controller
     public function store(StoreTripCargoRequest $request)
     {
         $validated = $this->validateRequest($request);
-
+    
         try {
-
             $user = auth()->user();
-
-            $trip = Trip::findOrFail($request->input('trip_id'));
-
+            $trip = Trip::with('detailable', 'driver.user.wallet')->findOrFail($validated['trip_id']);
+    
             if (in_array($trip->type, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
                 throw new Exception('This trip in not an international trip');
             }
-
-            // Check if user has passenger profile
+    
             if (!$user->passenger) {
                 throw new Exception('User must have a passenger profile to add cargo');
             }
-
+    
+            // Check wallet balance
+            if($validated['total_fees'] > $user->wallet->balance) {
+                throw new Exception('Insufficient wallet balance');
+            }
+    
             DB::beginTransaction();
-
-            // Create cargo for the current user
+    
+            // Deduct from user wallet and add to driver wallet
+            $user->wallet->decrement('balance', $validated['total_fees']);
+            $trip->driver->user->wallet->increment('balance', $validated['total_fees']);
+    
+            // Create transactions
+            $passengerTransaction = Transaction::create([
+                'wallet_id' => $user->wallet->id,
+                'trip_id' => $validated['trip_id'],
+                'type' => TransactionType::RESERVATION,
+                'amount' => -abs($validated['total_fees']),
+            ]);
+    
+            $driverTransaction = Transaction::create([
+                'wallet_id' => $trip->driver->user->wallet->id,
+                'trip_id' => $validated['trip_id'],
+                'type' => TransactionType::RESERVATION,
+                'amount' => abs($validated['total_fees']),
+            ]);
+    
+            // Create cargo
             $cargo = Cargo::create([
                 'passenger_id' => $user->passenger->id,
                 'description' => $validated['cargo']['description'],
                 'weight' => $validated['cargo']['weight'],
             ]);
-
-            // Handle cargo images if provided
+    
+            // Handle cargo images
             if ($request->hasFile('cargo.images')) {
                 foreach ($request->file('cargo.images') as $image) {
                     $cargo->addMedia($image)
                         ->toMediaCollection(Cargo::IMAGES);
                 }
             }
-
+    
             // Create trip cargo
             $tripCargo = TripCargo::create([
                 'trip_id' => $validated['trip_id'],
                 'cargo_id' => $cargo->id,
                 'total_fees' => $validated['total_fees'],
             ]);
-
+    
+            // Send notifications
+            $user->notify(new NewMessageNotification(
+                NotificationMessages::TRANSACTION_RESERVATION,
+                ['amount' => $validated['total_fees'], 'balance' => $user->wallet->balance]
+            ));
+    
+            $trip->driver->user->notify(new NewMessageNotification(
+                NotificationMessages::TRANSACTION_RESERVATION,
+                ['amount' => $validated['total_fees'], 'balance' => $trip->driver->user->wallet->balance]
+            ));
+    
             $tripCargo->load(['trip', 'cargo.passenger']);
-
+    
             DB::commit();
-
+    
             return $this->successResponse(
                 new TripCargoResource($tripCargo)
             );
-
+    
         } catch (Exception $e) {
             DB::rollBack();
             return $this->errorResponse($e->getMessage(), $e->getCode());
@@ -116,31 +148,71 @@ class TripCargoController extends Controller
     public function destroy($id)
     {
         try {
-            // Check if the authenticated user is the cargo owner or the trip driver
+            DB::beginTransaction();
+            
             $user = auth()->user();
             $tripCargo = TripCargo::findOrFail($id);
             $isCargoOwner = false;
             $isDriver = false;
-
-            // Check if user is the cargo owner
+    
             if ($user->passenger && $tripCargo->cargo) {
                 $isCargoOwner = $tripCargo->cargo->passenger_id === $user->passenger->id;
             }
-
-            // Check if user is the trip driver
+    
             if ($user->driver) {
                 $isDriver = $tripCargo->trip->driver_id === $user->driver->id;
             }
-
+    
             if (!$isCargoOwner && !$isDriver) {
                 throw new Exception('Unauthorized to delete this trip cargo', 403);
             }
-
+    
+            $trip = Trip::with('detailable', 'driver.user.wallet')->findOrFail($tripCargo->trip_id);
+    
+            // Handle refund if cargo owner is deleting
+            if ($isCargoOwner) {
+                $totalFees = $tripCargo->total_fees;
+                $passenger = $tripCargo->cargo->passenger;
+                $driver = $trip->driver;
+    
+                // Refund to passenger wallet
+                $passenger->user->wallet->increment('balance', $totalFees);
+                $driver->user->wallet->decrement('balance', $totalFees);
+    
+                // Create transaction records
+                $passengerTransaction = Transaction::create([
+                    'wallet_id' => $passenger->user->wallet->id,
+                    'trip_id' => $trip->id,
+                    'type' => TransactionType::REFUND,
+                    'amount' => abs($totalFees),
+                ]);
+    
+                $driverTransaction = Transaction::create([
+                    'wallet_id' => $driver->user->wallet->id,
+                    'trip_id' => $trip->id,
+                    'type' => TransactionType::REFUND,
+                    'amount' => -abs($totalFees),
+                ]);
+    
+                // Send notifications
+                $passenger->user->notify(new NewMessageNotification(
+                    NotificationMessages::TRANSACTION_REFUND,
+                    ['amount' => $totalFees, 'balance' => $passenger->user->wallet->balance]
+                ));
+    
+                $driver->user->notify(new NewMessageNotification(
+                    NotificationMessages::TRANSACTION_REFUND,
+                    ['amount' => $totalFees, 'balance' => $driver->user->wallet->balance]
+                ));
+            }
+    
             $tripCargo->delete();
-
+            DB::commit();
+    
             return $this->successResponse();
-
+    
         } catch (Exception $e) {
+            DB::rollBack();
             return $this->errorResponse($e->getMessage(), $e->getCode());
         }
     }

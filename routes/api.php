@@ -48,8 +48,8 @@ Route::prefix('v1')->group(function () {
     // Temp Dashboard Routes
     Route::prefix('dashboard')->group(function () {
         Route::post('/driver/update-status', [DashboardController::class, 'updateDriverStatus']);
-
         Route::post('/charge-wallet', [DashboardController::class, 'chargeWallet']);
+        Route::post('/withdraw-sum', [DashboardController::class, 'withdrawSum']);
     });
 
     // Wilaya routes
