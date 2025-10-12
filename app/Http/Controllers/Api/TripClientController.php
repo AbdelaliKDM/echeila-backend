@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
 use App\Constants\TransactionType;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TripClientResource;
 use App\Http\Requests\Api\TripClient\StoreTripClientRequest;
