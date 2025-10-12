@@ -141,7 +141,7 @@ class TripService
     /**
      * Determine the driver ID based on trip type and provided data
      */
-    protected function handleDriver(string $tripType, array $data, User $user): int
+    protected function handleDriver(string $tripType, array $data, User $user): Driver
     {
         if (in_array($tripType, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
             $data['driver_id'] = $data['driver_id'] ?? $user->driver->id;

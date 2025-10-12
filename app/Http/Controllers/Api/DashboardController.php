@@ -34,7 +34,7 @@ class DashboardController extends Controller
       $driver->user->notify(new NewMessageNotification(
         $request->status == DriverStatus::APPROVED ?
          NotificationMessages::DRIVER_APPROVED :
-           NotificationMessages::DRIVER_REJECTED,
+           NotificationMessages::DRIVER_DENIED,
         ['status' => $request->status]
       ));
 
