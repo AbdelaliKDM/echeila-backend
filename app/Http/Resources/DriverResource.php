@@ -28,7 +28,10 @@ class DriverResource extends JsonResource
             'vehicle' => new VehicleResource($this->whenLoaded('vehicle')),
             'services' => ServiceResource::collection($this->whenLoaded('services')),
             'cards' => CardResource::collection($this->whenLoaded('cards')),
-            
+            'subscription' => new SubscriptionResource($this->whenLoaded('subscription')),
+
+            'trip_count' => $this->trip_count,
+            'review_average' => $this->review_average,
             //'created_at' => $this->created_at,
             //'updated_at' => $this->updated_at,
         ];

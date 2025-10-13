@@ -1,21 +1,23 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\ColorController;
-use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DriverController;
-use App\Http\Controllers\Api\LostAndFoundController;
-use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\WilayaController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\PassengerController;
 use App\Http\Controllers\Api\SeatPriceController;
 use App\Http\Controllers\Api\TripCargoController;
 use App\Http\Controllers\Api\TripClientController;
-use App\Http\Controllers\Api\TripController;
-use App\Http\Controllers\Api\VehicleModelController;
-use App\Http\Controllers\Api\WilayaController;
+use App\Http\Controllers\Api\TripReviewController;
 use App\Http\Controllers\Api\TransactionController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\LostAndFoundController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\VehicleModelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +52,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/driver/update-status', [DashboardController::class, 'updateDriverStatus']);
         Route::post('/charge-wallet', [DashboardController::class, 'chargeWallet']);
         Route::post('/withdraw-sum', [DashboardController::class, 'withdrawSum']);
+        Route::post('/purchase-subscription', [DashboardController::class, 'purchaseSubscription']);
     });
 
     // Wilaya routes
@@ -143,6 +146,10 @@ Route::prefix('v1')->group(function () {
             Route::get('/', [NotificationController::class, 'index']);
             Route::get('/unread', [NotificationController::class, 'unread']);
             Route::post('/read/{id}', [NotificationController::class, 'markAsRead']);
+        });
+
+        Route::prefix('subscriptions')->group(function () {
+            Route::post('/', [SubscriptionController::class, 'store']);
         });
     });
 

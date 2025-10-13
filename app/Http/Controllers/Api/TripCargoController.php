@@ -118,18 +118,18 @@ class TripCargoController extends Controller
             $tripCargo = TripCargo::create([
                 'trip_id' => $validated['trip_id'],
                 'cargo_id' => $cargo->id,
-                'total_fees' => $validated['total_fees'],
+                'total_fees' => $validated['total_fees']
             ]);
     
             // Send notifications
             $user->notify(new NewMessageNotification(
-                NotificationMessages::TRANSACTION_RESERVATION,
-                ['amount' => $validated['total_fees'], 'balance' => $user->wallet->balance]
+                key: NotificationMessages::TRANSACTION_RESERVATION,
+                data: ['amount' => $passengerTransaction->amount, 'balance' => $user->wallet->balance]
             ));
-    
-            $trip->driver->user->notify(new NewMessageNotification(
-                NotificationMessages::TRANSACTION_RESERVATION,
-                ['amount' => $validated['total_fees'], 'balance' => $trip->driver->user->wallet->balance]
+
+            $driver->user->notify(new NewMessageNotification(
+                key: NotificationMessages::TRANSACTION_RESERVATION,
+                data: ['amount' => $driverTransaction->amount, 'balance' => $driver->user->wallet->balance]
             ));
     
             $tripCargo->load(['trip', 'cargo.passenger']);
@@ -195,19 +195,19 @@ class TripCargoController extends Controller
                     'wallet_id' => $driver->user->wallet->id,
                     'trip_id' => $trip->id,
                     'type' => TransactionType::REFUND,
-                    'amount' => -abs($totalFees),
+                    'amount' => -abs($totalFees)
                 ]);
     
                 // Send notifications
                 $passenger->user->notify(new NewMessageNotification(
-                    NotificationMessages::TRANSACTION_REFUND,
-                    ['amount' => $totalFees, 'balance' => $passenger->user->wallet->balance]
-                ));
-    
-                $driver->user->notify(new NewMessageNotification(
-                    NotificationMessages::TRANSACTION_REFUND,
-                    ['amount' => $totalFees, 'balance' => $driver->user->wallet->balance]
-                ));
+                key: NotificationMessages::TRANSACTION_REFUND,
+                data: ['amount' => $passengerTransaction->amount, 'balance' => $passenger->user->wallet->balance]
+            ));
+
+            $driver->user->notify(new NewMessageNotification(
+                key: NotificationMessages::TRANSACTION_REFUND,
+                data: ['amount' => $driverTransaction->amount, 'balance' => $driver->user->wallet->balance]
+            ));
             }
     
             $tripCargo->delete();

@@ -69,4 +69,30 @@ class Driver extends Model implements HasMedia
     {
         return $this->morphMany(Transaction::class, 'entity');
     }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class)
+        ->where('end_date', '>=', now())->latestOfMany();
+    }
+
+    public function reviews()
+    {
+        return $this->hasManyThrough(TripReview::class, Trip::class);
+    }
+
+    public function getTripCountAttribute()
+    {
+        return $this->trips()->count();
+    }
+
+    public function getReviewAverageAttribute()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
 }

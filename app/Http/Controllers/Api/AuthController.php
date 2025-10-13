@@ -54,7 +54,17 @@ class AuthController extends Controller
 
             $uid = $firebase_user->uid;
 
-            $user->refresh()->load('wallet', 'passenger', 'driver', 'federation');
+            $user->refresh()->load(
+                'wallet',
+                'passenger',
+                'federation',
+                'driver.federation',
+                'driver.subscription',
+                'driver.services',
+                'driver.cards',
+                'driver.vehicle.color',
+                'driver.vehicle.model.brand'
+            );
 
             return $this->successResponse([
                 'token' => $token,
@@ -87,7 +97,17 @@ class AuthController extends Controller
 
             $token = $user->createToken($this->random(8))->plainTextToken;
 
-            $user->load('wallet', 'passenger', 'driver', 'federation');
+            $user->load(
+                'wallet',
+                'passenger',
+                'federation',
+                'driver.federation',
+                'driver.subscription',
+                'driver.services',
+                'driver.cards',
+                'driver.vehicle.color',
+                'driver.vehicle.model.brand'
+            );
 
             return $this->successResponse([
                 'token' => $token,
@@ -128,6 +148,7 @@ class AuthController extends Controller
                 'passenger',
                 'federation',
                 'driver.federation',
+                'driver.subscription',
                 'driver.services',
                 'driver.cards',
                 'driver.vehicle.color',

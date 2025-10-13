@@ -118,7 +118,7 @@ class DriverController extends Controller
             DB::commit();
 
             // Load relationships for response
-            $driver->load(['federation', 'vehicle.model.brand', 'vehicle.color', 'services', 'cards']);
+            $driver->load(['subscription', 'federation', 'vehicle.model.brand', 'vehicle.color', 'services', 'cards']);
 
             return $this->successResponse(new DriverResource($driver));
         } catch (Exception $e) {
@@ -153,7 +153,7 @@ class DriverController extends Controller
             }
 
             // Load relationships for response
-            $driver->load(['federation', 'vehicle.model.brand', 'vehicle.color', 'services', 'cards']);
+            $driver->load(['subscription', 'federation', 'vehicle.model.brand', 'vehicle.color', 'services', 'cards']);
 
             return $this->successResponse(new DriverResource($driver));
         } catch (Exception $e) {

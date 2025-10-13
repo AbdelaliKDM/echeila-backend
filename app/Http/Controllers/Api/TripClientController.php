@@ -122,19 +122,19 @@ class TripClientController extends Controller
                     'wallet_id' => $driver->user->wallet->id,
                     'trip_id' => $validated['trip_id'],
                     'type' => TransactionType::RESERVATION,
-                    'amount' => abs($totalFees),
+                    'amount' => abs($totalFees)
                 ]);
 
             
              // Send notifications
             $user->notify(new NewMessageNotification(
-                NotificationMessages::TRANSACTION_RESERVATION,
-                ['amount' => $totalFees, 'balance' => $user->wallet->balance]
+                key: NotificationMessages::TRANSACTION_RESERVATION,
+                data: ['amount' => $passengerTransaction->amount, 'balance' => $user->wallet->balance]
             ));
 
             $driver->user->notify(new NewMessageNotification(
-                NotificationMessages::TRANSACTION_RESERVATION,
-                ['amount' => $totalFees, 'balance' => $driver->user->wallet->balance]
+                key: NotificationMessages::TRANSACTION_RESERVATION,
+                data: ['amount' => $driverTransaction->amount, 'balance' => $driver->user->wallet->balance]
             ));
 
                 $clientId = $user->passenger->id;
@@ -223,18 +223,18 @@ class TripClientController extends Controller
                     'wallet_id' => $driver->user->wallet->id,
                     'trip_id' => $trip->id,
                     'type' => TransactionType::REFUND,
-                    'amount' => -abs($totalFees),
+                    'amount' => -abs($totalFees)
                 ]);
 
                 // Send notifications
             $passenger->user->notify(new NewMessageNotification(
-                NotificationMessages::TRANSACTION_REFUND,
-                ['amount' => $totalFees, 'balance' => $passenger->user->wallet->balance]
+                key: NotificationMessages::TRANSACTION_REFUND,
+                data: ['amount' => $passengerTransaction->amount, 'balance' => $passenger->user->wallet->balance]
             ));
 
             $driver->user->notify(new NewMessageNotification(
-                NotificationMessages::TRANSACTION_REFUND,
-                ['amount' => $totalFees, 'balance' => $driver->user->wallet->balance]
+                key: NotificationMessages::TRANSACTION_REFUND,
+                data: ['amount' => $driverTransaction->amount, 'balance' => $driver->user->wallet->balance]
             ));
                 
             }
