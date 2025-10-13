@@ -64,6 +64,15 @@ class MenuServiceProvider extends ServiceProvider
         )
       ]
     );
+
+    MenuBuilder::add(
+      name: 'admins',
+      slug: 'admins',
+      route: 'admins.index',
+      icon: 'bx bx-user',
+      permission: ['manage_admins'],
+    );
+
     MenuBuilder::add(
       name: 'users',
       slug: 'users',
@@ -71,5 +80,7 @@ class MenuServiceProvider extends ServiceProvider
       icon: 'bx bx-user',
       permission: ['manage_users'],
     );
+
+
   }
 }

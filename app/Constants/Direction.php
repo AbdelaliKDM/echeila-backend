@@ -20,8 +20,8 @@ class Direction
     public static function all2(): array
     {
         return [
-            self::FROM => __('app.from'),
-            self::TO => __('app.to'),
+            self::FROM => __('constants.from'),
+            self::TO => __('constants.to'),
         ];
     }
 

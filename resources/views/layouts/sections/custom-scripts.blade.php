@@ -3,7 +3,11 @@
 {{--datatable initialization--}}
 <script>
   function initializeDataTable(route, columns, filters = {}, tableId = "#laravel_datatable") {
-    return $(tableId).DataTable({
+    const $table = $(tableId);
+    const $search = $('#custom_search');
+    const $length = $('#custom_length');
+
+    const table = $table.DataTable({
       language: {{ \Illuminate\Support\Js::from(__('datatable')) }},
       responsive: true,
       processing: true,
@@ -11,10 +15,13 @@
       ajax: {
         url: route,
         type: "GET",
-        data: function (d) {
-          Object.assign(d, filters); // Merge filter values dynamically
+        data: d => {
+          Object.assign(d, filters);
+          d.length = $length.val();
+          d.search.value = $search.val();
         }
       },
+      pageLength: $length.val() ?? 10,
       columns: [
         {
           data: null,
@@ -22,16 +29,55 @@
           orderable: false,
           searchable: false,
           render: function (data, type, row, meta) {
-            return meta.row + meta.settings._iDisplayStart + 1;
+            const pageInfo = $(meta.settings.nTable).DataTable().page.info();
+            return pageInfo.start + meta.row + 1;
           }
         },
-        ...columns.map(column => {
-          return column === 'action'
+        ...columns.map(column =>
+          column === 'action'
             ? { data: column, name: column, orderable: false, searchable: false }
-            : { data: column, name: column };
-        })
-      ]
+            : { data: column, name: column }
+        )
+      ],
+      dom: 'rt<"datatable-footer"ip>',
+      drawCallback: function (settings) {
+        const id = settings.nTable.id;
+        const $wrapper = $(settings.nTableWrapper);
+
+        // Move info & pagination into custom container
+        $('#' + id + '_info_custom').html($wrapper.find('.dataTables_info').html());
+        $('#' + id + '_paginate_custom').html($wrapper.find('.dataTables_paginate').html());
+
+        // Add table styling
+        $table.find('tbody').addClass('table-border-bottom-0');
+
+        // Custom pagination binding
+        const api = this.api();
+        const $customPaginate = $('#' + id + '_paginate_custom');
+
+        $customPaginate.off('click', '.page-link').on('click', '.page-link', function (e) {
+          e.preventDefault();
+          const idx = $(this).data('dt-idx');
+
+          if (idx === 'previous') {
+            if (!$(this).parent().hasClass('disabled')) api.page('previous').draw('page');
+          } else if (idx === 'next') {
+            if (!$(this).parent().hasClass('disabled')) api.page('next').draw('page');
+          } else {
+            const page = parseInt(idx);
+            if (!isNaN(page)) api.page(page).draw('page');
+          }
+        });
+      }
     });
+
+    // Custom search binding
+    $search.off('input').on('input', () => table.search($search.val()).draw());
+
+    // Page length selector
+    $length.off('change').on('change', () => table.page.len($length.val()).draw());
+
+    return table;
   }
 </script>
 
@@ -97,5 +143,62 @@
 
     quill = new Quill(elementId, options); // Initialize Quill and assign it globally
   }
+
+  function createBasicTextEditor(elementId) {
+    const options = {
+      debug: 'info', // Debug level
+      modules: {
+        toolbar: [
+          [{ 'font': [] }],
+          [{ 'size': ['small', false, 'large', 'huge'] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+          [{ 'align': [] }],
+          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+          [{ 'indent': '-1' }, { 'indent': '+1' }],
+          [{ 'direction': 'rtl' }],
+        ]
+      },
+      placeholder: "@lang('app.write_something')",
+      readOnly: false,
+      theme: 'snow'
+    };
+
+    quill = new Quill(elementId, options); // Initialize Quill and assign it globally
+  }
 </script>
 <!-- END: My Custom JS-->
+<script>
+function initializeDateFilter(inputId) {
+    const input = document.getElementById(inputId);
+    const iconSpan = document.getElementById(inputId + '_icon');
+    const icon = iconSpan.querySelector('i');
+
+    // Update icon based on input value
+    function updateIcon() {
+        if (input.value) {
+            icon.className = 'bx bx-calendar-x';
+            iconSpan.title = 'Clear date';
+        } else {
+            icon.className = 'bx bx-calendar';
+            iconSpan.title = 'Select date';
+        }
+    }
+
+    // Clear date and trigger change event
+    function clearDate() {
+        if (input.value) {
+            input.value = '';
+            updateIcon();
+            $(input).trigger('change'); // Trigger change for filter
+        }
+    }
+
+    // Event listeners
+    input.addEventListener('change', updateIcon);
+    iconSpan.addEventListener('click', clearDate);
+
+    // Initialize icon state
+    updateIcon();
+}
+  </script>

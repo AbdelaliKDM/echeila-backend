@@ -17,10 +17,8 @@
           <i class="tf-icons bx bx-menu bx-sm align-middle"></i>
         </button>
         <!-- Mobile menu toggle: End-->
-        <a href="{{url('front-pages/landing')}}" class="app-brand-link">
-          <span
-            class="app-brand-logo demo">@include('_partials.macros', ["width" => 25, "withbg" => 'var(--bs-primary)'])</span>
-          <span class="app-brand-text demo menu-text fw-bold ms-2 ps-1">{{config('variables.templateName')}}</span>
+        <a href="/" class="app-brand-link">
+         <img src="{{ asset('assets/img/logo/logo2.png') }}" alt="Logo" style="max-height: 50px; width: auto;">
         </a>
       </div>
       <!-- Menu logo wrapper: End -->
@@ -33,203 +31,22 @@
         </button>
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link fw-medium" aria-current="page" href="{{url('front-pages/landing')}}#landingHero">Home</a>
+            <a class="nav-link fw-medium" aria-current="page" href="{{ url('/#landingHero') }}">Accueille</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{url('front-pages/landing')}}#landingFeatures">Features</a>
+            <a class="nav-link fw-medium" href="{{ url('/#landingAbout') }}">A propos de nous</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{url('front-pages/landing')}}#landingTeam">Team</a>
+            <a class="nav-link fw-medium" href="{{ url('/#landingValues') }}">Nos valeurs </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{url('front-pages/landing')}}#landingFAQ">FAQ</a>
+            <a class="nav-link fw-medium" href="{{ url('/#landingMissions') }}">Nos Missions</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{url('front-pages/landing')}}#landingContact">Contact us</a>
-          </li>
-          <li class="nav-item mega-dropdown {{ $activeClass }}">
-            <a href="javascript:void(0);"
-              class="nav-link dropdown-toggle navbar-ex-14-mega-dropdown mega-dropdown fw-medium" aria-expanded="false"
-              data-bs-toggle="mega-dropdown" data-trigger="hover">
-              <span>Pages</span>
-            </a>
-            <div class="dropdown-menu p-4">
-              <div class="row gy-4">
-                <div class="col-12 col-lg">
-                  <div class="h6 d-flex align-items-center mb-2 mb-lg-3">
-                    <div class="avatar avatar-sm flex-shrink-0 me-2">
-                      <span class="avatar-initial rounded bg-label-primary"><i class='bx bx-grid-alt'></i></span>
-                    </div>
-                    <span class="ps-1">Other</span>
-                  </div>
-                  <!-- add page slug in $activeRoutes array, defined Beginning of the page to add active class to the nav item -->
-                  <ul class="nav flex-column">
-                    <li class="nav-item {{ $currentRouteName === 'front-pages-pricing' ? 'active' : '' }}">
-                      <a class="nav-link mega-dropdown-link" href="{{ url('front-pages/pricing') }}">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        <span>Pricing</span>
-                      </a>
-                    </li>
-                    <li class="nav-item {{ $currentRouteName === 'front-pages-payment' ? 'active' : '' }}">
-                      <a class="nav-link mega-dropdown-link" href="{{ url('front-pages/payment') }}">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        <span>Payment</span>
-                      </a>
-                    </li>
-                    <li class="nav-item {{ $currentRouteName === 'front-pages-checkout' ? 'active' : '' }}">
-                      <a class="nav-link mega-dropdown-link" href="{{ url('front-pages/checkout') }}">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        <span>Checkout</span>
-                      </a>
-                    </li>
-                    <li class="nav-item {{ $currentRouteName === 'front-pages-help-center' ? 'active' : '' }}">
-                      <a class="nav-link mega-dropdown-link" href="{{ url('front-pages/help-center') }}">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        <span>Help Center</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-12 col-lg">
-                  <div class="h6 d-flex align-items-center mb-2 mb-lg-3">
-                    <div class="avatar avatar-sm flex-shrink-0 me-2">
-                      <span class="avatar-initial rounded bg-label-primary"><i class='bx bx-lock-open'></i></span>
-                    </div>
-                    <span class="ps-1">Auth Demo</span>
-                  </div>
-                  <ul class="nav flex-column">
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/login-basic')}}" target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Login (Basic)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/login-cover')}}" target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Login (Cover)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/register-basic')}}" target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Register (Basic)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/register-cover')}}" target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Register (Cover)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/register-multisteps')}}"
-                        target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Register (Multi-steps)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/forgot-password-basic')}}"
-                        target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Forgot Password (Basic)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/forgot-password-cover')}}"
-                        target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Forgot Password (Cover)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/reset-password-basic')}}"
-                        target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Reset Password (Basic)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/reset-password-cover')}}"
-                        target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Reset Password (Cover)
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-12 col-lg">
-                  <div class="h6 d-flex align-items-center mb-2 mb-lg-3">
-                    <div class="avatar avatar-sm flex-shrink-0 me-2">
-                      <span class="avatar-initial rounded bg-label-primary"><i class='bx bx-image-alt'></i></span>
-                    </div>
-                    <span class="ps-1">Other</span>
-                  </div>
-                  <ul class="nav flex-column">
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/pages/misc-error')}}" target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Error
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/pages/misc-under-maintenance')}}"
-                        target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Under Maintenance
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/pages/misc-comingsoon')}}" target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Coming Soon
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/pages/misc-not-authorized')}}"
-                        target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Not Authorized
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/verify-email-basic')}}" target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Verify Email (Basic)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/verify-email-cover')}}" target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Verify Email (Cover)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/two-steps-basic')}}" target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Two Steps (Basic)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link mega-dropdown-link" href="{{url('/auth/two-steps-cover')}}" target="_blank">
-                        <i class='bx bx-radio-circle me-2'></i>
-                        Two Steps (Cover)
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-lg-4 d-none d-lg-block">
-                  <div class="bg-body nav-img-col p-2">
-                    <img src="{{asset('assets/img/front-pages/misc/nav-item-col-img.png')}}" alt="nav item col image"
-                      class="w-100">
-                  </div>
-                </div>
-              </div>
-            </div>
+            <a class="nav-link fw-medium" href="{{ url('/#landingServices') }}">Nos services</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{url('/')}}" target="_blank">Admin</a>
+            <a class="nav-link fw-medium" href="{{ url('/#landingContact') }}">Contact</a>
           </li>
         </ul>
       </div>
@@ -264,12 +81,7 @@
       <!-- / Style Switcher-->
     @endif
 
-        <!-- navbar button: Start -->
-        <li>
-          <a href="{{url('/auth/login-cover')}}" class="btn btn-primary" target="_blank"><span
-              class="tf-icons bx bx-user me-md-1"></span><span class="d-none d-md-block">Login/Register</span></a>
-        </li>
-        <!-- navbar button: End -->
+
       </ul>
       <!-- Toolbar: End -->
     </div>

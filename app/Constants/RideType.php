@@ -20,8 +20,8 @@ class RideType
     public static function all2(): array
     {
         return [
-            self::SHARED => __('app.shared'),
-            self::PRIVATE => __('app.private'),
+            self::SHARED => __('constants.shared'),
+            self::PRIVATE => __('constants.private'),
         ];
     }
 

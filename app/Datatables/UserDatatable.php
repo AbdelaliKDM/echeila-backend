@@ -2,12 +2,11 @@
 
 namespace App\Datatables;
 
-use App\Constants\Gender;
-use App\Constants\Statuses\UserStatus;
+use App\Constants\UserStatus;
 use App\Models\User;
-use App\Support\Enum\PermissionNames;
-use App\Support\Enum\UserRoles;
-use App\Support\Enum\UserTypes;
+use App\Support\Enum\Permissions;
+use App\Support\Enum\Roles;
+use App\Constants\UserType;
 use App\Traits\DataTableActionsTrait;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -37,8 +36,8 @@ class UserDatatable
       return datatables($this->query($request))
         ->addColumn("action", function (User $user) {
           return $this
-            ->edit(route("users.edit", $user->id), Auth::user()->hasPermissionTo(PermissionNames::MANAGE_USERS))
-            ->delete($user->id, Auth::user()->hasPermissionTo(PermissionNames::MANAGE_USERS))
+            ->edit(route("users.edit", $user->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_USERS))
+            ->delete($user->id, Auth::user()->hasPermissionTo(Permissions::MANAGE_USERS))
             ->make();
         })
         ->addColumn("name", function (User $user) {
@@ -53,14 +52,11 @@ class UserDatatable
         ->addColumn("avatar", function (User $user) {
           return $this->image($user->avatar_url, $user->fullname);
         })
-        ->addColumn("gender", function (User $user) {
-          return $this->statuses(Gender::get_color($user->gender), Gender::get_name($user->gender));
-        })
         ->addColumn("type", function (User $user) {
-          return $this->badge('bx bx-user', UserTypes::get_color($user->type),UserTypes::get_name($user->type));
+          return $this->badge('bx bx-user', UserType::get_color($user->type),UserType::get_name($user->type));
         })
         ->addColumn("role", function (User $user) {
-          $role = $user->getRoleNames()->first()? UserRoles::get_name($user->getRoleNames()->first()) : "-";
+          $role = $user->getRoleNames()->first()? Roles::get_name($user->getRoleNames()->first()) : "-";
           return $this->statuses('secondary', $role);
         })
         ->addColumn("status", function (User $user) {

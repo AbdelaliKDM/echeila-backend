@@ -3,94 +3,51 @@
   <div class="footer-top">
     <div class="container">
       <div class="row gx-0 gy-4 g-md-5">
+
+        <!-- Logo & Description -->
         <div class="col-lg-5">
-          <a href="javascript:;" class="app-brand-link mb-4">
-            <span class="app-brand-logo demo">@include('_partials.macros',["width"=>25,"withbg"=>'var(--bs-primary)'])</span>
-            <span class="app-brand-text demo footer-link fw-bold ms-2 ps-1">{{config('variables.templateName')}}</span>
-          </a>
+          <a href="{{url('front-pages/landing')}}" class="app-brand-link">
+         <img src="{{ asset('assets/img/logo/logo3.png') }}" alt="Logo" style="max-height: 80px; width: auto;">
+        </a>
           <p class="footer-text footer-logo-description mb-4">
-            Most developer friendly & highly customisable Admin Dashboard Template.
+            Hariri vous accompagne pour une prise en charge médicale moderne et humaine. Réservez une consultation ou commandez vos médicaments en ligne.
           </p>
-          <form class="footer-form">
-            <label for="footer-email" class="small">Subscribe to newsletter</label>
-            <div class="d-flex mt-1">
-              <input type="email" class="form-control rounded-0 rounded-start-bottom rounded-start-top" id="footer-email" placeholder="Your email" />
-              <button type="submit" class="btn btn-primary shadow-none rounded-0 rounded-end-bottom rounded-end-top">
-                Subscribe
-              </button>
-            </div>
-          </form>
         </div>
+
+        <!-- Liens utiles -->
         <div class="col-lg-2 col-md-4 col-sm-6">
-          <h6 class="footer-title mb-4">Demos</h6>
+          <h6 class="footer-title mb-4">Liens utiles</h6>
           <ul class="list-unstyled">
-            <li class="mb-3">
-              <a href="javascript:;" target="_blank" class="footer-link">Vertical Layout</a>
-            </li>
-            <li class="mb-3">
-              <a href="javascript:;" target="_blank" class="footer-link">Horizontal Layout</a>
-            </li>
-            <li class="mb-3">
-              <a href="javascript:;" target="_blank" class="footer-link">Bordered Layout</a>
-            </li>
-            <li class="mb-3">
-              <a href="javascript:;" target="_blank" class="footer-link">Semi Dark Layout</a>
-            </li>
-            <li class="mb-3">
-              <a href="javascript:;" target="_blank" class="footer-link">Dark Layout</a>
-            </li>
+            <li class="mb-3"><a href="#landingHero" class="footer-link">Accueille</a></li>
+            <li class="mb-3"><a href="#landingAbout" class="footer-link">À propos</a></li>
+            <li class="mb-3"><a href="#landingServices" class="footer-link">Nos services</a></li>
+            <li class="mb-3"><a href="#partners" class="footer-link">Partenaires</a></li>
+            <li class="mb-3"><a href="#contact" class="footer-link">Contact</a></li>
           </ul>
         </div>
-        <div class="col-lg-2 col-md-4 col-sm-6">
-          <h6 class="footer-title mb-4">Pages</h6>
-          <ul class="list-unstyled">
-            <li class="mb-3">
-              <a href="javascript:;" class="footer-link">Pricing</a>
-            </li>
-            <li class="mb-3">
-              <a href="javascript:;" class="footer-link">Payment<span class="badge rounded bg-primary ms-2 px-2">New</span></a>
-            </li>
-            <li class="mb-3">
-              <a href="javascript:;" class="footer-link">Checkout</a>
-            </li>
-            <li class="mb-3">
-              <a href="javascript:;" class="footer-link">Help Center</a>
-            </li>
-            <li class="mb-3">
-              <a href="javascript:;" target="_blank" class="footer-link">Login/Register</a>
-            </li>
-          </ul>
-        </div>
+
+        <!-- Téléchargement application -->
         <div class="col-lg-3 col-md-4">
-          <h6 class="footer-title mb-4">Download our app</h6>
-          <a href="javascript:void(0);" class="d-block footer-link mb-3 pb-2"><img src="{{ asset('assets/img/front-pages/landing-page/apple-icon.png')}}" alt="apple icon" /></a>
-          <a href="javascript:void(0);" class="d-block footer-link"><img src="{{ asset('assets/img/front-pages/landing-page/google-play-icon.png')}}" alt="google play icon" /></a>
+          <h6 class="footer-title mb-4">Téléchargez l'application</h6>
+          <a href="javascript:void(0);" class="d-block footer-link mb-3 pb-2">
+            <img src="{{ asset('assets/img/front-pages/landing-page/apple-icon.png')}}" alt="Apple Store" />
+          </a>
+          <a href="javascript:void(0);" class="d-block footer-link">
+            <img src="{{ asset('assets/img/front-pages/landing-page/google-play-icon.png')}}" alt="Google Play" />
+          </a>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Bottom Footer -->
   <div class="footer-bottom py-3">
     <div class="container d-flex flex-wrap justify-content-between flex-md-row flex-column text-center text-md-start">
       <div class="mb-2 mb-md-0">
         <span class="footer-text">©
-          <script>document.write(new Date().getFullYear());</script>
+          <script>document.write(new Date().getFullYear());</script> Hariri.
         </span>
-        <a href="javascript:;" target="_blank" class="fw-medium text-white footer-link">{{config('variables.creatorName')}},</a>
-        <span class="footer-text"> Made with ❤️ for a better web.</span>
-      </div>
-      <div>
-        <a href="javascript:;" class="footer-link me-3" target="_blank">
-          <img src="{{asset('assets/img/front-pages/icons/github-light.png')}}" alt="github icon" data-app-light-img="front-pages/icons/github-light.png" data-app-dark-img="front-pages/icons/github-dark.png" />
-        </a>
-        <a href="javascript:;" class="footer-link me-3" target="_blank">
-          <img src="{{asset('assets/img/front-pages/icons/facebook-light.png')}}" alt="facebook icon" data-app-light-img="front-pages/icons/facebook-light.png" data-app-dark-img="front-pages/icons/facebook-dark.png" />
-        </a>
-        <a href="javascript:;" class="footer-link me-3" target="_blank">
-          <img src="{{asset('assets/img/front-pages/icons/twitter-light.png')}}" alt="twitter icon" data-app-light-img="front-pages/icons/twitter-light.png" data-app-dark-img="front-pages/icons/twitter-dark.png" />
-        </a>
-        <a href="javascript:;" class="footer-link" target="_blank">
-          <img src="{{asset('assets/img/front-pages/icons/instagram-light.png')}}" alt="google icon" data-app-light-img="front-pages/icons/instagram-light.png" data-app-dark-img="front-pages/icons/instagram-dark.png" />
-        </a>
+        <span class="footer-text"> Tous droits réservés.</span>
       </div>
     </div>
   </div>

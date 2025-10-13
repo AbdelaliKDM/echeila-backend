@@ -1,13 +1,15 @@
 <?php
-namespace App\Support\Enum;
-class UserTypes
+namespace App\Constants;
+class UserType
 {
   const ADMIN = 'admin';
+  const USER = 'user';
 
-  public static function lists():array
+  public static function all($translated = false):array
   {
     return [
-      self::ADMIN => self::ADMIN,
+      self::ADMIN => $translated ? __('user.roles.admin') : self::ADMIN,
+      self::USER => $translated ? __('user.roles.user') : self::USER,
     ];
   }
 
@@ -15,6 +17,7 @@ class UserTypes
   {
     return [
       self::ADMIN => app()->isLocale('ar') ? 'أدمن' : 'Admin',
+      self::USER => app()->isLocale('ar') ? 'مستخدم' : 'User',
     ];
   }
 
@@ -22,6 +25,7 @@ class UserTypes
   {
     return [
       self::ADMIN => 'primary',
+      self::USER => 'warning',
     ];
   }
 
@@ -29,6 +33,7 @@ class UserTypes
   {
     return [
       self::ADMIN => 'أدمن',
+      self::USER => 'مستخدم'
     ];
   }
 
@@ -39,7 +44,7 @@ class UserTypes
 
   public static function get_name(string $type):string
   {
-    return self::lists2()[$type];
+    return self::all(true)[$type];
   }
 
   public static function get_color(string $type):string

@@ -17,19 +17,16 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-  <title>@yield('title') |
-    {{ config('variables.templateName') ? config('variables.templateName') : 'TemplateName' }} -
-    {{ config('variables.templateSuffix') ? config('variables.templateSuffix') : 'TemplateSuffix' }}
+  <title>@lang('app-name') | @yield('title', __('app.title'))</title>
   </title>
-  <meta name="description"
-    content="{{ config('variables.templateDescription') ? config('variables.templateDescription') : '' }}" />
-  <meta name="keywords" content="{{ config('variables.templateKeyword') ? config('variables.templateKeyword') : '' }}">
+   <meta name="description" content="Bienvenue chez Hariri, votre clinique et pharmacie de confiance. Soins médicaux, consultations, et pharmacie au même endroit." />
+  <meta name="keywords" content="clinique, pharmacie, hariri, santé, médecin, hôpital, soins" />
   <!-- laravel CRUD token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Canonical SEO -->
-  <link rel="canonical" href="{{ config('variables.productPage') ? config('variables.productPage') : '' }}">
+  <link rel="canonical" href="{{ url()->current() }}" />
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/logo/logo2.png') }}" />
 
 
   <!-- Include Styles -->

@@ -22,9 +22,9 @@ class DriverStatus
     public static function all2(): array
     {
         return [
-            self::PENDING => __('app.pending'),
-            self::APPROVED => __('app.approved'),
-            self::DENIED => __('app.denied'),
+            self::PENDING => __('constants.pending'),
+            self::APPROVED => __('constants.approved'),
+            self::DENIED => __('constants.denied'),
         ];
     }
 

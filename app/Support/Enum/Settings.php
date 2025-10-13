@@ -4,7 +4,7 @@ namespace App\Support\Enum;
 
 use function Laravel\Prompts\select;
 
-class AppSettings
+class Settings
 {
   //dashboard
   const CHARGILY_PAY_MODE = 'chargily_pay_mode';

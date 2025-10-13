@@ -3,8 +3,8 @@
 namespace App\Datatables;
 
 use App\Support\DataTable\DataTableActions;
-use App\Support\Enum\PermissionNames;
-use App\Support\Enum\UserRoles;
+use App\Support\Enum\Permissions;
+use App\Support\Enum\Roles;
 use App\Traits\DataTableActionsTrait;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -30,13 +30,13 @@ class RoleDatatable
       return datatables($this->query($request))
         ->addColumn("action", function (Role $role) {
           return $this
-            ->edit(route("roles.edit", $role->id),Auth::user()->hasPermissionTo(PermissionNames::MANAGE_ROLES))
-            ->delete(route("roles.destroy", $role->id), Auth::user()->hasPermissionTo(PermissionNames::MANAGE_ROLES))
+            ->edit(route("roles.edit", $role->id),Auth::user()->hasPermissionTo(Permissions::MANAGE_ROLES))
+            ->delete(route("roles.destroy", $role->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_ROLES))
             ->make();
         })
         ->addColumn("name", function (Role $role) {
           //test locale ar
-          return app()->getLocale() == 'ar' ? $this->bold(UserRoles::get_name($role->name)) : $this->bold($role->name);
+          return app()->getLocale() == 'ar' ? $this->bold(Roles::get_name($role->name)) : $this->bold($role->name);
         })
         ->addColumn("guard_name", function (Role $role) {
           return $role->guard_name;

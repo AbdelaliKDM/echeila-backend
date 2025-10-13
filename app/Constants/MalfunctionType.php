@@ -24,10 +24,10 @@ class MalfunctionType
     public static function all2(): array
     {
         return [
-            self::TIRE => __('app.tire'),
-            self::BATTERY => __('app.battery'),
-            self::FUEL => __('app.fuel'),
-            self::OTHER => __('app.other'),
+            self::TIRE => __('constants.tire'),
+            self::BATTERY => __('constants.battery'),
+            self::FUEL => __('constants.fuel'),
+            self::OTHER => __('constants.other'),
         ];
     }
 

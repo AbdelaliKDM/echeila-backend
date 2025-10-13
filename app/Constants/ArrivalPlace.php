@@ -20,8 +20,8 @@ class ArrivalPlace
     public static function all2(): array
     {
         return [
-            self::MAURITANIA => __('app.mauritania'),
-            self::SPAIN => __('app.spain'),
+            self::MAURITANIA => __('constants.mauritania'),
+            self::SPAIN => __('constants.spain'),
         ];
     }
 

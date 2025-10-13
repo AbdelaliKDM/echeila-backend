@@ -17,7 +17,7 @@
             <th>{{__('Permission')}}</th>
             <th>{{__('Name')}}</th>
             @foreach ($roles as $role)
-              <th>{{ $role->name }} <br> <small>({{ \App\Support\Enum\UserRoles::get_name($role->name) }})</small></th>
+              <th>{{ $role->name }} <br> <small>({{ \App\Support\Enum\Roles::get_name($role->name) }})</small></th>
             @endforeach
           </tr>
         </thead>
@@ -25,7 +25,7 @@
         @if (count($permissions))
           @foreach ($permissions as $permission)
             <tr>
-              <td>{{ \App\Support\Enum\PermissionNames::get_permission_slug($permission->name) }}</td>
+              <td>{{ \App\Support\Enum\Permissions::get_permission_slug($permission->name) }}</td>
               <td>{{ $permission->name }}</td>
 
               @foreach ($roles as $role)
@@ -37,9 +37,9 @@
                            name="roles[{{ $role->id }}][]"
                            value="{{ $permission->id }}"
                           {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}
-                          {{ ($role->name === \App\Support\Enum\UserRoles::SUPER_ADMIN
-                          && ($permission->name === \App\Support\Enum\PermissionNames::MANAGE_ROLES
-                          || $permission->name === \App\Support\Enum\PermissionNames::MANAGE_PERMISSIONS)) ? 'disabled' : '' }}
+                          {{ ($role->name === \App\Support\Enum\Roles::SUPER_ADMIN
+                          && ($permission->name === \App\Support\Enum\Permissions::MANAGE_ROLES
+                          || $permission->name === \App\Support\Enum\Permissions::MANAGE_PERMISSIONS)) ? 'disabled' : '' }}
                     >
                     <label class="custom-control-label d-inline" for="cb-{{ $role->id }}-{{ $permission->id }}">
                     </label>

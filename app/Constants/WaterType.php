@@ -20,8 +20,8 @@ class WaterType
     public static function all2(): array
     {
         return [
-            self::DRINK => __('app.drink'),
-            self::TEA => __('app.tea'),
+            self::DRINK => __('constants.drink'),
+            self::TEA => __('constants.tea'),
         ];
     }
 

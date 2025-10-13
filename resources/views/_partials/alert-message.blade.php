@@ -1,4 +1,3 @@
-<script src="{{asset('assets/js/ui-toasts.js')}}"></script>
 @if(session()->has('success'))
   <div class="bs-toast toast toast-placement-ex m-2 fade bg-primary bottom-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
     <div class="toast-header">

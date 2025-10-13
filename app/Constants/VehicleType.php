@@ -20,8 +20,8 @@ class VehicleType
     public static function all2(): array
     {
         return [
-            self::CAR => __('app.car'),
-            self::TRUCK => __('app.truck'),
+            self::CAR => __('constants.car'),
+            self::TRUCK => __('constants.truck'),
         ];
     }
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Support\Enum\UserRoles;
+use App\Support\Enum\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +26,7 @@ class LoginController extends Controller
 
     if (Auth::attempt($credentials)) {
       $user = Auth::user();
-      if ($user->hasAnyRole([UserRoles::ADMIN, UserRoles::SUPER_ADMIN])) {
+      if ($user->hasAnyRole([Roles::ADMIN, Roles::SUPER_ADMIN])) {
         return redirect()->route('dashboard');
       }
       Auth::logout();

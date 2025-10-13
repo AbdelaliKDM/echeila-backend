@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Support\Enum\UserTypes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -35,10 +34,6 @@ class User extends Authenticatable
     'password',
     'remember_token',
     'device_token'
-  ];
-
-  protected $casts = [
-    'balance' => 'decimal:2',
   ];
 
   // Relationships

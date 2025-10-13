@@ -8,7 +8,6 @@ class UserStatus
 {
     const ACTIVE = 'active';
     const INACTIVE = 'inactive';
-
     const BANNED = 'banned';
 
     public static function all():array
@@ -23,9 +22,9 @@ class UserStatus
     public static function all2():array
     {
         return [
-          self::ACTIVE => __('app.active'),
-          self::INACTIVE => __('app.inactive'),
-          self::BANNED => __('app.banned'),
+          self::ACTIVE => __('constants.active'),
+          self::INACTIVE => __('constants.inactive'),
+          self::BANNED => __('constants.banned'),
         ];
     }
 

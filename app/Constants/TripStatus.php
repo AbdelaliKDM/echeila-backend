@@ -24,10 +24,10 @@ class TripStatus
     public static function all2(): array
     {
         return [
-            self::PENDING => __('app.pending'),
-            self::ONGOING => __('app.ongoing'),
-            self::COMPLETED => __('app.completed'),
-            self::CANCELED => __('app.canceled'),
+            self::PENDING => __('constants.pending'),
+            self::ONGOING => __('constants.ongoing'),
+            self::COMPLETED => __('constants.completed'),
+            self::CANCELED => __('constants.canceled'),
         ];
     }
 

@@ -2,8 +2,8 @@
 namespace Database\Seeders;
 
 
-use App\Support\Enum\PermissionNames;
-use App\Support\Enum\UserRoles;
+use App\Support\Enum\Permissions;
+use App\Support\Enum\Roles;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 
@@ -17,16 +17,16 @@ class PermissionSeeder extends Seeder
   public function run()
   {
 
-    foreach (PermissionNames::lists() as $permission) {
+    foreach (Permissions::lists() as $permission) {
       Permission::findOrCreate($permission);
     }
 
     //assign super admin permissions
-    $superAdminPermissions = PermissionNames::lists();
+    $superAdminPermissions = Permissions::lists();
 
     Permission::whereIn('name', $superAdminPermissions)
       ->each(function ($permission) {
-        $permission->assignRole([UserRoles::SUPER_ADMIN]);
+        $permission->assignRole([Roles::SUPER_ADMIN]);
       });
 
     //assign admin permissions
@@ -35,7 +35,7 @@ class PermissionSeeder extends Seeder
 
     Permission::whereIn('name', $adminPermissions)
       ->each(function ($permission) {
-        $permission->assignRole([UserRoles::ADMIN]);
+        $permission->assignRole([Roles::ADMIN]);
       });
   }
 }

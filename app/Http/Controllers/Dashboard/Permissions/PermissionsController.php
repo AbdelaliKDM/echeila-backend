@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Dashboard\Permissions;
 
 use App\Http\Controllers\Controller;
-use App\Support\Enum\PermissionNames;
+use App\Support\Enum\Permissions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
@@ -13,7 +13,7 @@ class PermissionsController extends Controller
 {
   public function index()
   {
-    if (!auth()->user()->hasPermissionTo(PermissionNames::MANAGE_PERMISSIONS)) {
+    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_PERMISSIONS)) {
       return redirect()->route('unauthorized');
     }
 
@@ -30,7 +30,7 @@ class PermissionsController extends Controller
    */
   public function update(Request $request)
   {
-    if (!auth()->user()->hasPermissionTo(PermissionNames::MANAGE_PERMISSIONS)) {
+    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_PERMISSIONS)) {
       return response()->json(['message' => __('app.unauthorized')], 403);
     }
     // Validate the request
@@ -61,12 +61,12 @@ class PermissionsController extends Controller
       $permissionIds = $role['permissions'];
 
       // Map permission IDs to their names
-      $permissionNames = $permissions->only($permissionIds)->pluck('name')->toArray();
+      $Permissions = $permissions->only($permissionIds)->pluck('name')->toArray();
 
       // Find the role by ID and sync the permissions
       $foundRole = Role::find($roleId);
       if ($foundRole) {
-        $foundRole->syncPermissions($permissionNames); // Update permissions with names
+        $foundRole->syncPermissions($Permissions); // Update permissions with names
       }
     }
     DB::commit();

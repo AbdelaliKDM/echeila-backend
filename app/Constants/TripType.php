@@ -30,13 +30,13 @@ class TripType
     public static function all2(): array
     {
         return [
-            self::TAXI_RIDE => __('app.taxi_ride'),
-            self::CAR_RESCUE => __('app.car_rescue'),
-            self::CARGO_TRANSPORT => __('app.cargo_transport'),
-            self::WATER_TRANSPORT => __('app.water_transport'),
-            self::PAID_DRIVING => __('app.paid_driving'),
-            self::MRT_TRIP => __('app.mrt_trip'),
-            self::ESP_TRIP => __('app.esp_trip'),
+            self::TAXI_RIDE => __('constants.taxi_ride'),
+            self::CAR_RESCUE => __('constants.car_rescue'),
+            self::CARGO_TRANSPORT => __('constants.cargo_transport'),
+            self::WATER_TRANSPORT => __('constants.water_transport'),
+            self::PAID_DRIVING => __('constants.paid_driving'),
+            self::MRT_TRIP => __('constants.mrt_trip'),
+            self::ESP_TRIP => __('constants.esp_trip'),
         ];
     }
 

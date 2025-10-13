@@ -28,12 +28,12 @@ class TransactionType
     public static function all2(): array
     {
         return [
-            self::RESERVATION => __('app.reservation'),
-            self::REFUND => __('app.refund'),
-            self::DEPOSIT => __('app.deposit'),
-            self::WITHDRAW => __('app.withdraw'),
-            self::SUBSCRIBTION => __('app.subscribtion'),
-            self::SERVICE => __('app.service'),
+            self::RESERVATION => __('constants.reservation'),
+            self::REFUND => __('constants.refund'),
+            self::DEPOSIT => __('constants.deposit'),
+            self::WITHDRAW => __('constants.withdraw'),
+            self::SUBSCRIBTION => __('constants.subscribtion'),
+            self::SERVICE => __('constants.service'),
         ];
     }
 

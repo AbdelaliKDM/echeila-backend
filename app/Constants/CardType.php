@@ -20,8 +20,8 @@ class CardType
     public static function all2(): array
     {
         return [
-            self::NATIONAL_ID => __('app.national_id'),
-            self::DRIVING_LICENSE => __('app.driving_license'),
+            self::NATIONAL_ID => __('constants.national_id'),
+            self::DRIVING_LICENSE => __('constants.driving_license'),
         ];
     }
 

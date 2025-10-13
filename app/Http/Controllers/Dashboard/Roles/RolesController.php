@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Dashboard\Roles;
 
 use App\Datatables\RoleDatatable;
 use App\Http\Controllers\Controller;
-use App\Support\Enum\PermissionNames;
+use App\Support\Enum\Permissions;
 use Illuminate\Http\Request;
 
 class RolesController extends Controller
 {
   public function index(Request $request)
   {
-    if (!auth()->user()->hasPermissionTo(PermissionNames::MANAGE_ROLES)) {
+    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_ROLES)) {
       return redirect()->route('unauthorized');
     }
 

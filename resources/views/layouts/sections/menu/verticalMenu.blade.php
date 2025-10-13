@@ -1,5 +1,6 @@
 @php
   use Illuminate\Support\Facades\Route;
+  use App\Support\Enum\Roles;
   $configData = Helper::appClasses();
 @endphp
 
@@ -8,10 +9,11 @@
   <!-- ! Hide app brand if navbar-full -->
   @if(!isset($navbarFull))
     <div class="app-brand demo">
-    <a href="{{url('/')}}" class="app-brand-link">
-      <span
-      class="app-brand-logo demo">@include('_partials.macros', ["width" => 25, "withbg" => 'var(--bs-primary)'])</span>
-      <span class="app-brand-text demo menu-text fw-bold ms-2">{{config('variables.templateName')}}</span>
+    <a href="{{url('/admin')}}" class="app-brand-link">
+      <span class="app-brand-logo demo">
+        <img src="{{asset('assets/img/logo/logo2.png')}}" alt="Logo" width="65" height="65"/>
+      </span>
+      <span class="app-brand-text demo menu-text fw-bold ms-2 text-capitalize">@lang('app-name')</span>
     </a>
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
@@ -22,17 +24,18 @@
 
   <div class="menu-inner-shadow"></div>
 
-  <ul class="menu-inner py-1">
+  <ul class="menu-inner">
     @foreach ($menuData->verticalMenu as $menu)
 
       {{-- adding active and open class if child is active --}}
 
       {{-- menu headers --}}
       @if (isset($menu->menuHeader))
-      <li class="menu-header small text-uppercase">
+        @if (auth()->user()->hasRole([Roles::SUPER_ADMIN, Roles::ADMIN]))
+        <li class="menu-header small text-uppercase mt-0 mb-0">
         <span class="menu-header-text">{{ __($menu->menuHeader) }}</span>
-      </li>
-
+        </li>
+        @endif
       @else
 
         {{-- active menu method --}}

@@ -1,7 +1,7 @@
 <?php
 namespace Database\Seeders;
 
-use App\Support\Enum\UserRoles;
+use App\Support\Enum\Roles;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -14,7 +14,7 @@ class RoleSeeder extends Seeder
    */
   public function run()
   {
-    Role::create(['name' => UserRoles::SUPER_ADMIN]);
-    Role::create(['name' => UserRoles::ADMIN]);
+    Role::create(['name' => Roles::SUPER_ADMIN]);
+    Role::create(['name' => Roles::ADMIN]);
   }
 }

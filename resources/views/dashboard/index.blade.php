@@ -4,7 +4,7 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Home')
+@section('title', __('actions.home'))
 
 @section('content')
     <div class="row">
