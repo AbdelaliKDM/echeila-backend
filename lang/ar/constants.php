@@ -67,4 +67,7 @@ return [
 
     'super_admin' => 'مشرف عام',
     'admin' => 'أدمن',
+    'passenger' => 'راكب',
+    'driver' => 'سائق',
+    'federation' => 'اتحادية'
 ];

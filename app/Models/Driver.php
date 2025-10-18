@@ -95,4 +95,24 @@ class Driver extends Model implements HasMedia
     {
         return $this->reviews()->avg('rating') ?? 0;
     }
+
+        public function getFullnameAttribute()
+    {
+        if ($this->first_name || $this->last_name) {
+            return "{$this->first_name} {$this->last_name}";
+        }
+
+        return $this->user->username;
+
+    }
+
+    public function getPhoneAttribute()
+    {
+        return $this->user->phone;
+    }
+
+    public function getAvatarUrlAttribute(){
+        $image  = $this->getFirstMediaUrl('image');
+        return empty($image) ? asset('assets/img/avatars/1.png') : $image;
+    }
 }

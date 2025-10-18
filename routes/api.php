@@ -151,6 +151,11 @@ Route::prefix('v1')->group(function () {
         Route::prefix('subscriptions')->group(function () {
             Route::post('/', [SubscriptionController::class, 'store']);
         });
+
+        Route::prefix('documentations')->group(function () {
+            Route::post('/{key}', [DocumentationController::class, 'index']);
+        });
+
     });
 
 });

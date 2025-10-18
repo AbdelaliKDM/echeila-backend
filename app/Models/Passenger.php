@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Passenger extends Model implements HasMedia
 {
@@ -25,10 +25,10 @@ class Passenger extends Model implements HasMedia
     ];
 
     public function registerMediaCollections(): void
-  {
-    $this->addMediaCollection(self::IMAGE)
-      ->singleFile();
-  }
+    {
+        $this->addMediaCollection(self::IMAGE)
+            ->singleFile();
+    }
 
     // Relationships
     public function user()
@@ -46,16 +46,49 @@ class Passenger extends Model implements HasMedia
         return $this->hasMany(TripReview::class);
     }
 
+    public function trips()
+    {
+        // Get trips where passenger is a trip client
+        $tripsAsClient = Trip::whereHas('clients', function ($query) {
+            $query->where('client_id', $this->id)
+                  ->where('client_type', self::class);
+        });
+
+        // Get trips where passenger has a cargo
+        $tripsWithCargo = Trip::whereHas('cargos.cargo', function ($query) {
+            $query->where('passenger_id', $this->id);
+        });
+
+        // Union both queries and return distinct trips
+        return $tripsAsClient->union($tripsWithCargo)->distinct();
+    }
+
+    public function cargos(){
+        return $this->hasMany(Cargo::class);
+    }
+
     public function lostAndFounds()
     {
         return $this->hasMany(LostAndFound::class);
     }
 
-    public function getFullnameAttribute(){
-        return "{$this->first_name} {$this->last_name}";
+    public function getFullnameAttribute()
+    {
+        if ($this->first_name || $this->last_name) {
+            return "{$this->first_name} {$this->last_name}";
+        }
+
+        return $this->user->username;
+
     }
 
-    public function getPhoneAttribute(){
+    public function getPhoneAttribute()
+    {
         return $this->user->phone;
+    }
+
+    public function getAvatarUrlAttribute(){
+        $image  = $this->getFirstMediaUrl('image');
+        return empty($image) ? asset('assets/img/avatars/1.png') : $image;
     }
 }

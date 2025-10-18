@@ -2,38 +2,43 @@
 namespace App\Constants;
 class UserType
 {
-  const ADMIN = 'admin';
-  const USER = 'user';
+  const PASSENGER = 'passenger';
+  const DRIVER = 'driver';
+  const FEDERATION = 'federation';
 
   public static function all($translated = false):array
   {
     return [
-      self::ADMIN => $translated ? __('user.roles.admin') : self::ADMIN,
-      self::USER => $translated ? __('user.roles.user') : self::USER,
+      self::PASSENGER => $translated ? __('constants.passenger') : self::PASSENGER,
+      self::DRIVER => $translated ? __('constants.driver') : self::DRIVER,
+      self::FEDERATION => $translated ? __('constants.federation') : self::FEDERATION,
     ];
   }
 
   public static function lists2(): array
   {
     return [
-      self::ADMIN => app()->isLocale('ar') ? 'أدمن' : 'Admin',
-      self::USER => app()->isLocale('ar') ? 'مستخدم' : 'User',
+      self::PASSENGER => app()->isLocale('ar') ? 'راكب' : 'Passenger',
+      self::DRIVER => app()->isLocale('ar') ? 'سائق' : 'Driver',
+      self::FEDERATION => app()->isLocale('ar') ? 'اتحاد' : 'Federation',
     ];
   }
 
   public static function colors():array
   {
     return [
-      self::ADMIN => 'primary',
-      self::USER => 'warning',
+      self::PASSENGER => 'primary',
+      self::DRIVER => 'warning',
+      self::FEDERATION => 'info',
     ];
   }
 
   public static function lists_arabic()
   {
     return [
-      self::ADMIN => 'أدمن',
-      self::USER => 'مستخدم'
+      self::PASSENGER => 'راكب',
+      self::DRIVER => 'سائق',
+      self::FEDERATION => 'اتحاد'
     ];
   }
 

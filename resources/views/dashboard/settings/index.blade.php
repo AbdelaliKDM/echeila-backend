@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', __('Settings'))
+@section('title', __('app.settings'))
 
 @section('content')
     <form class="form-horizontal" action="{{ route('settings.store') }}" method="POST" enctype="multipart/form-data">

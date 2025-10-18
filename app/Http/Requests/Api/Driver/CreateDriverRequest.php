@@ -30,7 +30,7 @@ class CreateDriverRequest extends FormRequest
             'vehicle.production_year' => 'required|integer|min:1900|max:' . date('Y'),
             'vehicle.plate_number' => 'required|string|max:255|unique:vehicles,plate_number',
             'vehicle.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:8192',
-            'vehicle.permit' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
+            'vehicle.permit' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:8192',
 
             // Services (array of trip types)
             'services' => 'required|array|min:1',

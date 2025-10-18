@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Auth;
-use Illuminate\Support\Facades\Hash;
 use Session;
+use App\Models\Admin;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
   public function index()
   {
     return view('dashboard.profile.index')->with([
-      'user' => User::where('id', auth()->id())->first(),
+      'user' => Admin::where('id', auth()->id())->first(),
     ]);
   }
 
   public function store(Request $request)
   {
     try {
-      $user = User::where('id', auth()->id())->first();
+      $user = Admin::where('id', auth()->id())->first();
       $data = $request->validate([
         'firstname' => 'required|string|max:255',
         'lastname' => 'required|string|max:255',
         'phone' => 'required|regex:/^(\+?\d{1,3})?(\d{9})$/|unique:users,phone,' . $user->id,
-        'birthdate' => 'nullable|date|before:today',
-        'full_address' => 'nullable|string|max:255',
+        //'birthdate' => 'nullable|date|before:today',
+        //'full_address' => 'nullable|string|max:255',
         'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:8192',
       ]);
 
@@ -44,7 +44,7 @@ class ProfileController extends Controller
   public function updatePassword(Request $request)
   {
     try {
-      $user = User::where('id', auth()->id())->first();
+      $user = Admin::where('id', auth()->id())->first();
       $data = $request->validate([
         'old_password' => 'required|string|min:8',
         'password' => 'required|string|min:8|confirmed',

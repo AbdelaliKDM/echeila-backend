@@ -26,7 +26,7 @@ class MenuBuilder
     array $submenu = []
   ): void {
     $item = [
-      'name' => trans('app.' . $name),
+      'name' => $name,
       'icon' => 'menu-icon tf-icons ' . $icon, // Add the default prefix
       'slug' => $slug,
     ];
@@ -68,7 +68,7 @@ class MenuBuilder
     string|array|null $permission = null
   ): array {
     $sub = [
-      'name' => trans('app.' . $name),
+      'name' => $name,
       'route' => $route,
       'slug' => $slug,
       'icon' => $icon? 'menu-icon tf-icons ' . $icon : '', // Add the default prefix

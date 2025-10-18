@@ -40,12 +40,12 @@ class TransactionType
     public static function colors(): array
     {
         return [
-            self::RESERVATION => 'primary',
+            self::RESERVATION => 'blue',
             self::REFUND => 'warning',
             self::DEPOSIT => 'success',
             self::WITHDRAW => 'info',
-            self::SUBSCRIBTION => 'secondary',
-            self::SERVICE => 'dark',
+            self::SUBSCRIBTION => 'purple',
+            self::SERVICE => 'teal',
         ];
     }
 

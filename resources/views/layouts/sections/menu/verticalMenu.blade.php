@@ -8,10 +8,10 @@
 
   <!-- ! Hide app brand if navbar-full -->
   @if(!isset($navbarFull))
-    <div class="app-brand demo">
+    <div class="app-brand demo px-4">
     <a href="{{url('/admin')}}" class="app-brand-link">
-      <span class="app-brand-logo demo">
-        <img src="{{asset('assets/img/logo/logo2.png')}}" alt="Logo" width="65" height="65"/>
+      <span class="app-brand-logo demo avatar">
+        <img src="{{asset('assets/img/logo/1.png')}}" alt="Logo" class="rounded-2"/>
       </span>
       <span class="app-brand-text demo menu-text fw-bold ms-2 text-capitalize">@lang('app-name')</span>
     </a>

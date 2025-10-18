@@ -1,4 +1,21 @@
-{
+{ 
+    "app-name": "Echeila",
+    "dashboard": "Dashboard",
+    "admins": "Admins",
+    "roles-permissions": "Roles & Permissions",
+    "roles": "Roles",
+    "permissions": "Permissions",
+    "users": "Users",
+    "drivers": "Drivers",
+    "passengers": "Passengers",
+    "federations": "Federations",
+    "wilayas": "Wilayas",
+    "seat-prices" : "Seat prices",
+    "vehicles": "Vehicles",
+    "brands": "Brands",
+    "vehicle-models": "Vehicle Models",
+    "colors": "Colors",
+
     "(and :count more error)": "(and :count more error)",
     "(and :count more errors)": "(and :count more error)|(and :count more errors)|(and :count more errors)",
     "A decryption key is required.": "A decryption key is required.",

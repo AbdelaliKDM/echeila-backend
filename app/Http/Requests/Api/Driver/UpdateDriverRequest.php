@@ -29,7 +29,7 @@ class UpdateDriverRequest extends FormRequest
             'birth_date' => 'sometimes|date|before:today',
             'email' => 'sometimes|email',
             'status' => 'sometimes|in:' . implode(',', DriverStatus::all()),
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:8192',
         ];
     }
 

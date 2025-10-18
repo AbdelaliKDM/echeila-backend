@@ -28,22 +28,22 @@ class AdminDatatable
     {
         try {
             return datatables($this->query($request))
-                ->addColumn('actions', function (Admin $admin) {
+                ->addColumn('actions', function ($model) {
                     return $this
-                        ->edit(route('admins.edit', $admin->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_ADMINS))
-                        ->delete($admin->id, Auth::user()->hasPermissionTo(Permissions::MANAGE_ADMINS))
-                        ->make();
+                        ->edit(route('admins.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_ADMINS))
+                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::MANAGE_ADMINS))
+                        ->makeLabelledIcons();
                 })
-                ->addColumn('admin', function (Admin $admin) {
-                    return $this->thumbnailTitleMeta($admin->getFirstMediaUrl('image'), $admin->fullname, $admin->phone);
+                ->addColumn('admin', function ($model) {
+                    return $this->thumbnailTitleMeta($model->avatar_url, $model->fullname, $model->phone);
                 })
-                ->addColumn('email', function (Admin $admin) {
-                    return $admin->email;
+                ->addColumn('email', function ($model) {
+                    return $model->email;
                 })
-                ->addColumn('role', function (Admin $admin) {
-                    $role = $admin->getRoleNames()->first() ?? '-';
+                ->addColumn('role', function ($model) {
+                    $role = $model->getRoleNames()->first() ?? '-';
 
-                    return $this->badge(Roles::get_color($role), Roles::get_name($role));
+                    return $this->badge(Roles::get_name($role), Roles::get_color($role));
                 })
                 ->rawColumns(self::columns())
                 ->make(true);

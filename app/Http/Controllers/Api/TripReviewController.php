@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use Exception;
+use App\Models\Trip;
+use App\Models\Passenger;
 use App\Models\TripReview;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponseTrait;
@@ -16,10 +18,10 @@ class TripReviewController extends Controller
     public function store(Request $request)
     {
 
-        $validated = $this->validateRequest($reauest, [
+        $validated = $this->validateRequest($request, [
                 'trip_id' => 'required|exists:trips,id',
                 'rating' => 'required|integer|min:1|max:5',
-                'review_text' => 'nullable|string'
+                'comment' => 'nullable|string'
             ]);
         try {
             $user = auth()->user();
@@ -30,7 +32,7 @@ class TripReviewController extends Controller
                 throw new Exception('Passenger profile not found', 404);
             }
 
-            if($trip->passengers()->where('passenger_id', $passenger->id)->doesntExist()) {
+            if($trip->clients()->where([ 'client_type' => Passenger::class, 'client_id' => $passenger->id])->doesntExist()) {
                 throw new Exception('You did not participate in this trip', 400);
             }
 

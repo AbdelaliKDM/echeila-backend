@@ -3,20 +3,22 @@
 @section('title', __('app.user'))
 
 @section('content')
-  <h4 class="fw-bold py-3 mb-3 row justify-content-between">
-    <div class="col-md-auto">
-      <span class="text-muted fw-light">{{ __($edit ? 'app.edit' : 'app.add') }}/</span> @lang('app.user')
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="fw-bold mb-1">{{ __($edit ? 'app.edit-user' : 'app.create-user') }}</h4>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('app.dashboard') }}</a></li>
+          <li class="breadcrumb-item"><a href="{{ route('users.index') }}">{{ __('app.users') }}</a></li>
+          <li class="breadcrumb-item active">{{ __($edit ? 'app.edit' : 'app.add') }}</li>
+        </ol>
+      </nav>
     </div>
-    <div class="col-md-auto">
-      @permission(\App\Support\Enum\Permissions::MANAGE_USERS)
-      <a href="{{ route('users.index') }}" class="text-white text-decoration-none">
-        <button type="button" class="btn btn-primary" style="float: {{ app()->isLocale('ar') ? 'left' : 'right' }}">
-          <span class="tf-icons bx bx-arrow-back"></span> @lang('app.back')
-        </button>
-      </a>
-      @endpermission
-    </div>
-  </h4>
+    <a href="{{ route('users.index') }}" class="btn btn-label-secondary">
+      <i class="bx bx-arrow-back me-1"></i>{{ __('app.back') }}
+    </a>
+  </div>
 
   @if ($edit)
     <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data">

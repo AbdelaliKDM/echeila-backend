@@ -14,7 +14,7 @@ class UserStatus
     {
         return [
           self::ACTIVE,
-          self::INACTIVE,
+          //self::INACTIVE,
           self::BANNED,
         ];
     }
@@ -32,8 +32,8 @@ class UserStatus
     {
         return [
           self::ACTIVE => 'success',
-          self::INACTIVE => 'danger',
-          self::BANNED => 'warning',
+          self::INACTIVE => 'warning',
+          self::BANNED => 'danger',
         ];
     }
 

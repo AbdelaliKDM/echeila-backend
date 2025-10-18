@@ -45,14 +45,14 @@
                 <label for="phone" class="form-label">@lang('user.phone')</label>
                 <input type="text" name="phone" class="form-control" id="phone" value="{{ old('phone', $user->phone) }}" required>
               </div>
-              <div class="mb-3 col-md-6">
+              {{-- <div class="mb-3 col-md-6">
                 <label for="birthdate" class="form-label">@lang('user.birthdate')</label>
                 <input type="date" name="birthdate" class="form-control" id="birthdate" value="{{ old('birthdate', $user->birthdate?->format('Y-m-d')) }}">
               </div>
               <div class="mb-3 col-md">
                 <label for="full_address" class="form-label">@lang('user.full_address')</label>
                 <input type="text" name="full_address" class="form-control" id="full_address" value="{{ old('full_address', $user->full_address) }}">
-              </div>
+              </div> --}}
             </div>
             <div class="form-group" style="text-align: {{ app()->isLocale('ar') ? 'left' : 'right' }}">
               <button type="submit" class="btn btn-primary">@lang('app.send')</button>

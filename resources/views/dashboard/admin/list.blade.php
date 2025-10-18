@@ -1,9 +1,20 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', __('admin.admin'))
+@section('title', __('app.admins'))
 
 @section('content')
-
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="fw-bold mb-1">{{ __('app.admins') }}</h4>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('app.dashboard') }}</a></li>
+          <li class="breadcrumb-item active">{{ __('app.admins') }}</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
 
   <!-- Bootstrap Table with Header - Light -->
   <div class="card">

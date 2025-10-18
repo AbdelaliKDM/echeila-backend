@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Dashboard\Users;
 use App\Datatables\UserDatatable;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Transaction;
 use App\Support\Enum\Permissions;
 use App\Support\Enum\Roles;
 use App\Constants\UserType;
+use App\Constants\NotificationMessages;
+use App\Constants\TransactionType;
+use App\Notifications\NewMessageNotification;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Modules\Transactions\Constants\Status;
-use Modules\Transactions\Constants\Type;
 
 class UsersController extends Controller
 {
@@ -159,13 +161,101 @@ class UsersController extends Controller
       $user = User::findOrFail($data['id']);
       $user->status = $data['status'];
       $user->save();
+
+      // Send notification
+      $notificationKey = $data['status'] === 'active' 
+        ? NotificationMessages::ACCOUNT_ACTIVATED 
+        : NotificationMessages::ACCOUNT_SUSPENDED;
+      
+      $user->notify(new NewMessageNotification(
+        key: $notificationKey,
+        data: ['status' => $data['status']]
+      ));
+
       DB::commit();
 
       $statusMessage = $data['status'] === 'active'
         ? __('user.activated_successfully')
         : __('user.suspended_successfully');
 
-      return redirect()->route('users.index')->with('success', $statusMessage);
+      return redirect()->back()->with('success', $statusMessage);
+    } catch (\Exception $e) {
+      DB::rollBack();
+      return redirect()->back()->with('error', $e->getMessage());
+    }
+  }
+
+  public function chargeWallet(Request $request)
+  {
+    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
+      return redirect()->route('unauthorized');
+    }
+
+    $data = $request->validate([
+      'id' => 'required|exists:users,id',
+      'amount' => 'required|numeric|min:0',
+    ]);
+
+    try {
+      DB::beginTransaction();
+      $user = User::findOrFail($data['id']);
+      $wallet = $user->wallet;
+      $wallet->increment('balance', $data['amount']);
+
+      $transaction = Transaction::create([
+        'wallet_id' => $wallet->id,
+        'type' => TransactionType::DEPOSIT,
+        'amount' => abs($data['amount']),
+      ]);
+
+      $user->notify(new NewMessageNotification(
+        key: NotificationMessages::TRANSACTION_DEPOSIT,
+        data: ['amount' => $transaction->amount, 'balance' => $wallet->balance]
+      ));
+
+      DB::commit();
+      return redirect()->back()->with('success', __('app.wallet_charged_successfully'));
+    } catch (\Exception $e) {
+      DB::rollBack();
+      return redirect()->back()->with('error', $e->getMessage());
+    }
+  }
+
+  public function withdrawSum(Request $request)
+  {
+    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
+      return redirect()->route('unauthorized');
+    }
+
+    $data = $request->validate([
+      'id' => 'required|exists:users,id',
+      'amount' => 'required|numeric|min:0',
+    ]);
+
+    try {
+      DB::beginTransaction();
+      $user = User::findOrFail($data['id']);
+      $wallet = $user->wallet;
+
+      if ($wallet->balance < $data['amount']) {
+        throw new \Exception('Insufficient balance');
+      }
+
+      $wallet->decrement('balance', $data['amount']);
+
+      $transaction = Transaction::create([
+        'wallet_id' => $wallet->id,
+        'type' => TransactionType::WITHDRAW,
+        'amount' => -abs($data['amount']),
+      ]);
+
+      $user->notify(new NewMessageNotification(
+        key: NotificationMessages::TRANSACTION_WITHDRAW,
+        data: ['amount' => $transaction->amount, 'balance' => $wallet->balance]
+      ));
+
+      DB::commit();
+      return redirect()->back()->with('success', __('app.withdrawal_completed_successfully'));
     } catch (\Exception $e) {
       DB::rollBack();
       return redirect()->back()->with('error', $e->getMessage());

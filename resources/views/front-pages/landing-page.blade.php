@@ -25,108 +25,109 @@ $configData = Helper::appClasses();
 @endsection
 
 @section('content')
-<section id="hero-animation">
-  <div id="landingHero" class="section-py landing-hero position-relative">
-    <div class="container">
-      <div class="hero-text-box text-center">
-        <h1 class="text-primary hero-title display-4 fw-bold">
-          Votre santé, notre priorité
-        </h1>
-        <h2 class="hero-sub-title h6 mb-4 pb-1">
-          Commandez vos médicaments en ligne et prenez vos rendez-vous à l’Hôpital Hariri – le tout depuis une seule application mobile intuitive.
-        </h2>
-        <div class="landing-hero-btn d-inline-block position-relative">
-          <span class="hero-btn-item position-absolute d-none d-md-flex text-heading">
-            Rejoignez notre communauté
-            <img src="{{ asset('assets/img/front-pages/icons/Join-community-arrow.png') }}" alt="Join community arrow" class="scaleX-n1-rtl" />
-          </span>
-          <a href="#telechargement" class="btn btn-primary">Télécharger l'application</a>
-        </div>
-      </div>
-      <div id="heroDashboardAnimation" class="hero-animation-img">
-        <a href="#">
-          <div id="heroAnimationImg" class="position-relative hero-dashboard-img">
-            <!-- <img src="{{ asset('assets/img/front-pages/landing-page/hero-dashboard-' . $configData['style'] . '.png') }}" alt="hero dashboard" class="animation-img"
-              data-app-light-img="front-pages/landing-page/hero-dashboard-light.png"
-              data-app-dark-img="front-pages/landing-page/hero-dashboard-dark.png" /> -->
-            <img src="{{ asset('assets/img/backgrounds/hero-' . $configData['style'] . '.svg') }}" alt="hero elements"
-              class=" hero-elements-img animation-img mt-5"
-              data-app-light-img="backgrounds/hero.svg"
-              data-app-dark-img="backgrounds/hero.svg" />
+<div data-bs-spy="scroll" class="scrollspy-example">
+  <!-- Hero: Start -->
+  <section id="hero-animation">
+    <div id="landingHero" class="section-py landing-hero position-relative">
+      <div class="container">
+        <div class="hero-text-box text-center">
+          <h1 class="text-primary hero-title display-4 fw-bold">One dashboard to manage all your businesses</h1>
+          <h2 class="hero-sub-title h6 mb-4 pb-1">
+            Production-ready & easy to use Admin Template<br class="d-none d-lg-block" />
+            for Reliability and Customizability.
+          </h2>
+          <div class="landing-hero-btn d-inline-block position-relative">
+            <span class="hero-btn-item position-absolute d-none d-md-flex text-heading">Join community
+              <img src="{{asset('assets/img/front-pages/icons/Join-community-arrow.png')}}" alt="Join community arrow" class="scaleX-n1-rtl" /></span>
+            <a href="#landingPricing" class="btn btn-primary">Get early access</a>
           </div>
-        </a>
+        </div>
+        <div id="heroDashboardAnimation" class="hero-animation-img">
+          <a href="{{url('/app/ecommerce/dashboard')}}" target="_blank">
+            <div id="heroAnimationImg" class="position-relative hero-dashboard-img">
+              <img src="{{asset('assets/img/front-pages/landing-page/hero-dashboard-'.$configData['style'].'.png')}}" alt="hero dashboard" class="animation-img" data-app-light-img="front-pages/landing-page/hero-dashboard-light.png" data-app-dark-img="front-pages/landing-page/hero-dashboard-dark.png" />
+              <img src="{{asset('assets/img/front-pages/landing-page/hero-elements-'.$configData['style'].'.png')}}" alt="hero elements" class="position-absolute hero-elements-img animation-img top-0 start-0" data-app-light-img="front-pages/landing-page/hero-elements-light.png" data-app-dark-img="front-pages/landing-page/hero-elements-dark.png" />
+            </div>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="landing-hero-blank"></div>
-</section>
-  <!-- Hero animation: End -->
+    <div class="landing-hero-blank"></div>
+  </section>
+  <!-- Hero: End -->
 
-<!-- À propos de nous: Start -->
-<section id="landingAbout" class="section-py bg-body">
-  <div class="container">
-    <div class="text-center mb-3 pb-1">
-      <span class="badge bg-label-primary">À propos de nous</span>
+  <!-- Useful features: Start -->
+  <section id="landingFeatures" class="section-py landing-features">
+    <div class="container">
+      <div class="text-center mb-3 pb-1">
+        <span class="badge bg-label-primary">Useful Features</span>
+      </div>
+      <h3 class="text-center mb-1">
+        <span class="section-title">Everything you need</span> to start your next project
+      </h3>
+      <p class="text-center mb-3 mb-md-5 pb-3">
+        Not just a set of tools, the package includes ready-to-deploy conceptual application.
+      </p>
+      <div class="features-icon-wrapper row gx-0 gy-4 g-sm-5">
+        <div class="col-lg-4 col-sm-6 text-center features-icon-box">
+          <div class="text-center mb-3">
+            <img src="{{asset('assets/img/front-pages/icons/laptop.png')}}" alt="laptop charging" />
+          </div>
+          <h5 class="mb-3">Quality Code</h5>
+          <p class="features-icon-description">
+            Code structure that all developers will easily understand and fall in love with.
+          </p>
+        </div>
+        <div class="col-lg-4 col-sm-6 text-center features-icon-box">
+          <div class="text-center mb-3">
+            <img src="{{asset('assets/img/front-pages/icons/rocket.png')}}" alt="transition up" />
+          </div>
+          <h5 class="mb-3">Continuous Updates</h5>
+          <p class="features-icon-description">
+            Free updates for the next 12 months, including new demos and features.
+          </p>
+        </div>
+        <div class="col-lg-4 col-sm-6 text-center features-icon-box">
+          <div class="text-center mb-3">
+            <img src="{{asset('assets/img/front-pages/icons/paper.png')}}" alt="edit" />
+          </div>
+          <h5 class="mb-3">Stater-Kit</h5>
+          <p class="features-icon-description">
+            Start your project quickly without having to remove unnecessary features.
+          </p>
+        </div>
+        <div class="col-lg-4 col-sm-6 text-center features-icon-box">
+          <div class="text-center mb-3">
+            <img src="{{asset('assets/img/front-pages/icons/check.png')}}" alt="3d select solid" />
+          </div>
+          <h5 class="mb-3">API Ready</h5>
+          <p class="features-icon-description">
+            Just change the endpoint and see your own data loaded within seconds.
+          </p>
+        </div>
+        <div class="col-lg-4 col-sm-6 text-center features-icon-box">
+          <div class="text-center mb-3">
+            <img src="{{asset('assets/img/front-pages/icons/user.png')}}" alt="lifebelt" />
+          </div>
+          <h5 class="mb-3">Excellent Support</h5>
+          <p class="features-icon-description">An easy-to-follow doc with lots of references and code examples.</p>
+        </div>
+        <div class="col-lg-4 col-sm-6 text-center features-icon-box">
+          <div class="text-center mb-3">
+            <img src="{{asset('assets/img/front-pages/icons/keyboard.png')}}" alt="google docs" />
+          </div>
+          <h5 class="mb-3">Well Documented</h5>
+          <p class="features-icon-description">An easy-to-follow doc with lots of references and code examples.</p>
+        </div>
+      </div>
     </div>
-    <h3 class="text-center mb-1">
-      <span class="section-title text-gradient-primary">Clinique Hariri Internationale</span> — Soins d’excellence, expertise mondiale
-    </h3>
-    <p class="text-center mb-3 mb-md-5 pb-3">
-      La Clinique Hariri est une clinique moderne dotée d’un personnel national et étranger hautement qualifié. 
-      Elle offre une large gamme de services médicaux spécialisés et accueille régulièrement des professeurs étrangers experts dans diverses spécialités pour des consultations avancées.
-    </p>
-    <div class="features-icon-wrapper row gx-0 gy-4 g-sm-5 justify-content-center">
-      
-      <!-- Service médical -->
-      <div class="col-lg-4 col-sm-6 text-center features-icon-box">
-        <div class="text-center mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3A57E8" viewBox="0 0 24 24">
-            <path d="M3 3v18h18V3H3zm16 16H5V5h14v14zm-3-7h-4v4h-2v-4H6v-2h4V6h2v4h4v2z"/>
-          </svg>
-        </div>
-        <h5 class="mb-3">Services Multidisciplinaires</h5>
-        <p class="features-icon-description">
-          Une variété de spécialités médicales prises en charge par une équipe expérimentée.
-        </p>
-      </div>
-
-      <!-- Équipe médicale -->
-      <div class="col-lg-4 col-sm-6 text-center features-icon-box">
-        <div class="text-center mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3A57E8" viewBox="0 0 24 24">
-            <path d="M12 12c2.67 0 8 1.34 8 4v2h-16v-2c0-2.66 5.33-4 8-4zm0-2a4 4 0 100-8 4 4 0 000 8z"/>
-          </svg>
-        </div>
-        <h5 class="mb-3">Équipe médicale qualifiée</h5>
-        <p class="features-icon-description">
-          Des professionnels de santé nationaux et internationaux au service des patients.
-        </p>
-      </div>
-
-      <!-- Visites de professeurs étrangers -->
-      <div class="col-lg-4 col-sm-6 text-center features-icon-box">
-        <div class="text-center mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3A57E8" viewBox="0 0 24 24">
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 3.25 2.25 6 5.25 6.75V20h3.5v-4.25C16.75 15 19 12.25 19 9c0-3.87-3.13-7-7-7z"/>
-          </svg>
-        </div>
-        <h5 class="mb-3">Consultations internationales</h5>
-        <p class="features-icon-description">
-          Des visites régulières de spécialistes venus du monde entier pour un diagnostic avancé.
-        </p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- À propos de nous: End -->
-
+  </section>
+  <!-- Useful features: End -->
 
   <!-- Real customers reviews: Start -->
-  <!-- <section id="landingReviews" class="section-py bg-body landing-reviews pb-0"> -->
+  <section id="landingReviews" class="section-py bg-body landing-reviews pb-0">
     <!-- What people say slider: Start -->
-    <!-- <div class="container">
+    <div class="container">
       <div class="row align-items-center gx-0 gy-4 g-lg-5">
         <div class="col-md-6 col-lg-5 col-xl-3">
           <div class="mb-3 pb-1">
@@ -331,11 +332,11 @@ $configData = Helper::appClasses();
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     <!-- What people say slider: End -->
-    <!-- <hr class="m-0" /> -->
+    <hr class="m-0" />
     <!-- Logo slider: Start -->
-    <!-- <div class="container">
+    <div class="container">
       <div class="swiper-logo-carousel py-4 my-lg-2">
         <div class="swiper" id="swiper-clients-logos">
           <div class="swiper-wrapper">
@@ -357,198 +358,371 @@ $configData = Helper::appClasses();
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     <!-- Logo slider: End -->
-  <!-- </section> -->
+  </section>
   <!-- Real customers reviews: End -->
 
-  <!-- Nos valeurs: Start -->
-<section id="landingValues" class="section-py landing-features">
-  <div class="container">
-    <div class="text-center mb-3 pb-1">
-      <span class="badge bg-label-primary">Nos valeurs</span>
-    </div>
-    <h3 class="text-center mb-1">
-      <span class="section-title text-gradient-primary">Ce qui nous guide</span> chaque jour
-    </h3>
-    <p class="text-center mb-4 mb-md-5 pb-2">
-      À la Clinique Hariri, nous plaçons l’humain au cœur de nos engagements pour offrir une expérience de soins exceptionnelle, dans le respect et l’écoute.
-    </p>
-
-    <div class="row gy-4 justify-content-center">
-      <!-- Valeur 1 -->
-      <div class="col-md-4 text-center">
-        <div class="mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3A57E8" viewBox="0 0 24 24">
-            <path d="M12 2a10 10 0 00-7.07 17.07l1.41-1.41A8 8 0 1120 12h-2.5l3.5 4.5L24 12h-2a10 10 0 00-10-10z"/>
-          </svg>
-        </div>
-        <h5 class="mb-2">Service adapté et réactif</h5>
-        <p>
-          Délivrer le bon service, au bon endroit, au bon moment, pour chaque patient.
-        </p>
+  <!-- Our great team: Start -->
+  <section id="landingTeam" class="section-py landing-team">
+    <div class="container">
+      <div class="text-center mb-3 pb-1">
+        <span class="badge bg-label-primary">Our Great Team</span>
       </div>
-
-      <!-- Valeur 2 -->
-      <div class="col-md-4 text-center">
-        <div class="mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3A57E8" viewBox="0 0 24 24">
-            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-          </svg>
-        </div>
-        <h5 class="mb-2">Respect & dignité</h5>
-        <p>
-          Respecter la diversité culturelle, la dignité et les droits fondamentaux de chaque patient.
-        </p>
-      </div>
-
-      <!-- Valeur 3 -->
-      <div class="col-md-4 text-center">
-        <div class="mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3A57E8" viewBox="0 0 24 24">
-            <path d="M12 3a9 9 0 019 9c0 3.87-2.52 7.16-6 8.48l-.01-.01c-.34.1-.69.17-1.05.17s-.71-.06-1.05-.17l-.01.01C7.52 19.16 5 15.87 5 12a9 9 0 019-9zm0 2a7 7 0 00-7 7c0 2.86 1.84 5.3 4.43 6.28.51.19.92.59 1.14 1.1.2.48.65.78 1.17.78s.97-.3 1.17-.78c.22-.51.63-.91 1.14-1.1A7.001 7.001 0 0019 12a7 7 0 00-7-7z"/>
-          </svg>
-        </div>
-        <h5 class="mb-2">Écoute & accompagnement</h5>
-        <p>
-          Être attentif aux besoins des patients et de leurs familles pour des soins plus humains.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- Nos valeurs: End -->
-
-<!-- Nos missions: Start -->
-<section id="landingMissions" class="section-py bg-body">
-  <div class="container">
-    <div class="text-center mb-3 pb-1">
-      <span class="badge bg-label-primary">Nos missions</span>
-    </div>
-    <h3 class="text-center mb-1">
-      <span class="section-title text-gradient-primary">Notre engagement</span> envers nos patients
-    </h3>
-    <p class="text-center mb-4 mb-md-5 pb-2">
-      Nous plaçons la qualité des soins, l’humain et l’accès à la santé pour tous au cœur de nos priorités.
-    </p>
-
-    <div class="row gy-4 justify-content-center">
-      <!-- Mission 1 -->
-      <div class="col-md-6 text-center">
-        <div class="mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3A57E8" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12c0 3.87 2.63 7.19 6.24 8.48l1.26-1.26C6.83 18.33 5 15.35 5 12c0-3.87 3.13-7 7-7s7 3.13 7 7c0 3.35-1.83 6.33-4.5 7.22l1.26 1.26C19.37 19.19 22 15.87 22 12c0-5.52-4.48-10-10-10z"/>
-          </svg>
-        </div>
-        <h5 class="mb-2">Leader en soins de santé</h5>
-        <p>
-          Être la référence en matière de soins médicaux pour les patients et leurs familles, à chaque étape du parcours.
-        </p>
-      </div>
-
-      <!-- Mission 2 -->
-      <div class="col-md-6 text-center">
-        <div class="mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3A57E8" viewBox="0 0 24 24">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14l4-4h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-          </svg>
-        </div>
-        <h5 class="mb-2">Soins personnalisés de qualité</h5>
-        <p>
-          Offrir des soins sur mesure de haute qualité aux patients tchadiens et internationaux, avec compassion et expertise.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- Nos missions: End -->
-
- <!-- Nos services: Start -->
-<section id="landingServices" class="section-py landing-fun-facts">
-  <div class="container">
-    <div class="text-center mb-4">
-      <span class="badge bg-label-primary  px-3 py-2 rounded-pill shadow-sm">Nos services</span>
-      <h3 class="mt-3 mb-1 fw-bold">
-        <span class="section-title text-gradient-primary">Spécialités disponibles</span> à la Clinique Hariri
-      </h3>
-      <p class="text-muted fs-5">Une gamme complète de soins pour répondre à tous vos besoins médicaux.</p>
-    </div>
-
-    <div class="row gy-4">
-      @php
-        $services = [
-          ['title' => 'Gynécologie-obstétrique', 'icon' => 'gynecology.png'],
-          ['title' => 'Gastro-entérologie', 'icon' => 'stomach.png'],
-          ['title' => 'Chirurgie', 'icon' => 'surgery.png'],
-          ['title' => 'Pédiatrie', 'icon' => 'pediatrics.png'],
-          ['title' => 'ORL', 'icon' => 'ear-plug.png'],
-          ['title' => 'Traumatologie', 'icon' => 'injury.png'],
-          ['title' => 'Neurologie', 'icon' => 'brain.png'],
-          ['title' => 'Diabétologie', 'icon' => 'sugar-blood-level.png'],
-          ['title' => 'Cardiologie', 'icon' => 'healthcare-and-medical.png'],
-          ['title' => 'Urologie', 'icon' => 'urology.png'],
-          ['title' => 'Hématologie', 'icon' => 'blood-test.png'],
-          ['title' => 'Dermatologie', 'icon' => 'dermatology.png'],
-          ['title' => 'Pneumologie', 'icon' => 'lungs.png'],
-          ['title' => 'Psychiatrie', 'icon' => 'mental-health.png'],
-          ['title' => 'Oncologie', 'icon' => 'oncology.png'],
-        ];
-      @endphp
-
-      @foreach($services as $service)
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="card border-0 shadow-lg h-100 service-card position-relative overflow-hidden animate__animated animate__fadeInUp" style="transition: transform 0.2s;">
-          <div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-4">
-            <div class="service-icon mb-3 d-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10" style="width:72px;height:72px;">
-              <img src="{{ asset('assets/img/favicon/' . $service['icon']) }}" alt="{{ $service['title'] }}" width="48" height="48" style="filter: drop-shadow(0 2px 8px #3A57E833);" />
+      <h3 class="text-center mb-1"><span class="section-title">Supported</span> by Real People</h3>
+      <p class="text-center mb-md-5 pb-3">Who is behind these great-looking interfaces?</p>
+      <div class="row gy-5 mt-2">
+        <div class="col-lg-3 col-sm-6">
+          <div class="card mt-3 mt-lg-0 shadow-none">
+            <div class="bg-label-primary position-relative team-image-box">
+              <img src="{{asset('assets/img/front-pages/landing-page/team-member-1.png')}}" class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl img-fluid" alt="human image" />
             </div>
-            <h6 class="fw-bold mb-0 text-primary">{{ $service['title'] }}</h6>
+            <div class="card-body border border-label-primary border-top-0 text-center">
+              <h5 class="card-title mb-0">Sophie Gilbert</h5>
+              <p class="text-muted mb-0">Project Manager</p>
+            </div>
           </div>
-          <div class="service-card-hover position-absolute top-0 start-0 w-100 h-100 bg-primary bg-opacity-10" style="opacity:0;transition:opacity 0.3s;"></div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <div class="card mt-3 mt-lg-0 shadow-none">
+            <div class="bg-label-info position-relative team-image-box">
+              <img src="{{asset('assets/img/front-pages/landing-page/team-member-2.png')}}" class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl img-fluid" alt="human image" />
+            </div>
+            <div class="card-body border border-label-info border-top-0 text-center">
+              <h5 class="card-title mb-0">Paul Miles</h5>
+              <p class="text-muted mb-0">UI Designer</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <div class="card mt-3 mt-lg-0 shadow-none">
+            <div class="bg-label-danger position-relative team-image-box">
+              <img src="{{asset('assets/img/front-pages/landing-page/team-member-3.png')}}" class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl img-fluid" alt="human image" />
+            </div>
+            <div class="card-body border border-label-danger border-top-0 text-center">
+              <h5 class="card-title mb-0">Nannie Ford</h5>
+              <p class="text-muted mb-0">Development Lead</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <div class="card mt-3 mt-lg-0 shadow-none">
+            <div class="bg-label-success position-relative team-image-box">
+              <img src="{{asset('assets/img/front-pages/landing-page/team-member-4.png')}}" class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl img-fluid" alt="human image" />
+            </div>
+            <div class="card-body border border-label-success border-top-0 text-center">
+              <h5 class="card-title mb-0">Chris Watkins</h5>
+              <p class="text-muted mb-0">Marketing Manager</p>
+            </div>
+          </div>
         </div>
       </div>
-      @endforeach
     </div>
-  </div>
+  </section>
+  <!-- Our great team: End -->
 
-  <style>
-    .service-card {
-      border-radius: 1.25rem;
-      box-shadow: 0 4px 24px 0 rgba(58,87,232,0.07);
-      transition: transform 0.2s, box-shadow 0.2s;
-      cursor: pointer;
-    }
-    .service-card:hover {
-      transform: translateY(-8px) scale(1.03);
-      box-shadow: 0 8px 32px 0 rgba(58,87,232,0.13);
-    }
-    .service-card .service-card-hover {
-      pointer-events: none;
-    }
-    .service-card:hover .service-card-hover {
-      opacity: 1;
-    }
-    .service-icon {
-      transition: background 0.2s, box-shadow 0.2s;
-    }
-    .service-card:hover .service-icon {
-      background: linear-gradient(135deg, #3A57E8 0%, #00CFE8 100%);
-      box-shadow: 0 2px 16px 0 rgba(58,87,232,0.15);
-    }
-    .text-gradient-primary {
-      background: linear-gradient(90deg, #3A57E8 0%, #00CFE8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-  </style>
+  <!-- Pricing plans: Start -->
+  <section id="landingPricing" class="section-py bg-body landing-pricing">
+    <div class="container">
+      <div class="text-center mb-3 pb-1">
+        <span class="badge bg-label-primary">Pricing Plans</span>
+      </div>
+      <h3 class="text-center mb-1"><span class="section-title">Tailored pricing plans</span> designed for you</h3>
+      <p class="text-center mb-4 pb-3">
+        All plans include 40+ advanced tools and features to boost your product.<br />Choose the best plan to fit
+        your needs.
+      </p>
+      <div class="text-center mb-5">
+        <div class="position-relative d-inline-block pt-3 pt-md-0">
+          <label class="switch switch-primary me-0">
+            <span class="switch-label">Pay Monthly</span>
+            <input type="checkbox" class="switch-input price-duration-toggler" checked />
+            <span class="switch-toggle-slider">
+              <span class="switch-on"></span>
+              <span class="switch-off"></span>
+            </span>
+            <span class="switch-label">Pay Annual</span>
+          </label>
+          <div class="pricing-plans-item position-absolute d-flex">
+            <img src="{{asset('assets/img/front-pages/icons/pricing-plans-arrow.png')}}" alt="pricing plans arrow" class="scaleX-n1-rtl" />
+            <span class="fw-semibold mt-2 ms-1"> Save 25%</span>
+          </div>
+        </div>
+      </div>
+      <div class="row gy-4 pt-lg-3">
+        <!-- Basic Plan: Start -->
+        <div class="col-xl-4 col-lg-6">
+          <div class="card">
+            <div class="card-header">
+              <div class="text-center">
+                <img src="{{asset('assets/img/front-pages/icons/paper-airplane.png')}}" alt="paper airplane icon" class="mb-4 pb-2 scaleX-n1-rtl" />
+                <h4 class="mb-1">Basic</h4>
+                <div class="d-flex align-items-center justify-content-center">
+                  <span class="price-monthly h1 text-primary fw-bold mb-0">$19</span>
+                  <span class="price-yearly h1 text-primary fw-bold mb-0 d-none">$14</span>
+                  <sub class="h6 text-muted mb-0 ms-1">/mo</sub>
+                </div>
+                <div class="position-relative pt-2">
+                  <div class="price-yearly text-muted price-yearly-toggle d-none">$ 168 / year</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled">
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Timeline
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Basic search
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Live chat widget
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Email marketing
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Custom Forms
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Traffic analytics
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Basic Support
+                  </h5>
+                </li>
+              </ul>
+              <div class="d-grid mt-4 pt-3">
+                <a href="{{url('/front-pages/payment')}}" class="btn btn-label-primary">Get Started</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Basic Plan: End -->
 
-</section>
-<!-- Nos services: End -->
+        <!-- Favourite Plan: Start -->
+        <div class="col-xl-4 col-lg-6">
+          <div class="card border border-primary shadow-lg">
+            <div class="card-header">
+              <div class="text-center">
+                <img src="{{asset('assets/img/front-pages/icons/plane.png')}}" alt="plane icon" class="mb-4 pb-2 scaleX-n1-rtl" />
+                <h4 class="mb-1">Team</h4>
+                <div class="d-flex align-items-center justify-content-center">
+                  <span class="price-monthly h1 text-primary fw-bold mb-0">$29</span>
+                  <span class="price-yearly h1 text-primary fw-bold mb-0 d-none">$22</span>
+                  <sub class="h6 text-muted mb-0 ms-1">/mo</sub>
+                </div>
+                <div class="position-relative pt-2">
+                  <div class="price-yearly text-muted price-yearly-toggle d-none">$ 264 / year</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled">
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Everything in basic
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Timeline with database
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Advanced search
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Marketing automation
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Advanced chatbot
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Campaign management
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Collaboration tools
+                  </h5>
+                </li>
+              </ul>
+              <div class="d-grid mt-4 pt-3">
+                <a href="{{url('/front-pages/payment')}}" class="btn btn-primary">Get Started</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Favourite Plan: End -->
 
+        <!-- Standard Plan: Start -->
+        <div class="col-xl-4 col-lg-6">
+          <div class="card">
+            <div class="card-header">
+              <div class="text-center">
+                <img src="{{asset('assets/img/front-pages/icons/shuttle-rocket.png')}}" alt="shuttle rocket icon" class="mb-4 pb-2 scaleX-n1-rtl" />
+                <h4 class="mb-1">Enterprise</h4>
+                <div class="d-flex align-items-center justify-content-center">
+                  <span class="price-monthly h1 text-primary fw-bold mb-0">$49</span>
+                  <span class="price-yearly h1 text-primary fw-bold mb-0 d-none">$37</span>
+                  <sub class="h6 text-muted mb-0 ms-1">/mo</sub>
+                </div>
+                <div class="position-relative pt-2">
+                  <div class="price-yearly text-muted price-yearly-toggle d-none">$ 444 / year</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled">
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Everything in premium
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Timeline with database
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Fuzzy search
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    A/B testing sanbox
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Custom permissions
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Social media automation
+                  </h5>
+                </li>
+                <li>
+                  <h5>
+                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-2"><i class="bx bx-check bx-xs"></i></span>
+                    Sales automation tools
+                  </h5>
+                </li>
+              </ul>
+              <div class="d-grid mt-4 pt-3">
+                <a href="{{url('/front-pages/payment')}}" class="btn btn-label-primary">Get Started</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Standard Plan: End -->
+      </div>
+    </div>
+  </section>
+  <!-- Pricing plans: End -->
+
+  <!-- Fun facts: Start -->
+  <section id="landingFunFacts" class="section-py landing-fun-facts">
+    <div class="container">
+      <div class="row gy-3">
+        <div class="col-sm-6 col-lg-3">
+          <div class="card border border-label-primary shadow-none">
+            <div class="card-body text-center">
+              <img src="{{asset('assets/img/front-pages/icons/laptop.png')}}" alt="laptop" class="mb-2" />
+              <h5 class="h2 mb-1">7.1k+</h5>
+              <p class="fw-medium mb-0">
+                Support Tickets<br />
+                Resolved
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card border border-label-success shadow-none">
+            <div class="card-body text-center">
+              <img src="{{asset('assets/img/front-pages/icons/user-success.png')}}" alt="laptop" class="mb-2" />
+              <h5 class="h2 mb-1">50k+</h5>
+              <p class="fw-medium mb-0">
+                Join creatives<br />
+                community
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card border border-label-info shadow-none">
+            <div class="card-body text-center">
+              <img src="{{asset('assets/img/front-pages/icons/diamond-info.png')}}" alt="laptop" class="mb-2" />
+              <h5 class="h2 mb-1">4.8/5</h5>
+              <p class="fw-medium mb-0">
+                Highly Rated<br />
+                Products
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card border border-label-warning shadow-none">
+            <div class="card-body text-center">
+              <img src="{{asset('assets/img/front-pages/icons/check-warning.png')}}" alt="laptop" class="mb-2" />
+              <h5 class="h2 mb-1">100%</h5>
+              <p class="fw-medium mb-0">
+                Money Back<br />
+                Guarantee
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Fun facts: End -->
 
   <!-- FAQ: Start -->
-  <!-- <section id="landingFAQ" class="section-py bg-body landing-faq">
+  <section id="landingFAQ" class="section-py bg-body landing-faq">
     <div class="container">
       <div class="text-center mb-3 pb-1">
         <span class="badge bg-label-primary">FAQ</span>
@@ -641,7 +815,7 @@ $configData = Helper::appClasses();
         </div>
       </div>
     </div>
-  </section> -->
+  </section>
   <!-- FAQ: End -->
 
   <!-- CTA: Start -->
@@ -649,13 +823,12 @@ $configData = Helper::appClasses();
     <div class="container">
       <div class="row align-items-center gy-5 gy-lg-0">
         <div class="col-lg-6 text-center text-lg-start">
-          <h6 class="h2 text-primary fw-bold mb-1">Téléchargez notre application Hariri</h6>
-          <p class="fw-medium mb-4">  Réservez votre consultation à la clinique ou commandez vos médicaments depuis chez vous, en toute simplicité.
-        </p></p>
-          <a href="/" class="btn btn-primary">Commencer maintenant</a>
+          <h6 class="h2 text-primary fw-bold mb-1">Ready to Get Started?</h6>
+          <p class="fw-medium mb-4">Start your project with a 14-day free trial</p>
+          <a href="{{url('/front-pages/payment')}}" class="btn btn-primary">Get Started</a>
         </div>
         <div class="col-lg-6 pt-lg-5 text-center text-lg-end">
-          <img src="{{asset('assets/img/backgrounds/hero.svg')}}" alt="cta dashboard" class="img-fluid" />
+          <img src="{{asset('assets/img/front-pages/landing-page/cta-dashboard.png')}}" alt="cta dashboard" class="img-fluid" />
         </div>
       </div>
     </div>
@@ -663,101 +836,78 @@ $configData = Helper::appClasses();
   <!-- CTA: End -->
 
   <!-- Contact Us: Start -->
-<section id="landingContact" class="section-py bg-body landing-contact">
-  <div class="container">
-    <div class="text-center mb-3 pb-1">
-      <span class="badge bg-label-primary">Contactez-nous</span>
-    </div>
-    <h3 class="text-center mb-1"><span class="section-title">Restons</span> en contact</h3>
-    <p class="text-center mb-4 mb-lg-5 pb-md-3">
-      Une question ? Besoin d'aide ? Appelez-nous ou passez directement à la clinique.
-    </p>
-    <div class="row gy-4">
-      
-      <!-- Left Column: Image and Info -->
-      <div class="col-lg-5">
-        <div class="contact-img-box position-relative border p-2 h-100">
-          <img src="{{asset('assets/img/front-pages/landing-page/contact-customer-service.png')}}" alt="Service Client Hariri" class="contact-img w-100 scaleX-n1-rtl img-fluid" />
-          <div class="pt-3 px-4 pb-1">
-            <div class="row gy-3 gx-md-4">
-              <div class="col-12">
-                <div class="d-flex align-items-center">
-                  <div class="badge bg-label-primary rounded p-2 me-2">
-                    <i class="bx bx-envelope bx-sm"></i>
+  <section id="landingContact" class="section-py bg-body landing-contact">
+    <div class="container">
+      <div class="text-center mb-3 pb-1">
+        <span class="badge bg-label-primary">Contact US</span>
+      </div>
+      <h3 class="text-center mb-1"><span class="section-title">Let's work</span> together</h3>
+      <p class="text-center mb-4 mb-lg-5 pb-md-3">Any question or remark? just write us a message</p>
+      <div class="row gy-4">
+        <div class="col-lg-5">
+          <div class="contact-img-box position-relative border p-2 h-100">
+            <img src="{{asset('assets/img/front-pages/landing-page/contact-customer-service.png')}}" alt="contact customer service" class="contact-img w-100 scaleX-n1-rtl img-fluid" />
+            <div class="pt-3 px-4 pb-1">
+              <div class="row gy-3 gx-md-4">
+                <div class="col-md-6 col-lg-12 col-xl-6">
+                  <div class="d-flex align-items-center">
+                    <div class="badge bg-label-primary rounded p-2 me-2"><i class="bx bx-envelope bx-sm"></i></div>
+                    <div>
+                      <p class="mb-0">Email</p>
+                      <h5 class="mb-0">
+                        <a href="mailto:example@gmail.com" class="text-heading">example@gmail.com</a>
+                      </h5>
+                    </div>
                   </div>
-                  <div>
-                    <p class="mb-0">Email</p>
-                    <h6 class="mb-0"><a href="mailto:cliniquehariri@gmail.com" class="text-heading">mail@cliniquehariri.com</a></h6>
+                </div>
+                <div class="col-md-6 col-lg-12 col-xl-6">
+                  <div class="d-flex align-items-center">
+                    <div class="badge bg-label-success rounded p-2 me-2">
+                      <i class="bx bx-phone-call bx-sm"></i>
+                    </div>
+                    <div>
+                      <p class="mb-0">Phone</p>
+                      <h5 class="mb-0"><a href="tel:+1234-568-963" class="text-heading">+1234 568 963</a></h5>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-12">
-                <div class="d-flex align-items-center">
-                  <div class="badge bg-label-success rounded p-2 me-2">
-                    <i class="bx bx-phone-call bx-sm"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="mb-1">Send a message</h4>
+              <p class="mb-4">
+                If you would like to discuss anything related to payment, account, licensing,<br class="d-none d-lg-block" />
+                partnerships, or have pre-sales questions, you’re at the right place.
+              </p>
+              <form>
+                <div class="row g-4">
+                  <div class="col-md-6">
+                    <label class="form-label" for="contact-form-fullname">Full Name</label>
+                    <input type="text" class="form-control" id="contact-form-fullname" placeholder="john" />
                   </div>
-                  <div>
-                    <p class="mb-0">Téléphone</p>
-                    <h6 class="mb-0"><a href="tel:0023566122555" class="text-heading">+213 792 73 02 75</a></h6>
+                  <div class="col-md-6">
+                    <label class="form-label" for="contact-form-email">Email</label>
+                    <input type="text" id="contact-form-email" class="form-control" placeholder="johndoe@gmail.com" />
                   </div>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="d-flex align-items-center">
-                  <div class="badge bg-label-info rounded p-2 me-2">
-                    <i class="bx bx-map bx-sm"></i>
+                  <div class="col-12">
+                    <label class="form-label" for="contact-form-message">Message</label>
+                    <textarea id="contact-form-message" class="form-control" rows="9" placeholder="Write a message"></textarea>
                   </div>
-                  <div>
-                    <p class="mb-0">Adresse</p>
-                    <h6 class="mb-0">Sidi masttor El oued Alger</h6>
-                  </div>
-                </div>
-              </div>
-              <!-- <div class="col-12">
-                <div class="d-flex align-items-center">
-                  <div class="badge bg-label-warning rounded p-2 me-2">
-                    <i class="bx bx-time bx-sm"></i>
-                  </div>
-                  <div>
-                    <p class="mb-0">Horaires</p>
-                    <h6 class="mb-0">Lun - Sam: 8h00 - 20h00</h6>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Send inquiry</button>
                   </div>
                 </div>
-              </div> -->
+              </form>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Right Column: Map and CTA -->
-      <div class="col-lg-7">
-        <div class="card h-100">
-          <div class="card-body">
-            <h4 class="mb-3">Trouvez-nous sur la carte</h4>
-            <div class="ratio ratio-16x9 mb-4">
-              <iframe
-                src="https://www.google.com/maps/place/Sidi+Mestour,+El+Oued/@33.3625508,6.869325,16z/data=!3m1!4b1!4m6!3m5!1s0x1259110aef6584ed:0x63f0e543f9283061!8m2!3d33.3616894!4d6.8739702!16s%2Fg%2F11gzxpwy1?entry=ttu&g_ep=EgoyMDI1MTAwMS4wIKXMDSoASAFQAw%3D%3D"
-                style="border:0;" allowfullscreen="" loading="lazy">
-              </iframe>
-            </div>
-            <div class="d-flex gap-3 flex-wrap">
-              <a href="https://wa.me/+213792730275" target="_blank" class="btn btn-success">
-                <i class="bx bxl-whatsapp me-1"></i> WhatsApp
-              </a>
-              <a href="tel: +213 792 73 02 75" class="btn btn-outline-primary">
-                <i class="bx bx-phone me-1"></i> Appeler
-              </a>
-              <a href="mail@cliniquehariri.com" class="btn btn-outline-secondary">
-                <i class="bx bx-envelope me-1"></i> Email
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
-</section>
-<!-- Contact Us: End -->
+  </section>
+  <!-- Contact Us: End -->
 </div>
 @endsection

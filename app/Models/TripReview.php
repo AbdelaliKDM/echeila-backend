@@ -13,7 +13,7 @@ class TripReview extends Model
         'trip_id',
         'passenger_id',
         'rating',
-        'review_text',
+        'comment',
     ];
 
     // Relationships

@@ -37,13 +37,13 @@
         <div class="app-brand justify-content-center">
         <a href="{{url('/admin')}}" class="app-brand-link gap-2">
           <span class="app-brand-logo demo">
-             <img src="{{asset('assets/img/logo/logo3.png')}}" alt="Logo" class="app-brand-logo demo" width="50" />
+             <img src="{{asset('assets/img/logo/1.png')}}" alt="Logo" class="w-px-40 h-auto rounded-2" width="50" />
           </span>
-          <span class="app-brand-text demo text-body fw-bold text-capitalize">Clinique Hariri</span>
+          <span class="app-brand-text demo text-body fw-bold text-capitalize">@lang('app-name')</span>
         </a>
         </div>
         <!-- /Logo -->
-        <h4 class="mb-2">Bienvenue à Clinique Hariri  👋</h4>
+        <h4 class="mb-2">Bienvenue à @lang('app-name')  👋</h4>
         <p class="mb-4">S'il vous plaît, connectez-vous à votre compte et commencez l'aventure</p>
 
         <form id="formAuthentication" class="mb-3" action="{{route('login')}}" method="POST">
@@ -87,7 +87,7 @@
 {{--        </p>--}}
 
         <div class="divider my-4">
-        <div class="divider-text">Clinique Hariri</div>
+        <div class="divider-text">@lang('app-name')</div>
         </div>
 
 {{--        <div class="d-flex justify-content-center">--}}

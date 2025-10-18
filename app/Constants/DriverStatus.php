@@ -31,9 +31,9 @@ class DriverStatus
     public static function colors(): array
     {
         return [
-            self::PENDING => 'warning',
-            self::APPROVED => 'success',
-            self::DENIED => 'danger',
+            self::PENDING => 'info',
+            self::APPROVED => 'green',
+            self::DENIED => 'warning',
         ];
     }
 

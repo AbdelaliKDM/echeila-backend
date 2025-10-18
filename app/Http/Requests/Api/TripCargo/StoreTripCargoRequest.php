@@ -20,7 +20,7 @@ class StoreTripCargoRequest extends FormRequest
             'cargo.description' => 'required|string|max:1000',
             'cargo.weight' => 'required|numeric|min:0.01|max:1000',
             'cargo.images' => 'nullable|array|max:5',
-            'cargo.images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'cargo.images.*' => 'image|mimes:jpeg,png,jpg,gif|max:8192',
         ];
     }
 

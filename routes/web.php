@@ -4,30 +4,33 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\pages\MiscError;
 use App\Http\Controllers\Auth\ForgotPassword;
 use App\Http\Controllers\front_pages\Landing;
-use App\Http\Controllers\front_pages\Payment;
-use App\Http\Controllers\front_pages\Pricing;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\front_pages\Checkout;
 use App\Http\Controllers\pages\MiscComingSoon;
 use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\front_pages\HelpCenter;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\pages\MiscNotAuthorized;
 use App\Http\Controllers\pages\MiscUnderMaintenance;
 use App\Http\Controllers\Dashboard\ProfileController;
-use App\Http\Controllers\front_pages\HelpCenterArticle;
 use App\Http\Controllers\Dashboard\Admin\AdminController;
 use App\Http\Controllers\Dashboard\Roles\RolesController;
 use App\Http\Controllers\Dashboard\Users\UsersController;
-use App\Http\Controllers\front_pages\DocumentationController;
+use App\Http\Controllers\Dashboard\Users\DriverController;
+use App\Http\Controllers\Dashboard\Users\PassengerController;
 use App\Http\Controllers\Dashboard\Settings\SettingController;
+use App\Http\Controllers\Dashboard\Users\FederationController;
+use App\Http\Controllers\Dashboard\WilayaController;
+use App\Http\Controllers\Dashboard\SeatPriceController;
+use App\Http\Controllers\Dashboard\BrandController;
+use App\Http\Controllers\Dashboard\VehicleModelController;
+use App\Http\Controllers\Dashboard\ColorController;
+use App\Http\Controllers\Dashboard\Documentation\DocumentationController;
 use App\Http\Controllers\Dashboard\Permissions\PermissionsController;
 use App\Http\Controllers\Dashboard\Notifications\NotificationsController;
-
 
 // locale
 Route::get('/{locale}', function ($locale) {
     session()->put('locale', $locale);
+
     return redirect()->back();
 })->where('locale', 'en|fr|ar');
 
@@ -45,40 +48,69 @@ Route::get('/delete-account', [DocumentationController::class, 'deleteAccount'])
 // Auth Routes
 Route::group(['prefix' => 'admin'], function () {
 
-  Route::get('login', [LoginController::class, 'index'])->middleware('guest')->name('login');
-  Route::post('login', [LoginController::class, 'action'])->middleware('guest')->name('login.action');
-  Route::get('forgot-password', [ForgotPassword::class, 'index'])->middleware('guest')->name('reset-password');
-  Route::get('logout', [LogoutController::class, 'action'])->middleware('auth')->name('logout');
-  Route::get('register', [RegisterController::class, 'index'])->middleware('guest')->name('register');
-  Route::post('register', [RegisterController::class, 'action'])->middleware('guest')->name('register.action');
+    Route::get('login', [LoginController::class, 'index'])->middleware('guest')->name('login');
+    Route::post('login', [LoginController::class, 'action'])->middleware('guest')->name('login.action');
+    Route::get('forgot-password', [ForgotPassword::class, 'index'])->middleware('guest')->name('reset-password');
+    Route::get('logout', [LogoutController::class, 'action'])->middleware('auth')->name('logout');
+    Route::get('register', [RegisterController::class, 'index'])->middleware('guest')->name('register');
+    Route::post('register', [RegisterController::class, 'action'])->middleware('guest')->name('register.action');
 
-  Route::group(['middleware' => ['auth']], function () {
-    //navbar routes
-    Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::post('profile', [ProfileController::class, 'store'])->name('profile.store');
-    Route::post('profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+    Route::group(['middleware' => ['auth']], function () {
+        // navbar routes
+        Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
+        Route::post('profile', [ProfileController::class, 'store'])->name('profile.store');
+        Route::post('profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 
+        Route::get('/dashboard', function () {
+            return view('dashboard.index');
+        })->name('dashboard');
 
-    Route::get('/dashboard', function () {
-      return view('dashboard.index');
-    })->name('dashboard');
+        Route::get('/', function () {
+            return redirect()->route('dashboard');
+        })->name('home');
 
-    Route::get('/', function () {
-      return redirect()->route('dashboard');
-    })->name('home');
+        Route::resource('roles', RolesController::class);
 
-    Route::resource('roles', RolesController::class);
+        Route::get('permissions', [PermissionsController::class, 'index'])->name('permissions.index');
+        Route::post('permissions', [PermissionsController::class, 'update'])->name('permissions.update');
 
-    Route::get('permissions', [PermissionsController::class, 'index'])->name('permissions.index');
-    Route::post('permissions', [PermissionsController::class, 'update'])->name('permissions.update');
+        Route::resource('settings', SettingController::class)->only('index', 'store');
+        Route::resource('documentations', DocumentationController::class)->only('index', 'store');
+        Route::resource('admins', AdminController::class)->except(['show']);
+        Route::resource('wilayas', WilayaController::class)->except(['show']);
+        Route::resource('seat-prices', SeatPriceController::class)->except(['show']);
+        Route::resource('brands', BrandController::class)->except(['show']);
+        Route::resource('vehicle-models', VehicleModelController::class)->except(['show']);
+        Route::resource('colors', ColorController::class)->except(['show']);
+        Route::resource('users', UsersController::class)->except(['show']);
+        Route::post('users/update-status', [UsersController::class, 'updateStatus'])->name('users.status.update');
+        Route::post('users/charge-wallet', [UsersController::class, 'chargeWallet'])->name('users.wallet.charge');
+        Route::post('users/withdraw-sum', [UsersController::class, 'withdrawSum'])->name('users.wallet.withdraw');
 
-    Route::resource('settings', SettingController::class)->only('index','store');
-    Route::resource('documentations', DocumentationController::class)->only('index','store');
-    Route::resource('admins', AdminController::class)->except(['show']);
-    Route::resource('users', UsersController::class)->except(['show']);
-    Route::post('users/update-status', [UsersController::class, 'updateStatus'])->name('users.status.update');
+        Route::prefix('passengers')->group(function () {
+            Route::get('/', [PassengerController::class, 'index'])->name('passengers.index');
+            Route::get('/{id}', [PassengerController::class, 'show'])->name('passengers.show');
+        });
 
-    Route::get('send-notification', [NotificationsController::class, 'index'])->name('send-notification');
-    Route::post('send-notification', [NotificationsController::class, 'send'])->name('send-notification.send');
-  });
+        Route::prefix('drivers')->group(function () {
+            Route::get('/', [DriverController::class, 'index'])->name('drivers.index');
+            Route::get('/{id}', [DriverController::class, 'show'])->name('drivers.show');
+            Route::post('/update-status', [DriverController::class, 'updateStatus'])->name('drivers.status.update');
+            Route::post('/purchase-subscription', [DriverController::class, 'purchaseSubscription'])->name('drivers.subscription.purchase');
+        });
+
+        Route::prefix('federations')->group(function () {
+            Route::get('/', [FederationController::class, 'index'])->name('federations.index');
+            Route::get('/create', [FederationController::class, 'create'])->name('federations.create');
+            Route::get('/{id}', [FederationController::class, 'show'])->name('federations.show');
+            Route::post('/', [FederationController::class, 'store'])->name('federations.store');
+        });
+
+        Route::get('send-notification', [NotificationsController::class, 'index'])->name('send-notification');
+        Route::post('send-notification', [NotificationsController::class, 'send'])->name('send-notification.send');
+
+        Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
+            Route::resource('documentations', DocumentationController::class)->only('index', 'store');
+        });
+    });
 });

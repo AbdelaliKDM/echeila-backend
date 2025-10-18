@@ -66,5 +66,8 @@ return [
     'service' => 'Service',
 
     'super_admin' => 'Super Admin',
-    'admin' => 'Admin',
+    'admin' => 'Administrateur',
+    'passenger' => 'Passager',
+    'driver' => 'Chauffeur',
+    'federation' => 'Fédération'
 ];

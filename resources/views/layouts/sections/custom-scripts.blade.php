@@ -2,83 +2,78 @@
 
 {{--datatable initialization--}}
 <script>
-  function initializeDataTable(route, columns, filters = {}, tableId = "#laravel_datatable") {
-    const $table = $(tableId);
-    const $search = $('#custom_search');
-    const $length = $('#custom_length');
+function initializeDataTable(route, columns, filters = {}, tableId = "#laravel_datatable") {
+  const $table = $(tableId);
+  const $search = $('#custom_search');
+  const $length = $('#custom_length');
 
-    const table = $table.DataTable({
-      language: {{ \Illuminate\Support\Js::from(__('datatable')) }},
-      responsive: true,
-      processing: true,
-      serverSide: true,
-      ajax: {
-        url: route,
-        type: "GET",
-        data: d => {
-          Object.assign(d, filters);
-          d.length = $length.val();
-          d.search.value = $search.val();
+  const table = $table.DataTable({
+    language: {{ \Illuminate\Support\Js::from(__('datatable')) }},
+    responsive: false, // ← Disable responsive
+    scrollX: true, // ← Enable horizontal scroll
+    processing: true,
+    serverSide: true,
+    ajax: {
+      url: route,
+      type: "GET",
+      data: d => {
+        Object.assign(d, filters);
+        d.length = $length.val();
+        d.search.value = $search.val();
+      }
+    },
+    pageLength: $length.val() ?? 10,
+    columns: [
+      {
+        data: null,
+        name: 'number',
+        orderable: false,
+        searchable: false,
+        render: function (data, type, row, meta) {
+          const pageInfo = $(meta.settings.nTable).DataTable().page.info();
+          return pageInfo.start + meta.row + 1;
         }
       },
-      pageLength: $length.val() ?? 10,
-      columns: [
-        {
-          data: null,
-          name: 'number',
-          orderable: false,
-          searchable: false,
-          render: function (data, type, row, meta) {
-            const pageInfo = $(meta.settings.nTable).DataTable().page.info();
-            return pageInfo.start + meta.row + 1;
-          }
-        },
-        ...columns.map(column =>
-          column === 'action'
-            ? { data: column, name: column, orderable: false, searchable: false }
-            : { data: column, name: column }
-        )
-      ],
-      dom: 'rt<"datatable-footer"ip>',
-      drawCallback: function (settings) {
-        const id = settings.nTable.id;
-        const $wrapper = $(settings.nTableWrapper);
+      ...columns.map(column =>
+        column === 'action'
+          ? { data: column, name: column, orderable: false, searchable: false }
+          : { data: column, name: column }
+      )
+    ],
+    dom: 'rt<"datatable-footer"ip>',
+    drawCallback: function (settings) {
+      const id = settings.nTable.id;
+      const $wrapper = $(settings.nTableWrapper);
 
-        // Move info & pagination into custom container
-        $('#' + id + '_info_custom').html($wrapper.find('.dataTables_info').html());
-        $('#' + id + '_paginate_custom').html($wrapper.find('.dataTables_paginate').html());
+      $('#' + id + '_info_custom').html($wrapper.find('.dataTables_info').html());
+      $('#' + id + '_paginate_custom').html($wrapper.find('.dataTables_paginate').html());
 
-        // Add table styling
-        $table.find('tbody').addClass('table-border-bottom-0');
+      $table.find('tbody').addClass('table-border-bottom-0');
 
-        // Custom pagination binding
-        const api = this.api();
-        const $customPaginate = $('#' + id + '_paginate_custom');
+      const api = this.api();
+      const $customPaginate = $('#' + id + '_paginate_custom');
 
-        $customPaginate.off('click', '.page-link').on('click', '.page-link', function (e) {
-          e.preventDefault();
-          const idx = $(this).data('dt-idx');
+      $customPaginate.off('click', '.page-link').on('click', '.page-link', function (e) {
+        e.preventDefault();
+        const idx = $(this).data('dt-idx');
 
-          if (idx === 'previous') {
-            if (!$(this).parent().hasClass('disabled')) api.page('previous').draw('page');
-          } else if (idx === 'next') {
-            if (!$(this).parent().hasClass('disabled')) api.page('next').draw('page');
-          } else {
-            const page = parseInt(idx);
-            if (!isNaN(page)) api.page(page).draw('page');
-          }
-        });
-      }
-    });
+        if (idx === 'previous') {
+          if (!$(this).parent().hasClass('disabled')) api.page('previous').draw('page');
+        } else if (idx === 'next') {
+          if (!$(this).parent().hasClass('disabled')) api.page('next').draw('page');
+        } else {
+          const page = parseInt(idx);
+          if (!isNaN(page)) api.page(page).draw('page');
+        }
+      });
+    }
+  });
 
-    // Custom search binding
-    $search.off('input').on('input', () => table.search($search.val()).draw());
+  $search.off('input').on('input', () => table.search($search.val()).draw());
+  $length.off('change').on('change', () => table.page.len($length.val()).draw());
 
-    // Page length selector
-    $length.off('change').on('change', () => table.page.len($length.val()).draw());
-
-    return table;
-  }
+  return table;
+}
 </script>
 
 {{--delete confirmation--}}

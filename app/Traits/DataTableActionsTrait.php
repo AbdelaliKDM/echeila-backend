@@ -395,17 +395,33 @@ trait DataTableActionsTrait
     return "<strong>$text</strong>";
   }
 
-  public static function badge($code, $text, $icon = null): string
+  public static function badge($text, $color = 'primary', $icon = null): string
   {
     if (empty($text)) {
       return '-';
     }
-    $html = '<span class="badge bg-label-' . $code . ' me-1">';
+    $html = '<span class="badge bg-label-' . $color . ' me-1">';
 
     if ($icon) {
       $html .= '<span class="' . $icon . '"></span>';
     }
     $html .= $text . '</span>';
+
+    return $html;
+  }
+
+  public static function statusBadge($text, $color = 'primary', $icon = null): string
+  {
+    if (empty($text)) {
+      return '-';
+    }
+    $html = '<h6 class="mb-0 align-items-center d-flex w-px-100 text-' . $color . '">';
+    
+    if ($icon) {
+      $html .= '<i class="icon-base ' . $icon . ' icon-8px me-1"></i>';
+    }
+    
+    $html .= $text . '</h6>';
 
     return $html;
   }

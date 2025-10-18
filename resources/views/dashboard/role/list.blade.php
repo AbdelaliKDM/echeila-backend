@@ -1,15 +1,20 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', __('app.role'))
+@section('title', __('app.roles'))
 
 @section('content')
-  <h4 class="fw-bold py-3 mb-3 row justify-content-between">
-    <div class="col-md-auto">
-      <span class="text-muted fw-light">@lang('app.dashboard') /</span> @lang('app.role')
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="fw-bold mb-1">{{ __('app.roles') }}</h4>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('app.dashboard') }}</a></li>
+          <li class="breadcrumb-item active">{{ __('app.roles') }}</li>
+        </ol>
+      </nav>
     </div>
-    <div class="col-md-auto">
-    </div>
-  </h4>
+  </div>
 
   <!-- Bootstrap Table with Header - Light -->
   <div class="card">

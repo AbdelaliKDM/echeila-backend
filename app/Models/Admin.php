@@ -49,4 +49,9 @@ class Admin extends Authenticatable implements HasMedia
         return "{$this->firstname} {$this->lastname}";
     }
 
+    public function getAvatarUrlAttribute(){
+        $image  = $this->getFirstMediaUrl('image');
+        return empty($image) ? asset('assets/img/avatars/1.png') : $image;
+    }
+
 }

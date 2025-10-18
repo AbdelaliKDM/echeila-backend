@@ -13,7 +13,7 @@ class TripReviewResource extends JsonResource
             'trip_id' => $this->trip_id,
             'passenger_id' => $this->passenger_id,
             'rating' => $this->rating,
-            'review_text' => $this->review_text,
+            'comment' => $this->comment,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

@@ -53,7 +53,7 @@ class UserDatatable
           return $this->image($user->avatar_url, $user->fullname);
         })
         ->addColumn("type", function (User $user) {
-          return $this->badge('bx bx-user', UserType::get_color($user->type),UserType::get_name($user->type));
+          return $this->badge(UserType::get_name($user->type), UserType::get_color($user->type), 'bx bx-user');
         })
         ->addColumn("role", function (User $user) {
           $role = $user->getRoleNames()->first()? Roles::get_name($user->getRoleNames()->first()) : "-";

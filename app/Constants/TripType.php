@@ -43,13 +43,13 @@ class TripType
     public static function colors(): array
     {
         return [
-            self::TAXI_RIDE => 'primary',
-            self::CAR_RESCUE => 'warning',
-            self::CARGO_TRANSPORT => 'info',
-            self::WATER_TRANSPORT => 'secondary',
-            self::PAID_DRIVING => 'success',
-            self::MRT_TRIP => 'dark',
-            self::ESP_TRIP => 'danger',
+            self::TAXI_RIDE => 'blue',
+            self::CAR_RESCUE => 'purple',
+            self::CARGO_TRANSPORT => 'red',
+            self::WATER_TRANSPORT => 'orange',
+            self::PAID_DRIVING => 'yellow',
+            self::MRT_TRIP => 'cyan',
+            self::ESP_TRIP => 'teal',
         ];
     }
 

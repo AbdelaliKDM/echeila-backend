@@ -107,7 +107,7 @@ class CreateTripRequest extends FormRequest
             'cargo.description' => 'required|string|max:1000',
             'cargo.weight' => 'required|numeric|min:0.1',
             'cargo.images' => 'nullable|array',
-            'cargo.images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'cargo.images.*' => 'image|mimes:jpeg,png,jpg,gif|max:8192',
         ];
     }
 

@@ -25,7 +25,7 @@ class UpdatePassengerRequest extends FormRequest
             'first_name' => 'sometimes|string|max:255',
             'last_name' => 'sometimes|string|max:255',
             'birth_date' => 'sometimes|date|before:today',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:8192',
         ];
     }
 

@@ -41,8 +41,9 @@ class Federation extends Model implements HasMedia
         return $this->hasMany(Driver::class);
     }
 
-    public function transactions()
-    {
-        return $this->morphMany(Transaction::class, 'entity');
+
+    public function getAvatarUrlAttribute(){
+        $image  = $this->getFirstMediaUrl('image');
+        return empty($image) ? asset('assets/img/branding/brand-img-small.png') : $image;
     }
 }

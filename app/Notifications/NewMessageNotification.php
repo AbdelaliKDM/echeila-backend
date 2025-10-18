@@ -90,7 +90,7 @@ class NewMessageNotification extends Notification implements ShouldQueue
       'notification' => [
         'sound' => 'default',
         'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-        'channel_id' => 'clinique_hariri_channel',
+        'channel_id' => 'echeila_channel',
       ],
     ]);
 

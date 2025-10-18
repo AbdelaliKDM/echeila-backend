@@ -18,7 +18,7 @@
         </button>
         <!-- Mobile menu toggle: End-->
         <a href="/" class="app-brand-link">
-         <img src="{{ asset('assets/img/logo/logo2.png') }}" alt="Logo" style="max-height: 50px; width: auto;">
+         <img src="{{ asset('assets/img/logo/1.png') }}" alt="Logo" class="w-px-40 h-auto rounded-2">
         </a>
       </div>
       <!-- Menu logo wrapper: End -->

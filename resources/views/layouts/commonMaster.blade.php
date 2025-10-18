@@ -19,14 +19,14 @@
 
   <title>@lang('app-name') | @yield('title', __('app.title'))</title>
   </title>
-   <meta name="description" content="Bienvenue chez Hariri, votre clinique et pharmacie de confiance. Soins médicaux, consultations, et pharmacie au même endroit." />
-  <meta name="keywords" content="clinique, pharmacie, hariri, santé, médecin, hôpital, soins" />
+   <meta name="description" content="" />
+  <meta name="keywords" content="" />
   <!-- laravel CRUD token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Canonical SEO -->
   <link rel="canonical" href="{{ url()->current() }}" />
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/logo/logo2.png') }}" />
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/logo/1.png') }}" />
 
 
   <!-- Include Styles -->

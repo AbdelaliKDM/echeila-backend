@@ -153,7 +153,7 @@
                   @endpermission()
                 </div>
                 <div class="row row-bordered overflow-visible g-0">
-                  @permission(\App\Support\Enum\Permissions::MANAGE_USERS)
+                  {{-- @permission(\App\Support\Enum\Permissions::MANAGE_USERS)
                   <div class="dropdown-shortcuts-item col">
                     <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
                       <i class="bx bx-user fs-4"></i>
@@ -161,7 +161,14 @@
                     <a href="{{ route('users.index') }}" class="stretched-link">@lang('app.users')</a>
                     <small class="text-muted mb-0">@lang('app.manage-users')</small>
                   </div>
-                  @endpermission()
+                  @endpermission() --}}
+                  <div class="dropdown-shortcuts-item col">
+                    <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                      <i class="bx bx-home fs-4"></i>
+                    </span>
+                    <a href="{{ url('/') }}" class="stretched-link">@lang('app.home')</a>
+                    <small class="text-muted mb-0">@lang('app.landing')</small>
+                  </div>
                   @permission(\App\Support\Enum\Permissions::MANAGE_SETTINGS)
                   <div class="dropdown-shortcuts-item col">
                     <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
@@ -171,15 +178,6 @@
                     <small class="text-muted mb-0">@lang('app.send-notification')</small>
                   </div>
                   @endpermission()
-                </div>
-                <div class="row row-bordered overflow-visible g-0">
-                  <div class="dropdown-shortcuts-item col">
-                    <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                      <i class="bx bx-home fs-4"></i>
-                    </span>
-                    <a href="{{ url('/') }}" class="stretched-link">@lang('app.home')</a>
-                    <small class="text-muted mb-0">@lang('app.landing')</small>
-                  </div>
                 </div>
               </div>
             </div>

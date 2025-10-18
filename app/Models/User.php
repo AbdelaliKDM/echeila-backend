@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use App\Constants\UserType;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -55,6 +56,50 @@ class User extends Authenticatable
   public function wallet()
   {
     return $this->hasOne(Wallet::class);
+  }
+
+  public function getTypeAttribute(){
+    if($this->has('federation')){
+      return UserType::FEDERATION;
+    }
+
+    if($this->has('driver')){
+      return UserType::DRIVER;
+    }
+
+    return UserType::PASSENGER;
+  }
+
+  /**
+   * Scope a query to users of a given type.
+   * Usage: User::type(UserType::DRIVER)->get();
+   */
+  public function scopeType($query, string $type)
+  {
+    switch ($type) {
+      case UserType::DRIVER:
+        return $query->whereHas('driver')->with('driver', 'passenger');
+      case UserType::FEDERATION:
+        return $query->whereHas('federation')->with('federation', 'passenger');
+      case UserType::PASSENGER:
+      default:
+        return $query->whereDoesntHave('driver')->whereDoesntHave('federation')->with('passenger');
+    }
+  }
+
+  public function scopePassengers($query)
+  {
+    return $query->type(UserType::PASSENGER);
+  }
+
+  public function scopeDrivers($query)
+  {
+    return $query->type(UserType::DRIVER);
+  }
+
+  public function scopeFederations($query)
+  {
+    return $query->type(UserType::FEDERATION);
   }
 
 }
