@@ -19,6 +19,7 @@ class Trip extends Model
 
     protected $fillable = [
         'driver_id',
+        'identifier',
         'type',
         'status',
         'note',

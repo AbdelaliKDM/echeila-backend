@@ -28,8 +28,8 @@ class Direction
     public static function colors(): array
     {
         return [
-            self::FROM => 'warning',
-            self::TO => 'success',
+            self::FROM => 'blue',
+            self::TO => 'teal',
         ];
     }
 

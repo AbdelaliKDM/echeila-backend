@@ -64,6 +64,7 @@ class TripCargoController extends Controller
         try {
             $user = auth()->user();
             $trip = Trip::with('detailable', 'driver.user.wallet')->findOrFail($validated['trip_id']);
+            $driver = $trip->driver;
     
             if (!in_array($trip->type, [TripType::MRT_TRIP, TripType::ESP_TRIP])) {
                 throw new Exception('This trip in not an international trip');

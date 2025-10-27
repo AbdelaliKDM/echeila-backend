@@ -69,5 +69,8 @@ return [
     'admin' => 'أدمن',
     'passenger' => 'راكب',
     'driver' => 'سائق',
-    'federation' => 'اتحادية'
+    'federation' => 'اتحادية',
+
+    'found' => 'تم العثور عليه',
+    'returned' => 'تم إرجاعه',
 ];

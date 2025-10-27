@@ -42,15 +42,15 @@ class DriverDatatable
                         ->show(route('drivers.show', $model->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_USERS))
                         ->modalButton('user-status-activate-modal', __('app.activate'), 'bx bx-lock-open', ['id' => $model->id], $model->status === UserStatus::BANNED, UserStatus::get_color(UserStatus::ACTIVE))
                         ->modalButton('user-status-suspend-modal', __('app.suspend'), 'bx bx-lock', ['id' => $model->id], $model->status === UserStatus::ACTIVE, UserStatus::get_color(UserStatus::BANNED))
-                        ->modalButton('driver-status-approve-modal', __('app.approve'), 'bx bx-check-circle', ['id' => $model->id], $model->driver->status === DriverStatus::PENDING, DriverStatus::get_color(DriverStatus::APPROVED))
-                        ->modalButton('driver-status-deny-modal', __('app.deny'), 'bx bx-x-circle', ['id' => $model->id], $model->driver->status === DriverStatus::PENDING, DriverStatus::get_color(DriverStatus::DENIED))
+                        ->modalButton('driver-status-approve-modal', __('app.approve'), 'bx bx-check-circle', ['id' => $model->id], $model->driver->status !== DriverStatus::APPROVED, DriverStatus::get_color(DriverStatus::APPROVED))
+                        ->modalButton('driver-status-deny-modal', __('app.deny'), 'bx bx-x-circle', ['id' => $model->id], $model->driver->status !== DriverStatus::DENIED, DriverStatus::get_color(DriverStatus::DENIED))
                         ->modalButton('charge-wallet-modal', __('app.charge_wallet'), 'bx bx-wallet', ['id' => $model->id, 'wallet-balance' => $walletBalance], true, 'blue')
                         ->modalButton('withdraw-sum-modal', __('app.withdraw'), 'bx bx-money', ['id' => $model->id, 'wallet-balance' => $walletBalance], true, 'teal')
                         ->modalButton('purchase-subscription-modal', __('app.purchase_subscription'), 'bx bx-calendar', ['id' => $model->id, 'subscription-end-date' => $subscriptionEndDate, 'monthly-fee' => $monthlyFee], true, 'purple')
                         ->makeLabelledIcons();
                 })
                 ->addColumn('driver', function ($model) {
-                    return $this->thumbnailTitleMeta($model->driver->avatar_url, $model->driver->fullname, $model->driver->federation?->name);
+                    return $this->thumbnailTitleMeta($model->driver->avatar_url, $model->driver->fullname, $model->driver->federation?->name, route('drivers.show', $model->id));
                 })
                 ->addColumn('subscription', function ($model) {
                     return $model->driver->subscription

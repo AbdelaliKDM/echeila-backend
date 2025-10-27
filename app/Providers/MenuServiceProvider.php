@@ -147,5 +147,70 @@ class MenuServiceProvider extends ServiceProvider
             ]
         );
 
+        MenuBuilder::add(
+            name: 'trips',
+            slug: ['admin/trips/all', 'admin/trips/taxi_ride', 'admin/trips/car_rescue', 'admin/trips/cargo_transport', 'admin/trips/water_transport', 'admin/trips/paid_driving', 'admin/trips/mrt_trip', 'admin/trips/esp_trip'],
+            icon: 'bx bx-trip',
+            permission: [],
+            submenu: [
+                MenuBuilder::submenu(
+                    name: 'all_trips',
+                    slug: 'admin/trips/all',
+                    url: 'admin/trips/all',
+                    permission: [],
+                ),
+                MenuBuilder::submenu(
+                    name: 'taxi_rides',
+                    slug: 'admin/trips/taxi_ride',
+                    url: 'admin/trips/taxi_ride',
+                    permission: [],
+                ),
+                MenuBuilder::submenu(
+                    name: 'car_rescues',
+                    slug: 'admin/trips/car_rescue',
+                    url: 'admin/trips/car_rescue',
+                    permission: [],
+                ),
+                MenuBuilder::submenu(
+                    name: 'cargo_transports',
+                    slug: 'admin/trips/cargo_transport',
+                    url: 'admin/trips/cargo_transport',
+                    permission: [],
+                ),
+                MenuBuilder::submenu(
+                    name: 'water_transports',
+                    slug: 'admin/trips/water_transport',
+                    url: 'admin/trips/water_transport',
+                    permission: [],
+                ),
+                MenuBuilder::submenu(
+                    name: 'paid_drivings',
+                    slug: 'admin/trips/paid_driving',
+                    url: 'admin/trips/paid_driving',
+                    permission: [],
+                ),
+                MenuBuilder::submenu(
+                    name: 'mrt_trips',
+                    slug: 'admin/trips/mrt_trip',
+                    url: 'admin/trips/mrt_trip',
+                    permission: [],
+                ),
+                MenuBuilder::submenu(
+                    name: 'esp_trips',
+                    slug: 'admin/trips/esp_trip',
+                    url: 'admin/trips/esp_trip',
+                    permission: [],
+                ),
+            ]
+        );
+
+        MenuBuilder::add(
+            name: 'lost-and-founds',
+            slug: 'lost-and-founds',
+            route: 'lost-and-founds.index',
+            icon: 'bx bx-search',
+            permission: [],
+        );
+
     }
 }

@@ -13,6 +13,8 @@ use App\Models\TripCargo;
 use App\Models\TripClient;
 use App\Constants\RideType;
 use App\Constants\TripType;
+use App\Traits\RandomTrait;
+use App\Traits\ImageUpload;
 use App\Constants\TripStatus;
 use App\Models\TaxiRideDetail;
 use App\Models\CarRescueDetail;
@@ -26,6 +28,8 @@ use App\Notifications\NewMessageNotification;
 
 class TripService
 {
+
+    use RandomTrait, ImageUpload;
     /**
      * Create a new trip with its details and related data
      */
@@ -38,9 +42,14 @@ class TripService
             // Create trip details first
             $detailsModel = $this->handleTripDetails($tripType, $data, $user);
 
+            do {
+                $trip_identifier = 'TRP-'.now()->format('y')."-{$this->random(6, 'uppercase_alphanumeric')}";
+            } while (Trip::where('identifier', $trip_identifier)->exists());
+
             // Create the main trip with polymorphic relationship
             $trip = Trip::create([
                 'driver_id' => $driver->id,
+                'identifier' => $trip_identifier,
                 'type' => $tripType,
                 'status' => TripStatus::PENDING,
                 'note' => $data['note'] ?? null,
@@ -188,11 +197,12 @@ class TripService
                 'passenger_id' => $user->passenger->id,
             ]);
 
-            // Handle cargo images if provided
+            // Handle cargo images if provided using ImageUpload trait
             if (isset($data['cargo']['images']) && is_array($data['cargo']['images'])) {
                 foreach ($data['cargo']['images'] as $image) {
-                    $cargo->addMediaFromRequest('cargo.images.*')
-                        ->toMediaCollection(Cargo::IMAGES);
+                    if ($image && $image->isValid()) {
+                        $this->uploadImage($cargo, $image, Cargo::IMAGES);
+                    }
                 }
             }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard\Users;
 
 use App\Models\Trip;
 use App\Models\User;
+use App\Models\Driver;
 use App\Models\Federation;
 use App\Models\TripReview;
 use App\Constants\UserType;
@@ -49,10 +50,12 @@ class FederationController extends Controller
     }
     
     // Find the federation
-    $federation = Federation::with(['user', 'drivers.user'])->findOrFail($id);
+    $federation = Federation::with(['user', 'drivers.user'])->where('user_id', $id)->firstOrFail();
     
     // Get paginated drivers
     $drivers = $federation->drivers()->with('user')->paginate(10);
+
+    $availableDrivers = Driver::whereNull('federation_id')->with('user')->get();
     
     // Calculate statistics
     $driverIds = $federation->drivers()->pluck('id');
@@ -71,7 +74,7 @@ class FederationController extends Controller
       })->avg('rating') ?? 0,
     ];
     
-    return view('dashboard.federation.show', compact('federation', 'drivers', 'stats'));
+    return view('dashboard.federation.show', compact('federation', 'drivers', 'availableDrivers', 'stats'));
   }
 
     public function create()
@@ -79,7 +82,7 @@ class FederationController extends Controller
       if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
         return redirect()->route('unauthorized');
       }
-      $users = User::passengers()->get();
+      $users = User::passengers()->whereDoesntHave('federation')->get();
       return view('dashboard.federation.create', compact('users'));
     }
 

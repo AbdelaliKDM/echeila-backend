@@ -69,5 +69,8 @@ return [
     'admin' => 'Admin',
     'passenger' => 'Passenger',
     'driver' => 'Driver', 
-    'federation' => 'Federation'
+    'federation' => 'Federation',
+
+    'found' => 'Found',
+    'returned' => 'Returned',
 ];

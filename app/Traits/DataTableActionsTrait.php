@@ -441,7 +441,7 @@ trait DataTableActionsTrait
     return $time ? $time->format('H:i') : '';
   }
 
-  public static function link($url, $maxLength = 30, $displayUrl = null): string
+  public static function link($url, $displayUrl = null, $maxLength = 30): string
   {
     if (empty($url)) {
       return '-';
@@ -483,6 +483,10 @@ trait DataTableActionsTrait
       }
     }
     return $output;
+  }
+
+  public static function route($start, $end){
+    return (($start ?? '-') . (app()->getLocale() == 'ar' ? ' ← ' : ' → ') . ($end ?? '-'));
   }
 
   public static function toHtml($text): string

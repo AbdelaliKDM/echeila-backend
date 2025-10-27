@@ -211,6 +211,9 @@
         <div class="card shadow-sm">
           <div class="card-header d-flex align-items-center justify-content-between">
             <h5 class="mb-0">{{ __('federation.drivers_list') }}</h5>
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-driver-modal" data-federation-id="{{ $federation->id }}">
+              <i class="bx bx-plus me-1"></i>{{ __('federation.add_driver') }}
+            </button>
           </div>
           <div class="table-responsive">
             <table class="table table-hover mb-0">
@@ -257,9 +260,19 @@
                       <small class="text-muted">{{ $driver->user->created_at->format('Y-m-d') }}</small>
                     </td>
                     <td>
-                      <a href="{{ route('drivers.show', $driver->id) }}" class="btn btn-sm btn-icon btn-label-primary">
-                        <i class="bx bx-show"></i>
-                      </a>
+                      <div class="d-flex gap-1">
+                        <a href="{{ route('drivers.show', $driver->user->id) }}" class="btn btn-sm btn-icon btn-label-info">
+                          <i class="bx bx-show"></i>
+                        </a>
+                        <button type="button" class="btn btn-sm btn-icon btn-label-danger" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#remove-driver-modal" 
+                                data-driver-id="{{ $driver->id }}"
+                                data-driver-name="{{ $driver->fullname }}"
+                                data-federation-id="{{ $federation->id }}">
+                          <i class="bx bx-trash"></i>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 @empty
@@ -282,4 +295,83 @@
       </div>
     </div>
   </div>
+
+  <!-- Add Driver Modal -->
+  @php
+    $driverOptions = '<option value="">' . __("federation.choose_driver") . '</option>';
+    foreach($availableDrivers as $driver) {
+        $driverOptions .= '<option value="' . $driver->id . '">' . 
+                         e($driver->fullname) . ' (' . e($driver->user->phone) . ')</option>';
+    }
+  @endphp
+
+  <x-modal.form
+    id="add-driver-modal"
+    title="{{ __('federation.add_driver') }}"
+    action="{{ route('drivers.federation.add') }}"
+    method="POST"
+    inputs='
+    <input type="hidden" name="federation_id" value="">
+    
+    <!-- Driver Selection -->
+    <div class="mb-4">
+      <label class="form-label fw-bold" for="driver_id">
+        <i class="bx bx-user me-2"></i>{{ __("federation.select_driver") }}
+      </label>
+      <select name="driver_id" id="driver_id" class="form-select form-select-lg" required>
+        {!! $driverOptions !!}
+      </select>
+      <small class="text-muted d-block mt-2">{{ __("federation.select_driver_info") }}</small>
+    </div>
+    
+    <div class="alert alert-info d-flex align-items-center" role="alert">
+      <i class="bx bx-info-circle me-2"></i>
+      <div>{{ __("federation.add_driver_notice") }}</div>
+    </div>
+  '
+    theme="primary"
+    submitLabel="{{ __('app.add') }}"
+    cancelLabel="{{ __('app.cancel') }}"
+  />
+
+  <!-- Remove Driver Modal -->
+  <x-modal.confirmation
+    id="remove-driver-modal"
+    title="{{ __('federation.remove_driver') }}"
+    action="{{ route('drivers.federation.remove') }}"
+    method="POST"
+    inputs='
+    <input type="hidden" name="federation_id" value="">
+    <input type="hidden" name="driver_id" value="">
+  '
+    theme="danger"
+    confirmationTitle="{{ __('federation.remove_driver_confirmation') }}"
+    confirmationText='<span id="driver-name-placeholder"></span>'
+    checkboxLabel="{{ __('federation.remove_driver_confirm_checkbox') }}"
+    submitLabel="{{ __('app.remove') }}"
+    cancelLabel="{{ __('app.cancel') }}"
+  />
+@endsection
+
+@section('page-script')
+  <script>
+    $(document).ready(function() {
+      // Handle Add Driver Modal
+      $(document).on('click', '[data-bs-target="#add-driver-modal"]', function() {
+        const federationId = $(this).data('federation-id');
+        $('#add-driver-modal').find('input[name="federation_id"]').val(federationId);
+      });
+
+      // Handle Remove Driver Modal
+      $(document).on('click', '[data-bs-target="#remove-driver-modal"]', function() {
+        const driverId = $(this).data('driver-id');
+        const driverName = $(this).data('driver-name');
+        const federationId = $(this).data('federation-id');
+        
+        $('#remove-driver-modal').find('input[name="driver_id"]').val(driverId);
+        $('#remove-driver-modal').find('input[name="federation_id"]').val(federationId);
+        $('#driver-name-placeholder').text('{{ __("federation.remove_driver_text") }} ' + driverName + '?');
+      });
+    });
+  </script>
 @endsection

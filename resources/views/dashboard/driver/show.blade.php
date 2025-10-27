@@ -322,7 +322,14 @@
                     <i class="bx bx-palette text-muted me-2"></i>
                     <div>
                       <small class="text-muted d-block">{{ __('vehicle.color') }}</small>
-                      <span class="fw-medium">{{ $driver->vehicle->color->name ?? 'N/A' }}</span>
+                      <div class="d-flex align-items-center gap-2">
+                        @if($driver->vehicle->color)
+                          <span class="d-inline-block rounded" 
+                                style="width: 24px; height: 24px; background-color: {{ $driver->vehicle->color->code }}; border: 2px solid #ddd;"
+                                title="{{ $driver->vehicle->color->code }}"></span>
+                        @endif
+                        <span class="fw-medium">{{ $driver->vehicle->color->name ?? 'N/A' }}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -543,7 +550,9 @@
                     @forelse($recentTrips as $trip)
                       <tr>
                         <td>
-                          <span class="fw-medium">#{{ $trip->id }}</span>
+                          <a href="{{ route('trips.show', $trip->id) }}" class="text-decoration-none">
+                              <span class="fw-medium">#{{ $trip->identifier }}</span>
+                          </a>
                         </td>
                         <td>
                           <span class="{{ 'badge bg-label-' . \App\Constants\TripType::get_color($trip->type)}}">
@@ -589,7 +598,11 @@
                     <div class="flex-grow-1 ms-3">
                       <div class="d-flex justify-content-between align-items-start mb-2">
                         <div>
-                          <h6 class="mb-1">{{ __('driver.trip_id') }}: #{{ $review->trip_id }}</h6>
+                          <h6 class="mb-1">
+                            <a href="{{ route('trips.show', $review->trip->id) }}" class="text-decoration-none">
+                              <span class="fw-medium">#{{ $review->trip->identifier }}</span>
+                          </a>
+                          </h6>
                           <div class="mb-2">
                             @for($i = 0; $i < 5; $i++)
                               @if($i < $review->rating)

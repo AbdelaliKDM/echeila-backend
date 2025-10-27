@@ -1,4 +1,4 @@
-<table id="{{ $tableId }}" class="table border-top dataTable no-footer collapsed table-hover">
+<table id="{{ $tableId }}" class="table border-top dataTable no-footer collapsed table-hover text-nowrap">
   <thead class="table-light">
   <tr class="text-nowrap">
     <th>#</th>

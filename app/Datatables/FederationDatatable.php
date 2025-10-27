@@ -41,7 +41,7 @@ class FederationDatatable
                         ->makeLabelledIcons();
                 })
                 ->addColumn('federation', function ($model) {
-                    return $this->thumbnailTitleMeta($model->federation->avatar_url, $model->federation->name, $model->federation->description);
+                    return $this->thumbnailTitleMeta($model->federation->avatar_url, $model->federation->name, null, route('federations.show', $model->id));
                 })
                 ->addColumn('phone', function ($model) {
                     return $model->phone;

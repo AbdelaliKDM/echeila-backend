@@ -54,7 +54,7 @@ class AdminDatatable
 
     public function query($request)
     {
-        $query = Admin::query();
+        $query = Admin::whereNot('id', Auth::id());
 
         if ($request->role_filter) {
             $query->role($request->role_filter);

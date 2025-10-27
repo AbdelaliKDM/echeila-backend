@@ -9,22 +9,24 @@ use App\Http\Controllers\pages\MiscComingSoon;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\pages\MiscNotAuthorized;
+use App\Http\Controllers\Dashboard\BrandController;
+use App\Http\Controllers\Dashboard\ColorController;
+use App\Http\Controllers\Dashboard\WilayaController;
 use App\Http\Controllers\pages\MiscUnderMaintenance;
 use App\Http\Controllers\Dashboard\ProfileController;
+use App\Http\Controllers\Dashboard\SeatPriceController;
 use App\Http\Controllers\Dashboard\Admin\AdminController;
 use App\Http\Controllers\Dashboard\Roles\RolesController;
 use App\Http\Controllers\Dashboard\Users\UsersController;
+use App\Http\Controllers\Dashboard\LostAndFoundController;
+use App\Http\Controllers\Dashboard\TripController;
 use App\Http\Controllers\Dashboard\Users\DriverController;
+use App\Http\Controllers\Dashboard\VehicleModelController;
 use App\Http\Controllers\Dashboard\Users\PassengerController;
 use App\Http\Controllers\Dashboard\Settings\SettingController;
 use App\Http\Controllers\Dashboard\Users\FederationController;
-use App\Http\Controllers\Dashboard\WilayaController;
-use App\Http\Controllers\Dashboard\SeatPriceController;
-use App\Http\Controllers\Dashboard\BrandController;
-use App\Http\Controllers\Dashboard\VehicleModelController;
-use App\Http\Controllers\Dashboard\ColorController;
-use App\Http\Controllers\Dashboard\Documentation\DocumentationController;
 use App\Http\Controllers\Dashboard\Permissions\PermissionsController;
+use App\Http\Controllers\Dashboard\Documentation\DocumentationController;
 use App\Http\Controllers\Dashboard\Notifications\NotificationsController;
 
 // locale
@@ -97,6 +99,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/{id}', [DriverController::class, 'show'])->name('drivers.show');
             Route::post('/update-status', [DriverController::class, 'updateStatus'])->name('drivers.status.update');
             Route::post('/purchase-subscription', [DriverController::class, 'purchaseSubscription'])->name('drivers.subscription.purchase');
+            Route::post('/add-to-federation', [DriverController::class, 'addToFederation'])->name('drivers.federation.add');
+            Route::post('/remove-from-federation', [DriverController::class, 'removeFromFederation'])->name('drivers.federation.remove');
         });
 
         Route::prefix('federations')->group(function () {
@@ -106,11 +110,18 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('/', [FederationController::class, 'store'])->name('federations.store');
         });
 
+        Route::prefix('trips')->group(function () {
+            Route::get('/{type}', [\App\Http\Controllers\Dashboard\TripController::class, 'index'])->name('trips.index');
+            Route::get('/show/{id}', [\App\Http\Controllers\Dashboard\TripController::class, 'show'])->name('trips.show');
+        });
+
         Route::get('send-notification', [NotificationsController::class, 'index'])->name('send-notification');
         Route::post('send-notification', [NotificationsController::class, 'send'])->name('send-notification.send');
 
-        Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
-            Route::resource('documentations', DocumentationController::class)->only('index', 'store');
-        });
+        Route::resource('documentations', DocumentationController::class)->only('index', 'store');
+
+        Route::resource('lost-and-founds', LostAndFoundController::class);
+        Route::post('lost-and-founds/update-status', [LostAndFoundController::class, 'updateStatus'])->name('lost-and-founds.status.update');
+        
     });
 });

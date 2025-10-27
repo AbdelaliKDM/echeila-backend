@@ -301,6 +301,7 @@
                 <table class="table table-hover mb-0">
                   <thead class="table-light">
                     <tr>
+                      <th>{{ __('trip.id') }}</th>
                       <th>{{ __('trip.driver') }}</th>
                       <th>{{ __('trip.type') }}</th>
                       <th>{{ __('trip.date') }}</th>
@@ -310,11 +311,18 @@
                     @forelse($recentTrips as $trip)
                       <tr>
                         <td>
+                          <a href="{{ route('trips.show', $trip->id) }}" class="text-decoration-none">
+                          <span class="fw-medium">#{{ $trip->identifier }}</span>
+                          </a>
+                        </td>
+                        <td>
                           @if($trip->driver)
-                            <div class="d-flex align-items-center">
-                              <i class="bx bx-user-circle me-1"></i>
-                              <span>{{ $trip->driver->fullname}}</span>
-                            </div>
+                            <a href="{{ route('drivers.show', $trip->driver->user->id) }}" class="text-decoration-none">
+                              <div class="d-flex align-items-center">
+                                <i class="bx bx-user-circle me-1"></i>
+                                <span>{{ $trip->driver->fullname }}</span>
+                              </div>
+                            </a>
                           @else
                             <span class="text-muted">N/A</span>
                           @endif
@@ -358,7 +366,11 @@
                     <div class="flex-grow-1 ms-3">
                       <div class="d-flex justify-content-between align-items-start mb-2">
                         <div>
-                          <h6 class="mb-1">{{ __('passenger.trip_id') }}: #{{ $review->trip_id }}</h6>
+                          <h6 class="mb-1">
+                            <a href="{{ route('trips.show', $review->trip->id) }}" class="text-decoration-none">
+                              <span class="fw-medium">#{{ $review->trip->identifier }}</span>
+                          </a>
+                          </h6>
                           <div class="mb-2">
                             @for($i = 0; $i < 5; $i++)
                               @if($i < $review->rating)

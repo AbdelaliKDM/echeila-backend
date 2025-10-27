@@ -18,4 +18,8 @@ class Guest extends Model
     {
         return $this->morphMany(TripClient::class, 'client');
     }
+
+    public function getAvatarUrlAttribute(){
+        return asset('assets/img/avatars/1.png');
+    }
 }

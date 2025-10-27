@@ -15,32 +15,19 @@
   .leaflet-container {
     font-family: inherit;
   }
-  .location-info-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 1.25rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  .selected-marker-pulse {
+    animation: pulse 2s infinite;
   }
-  .location-info-card .info-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
-  .location-info-card .info-item:last-child {
-    margin-bottom: 0;
-  }
-  .location-info-card .info-label {
-    font-weight: 600;
-    margin-right: 0.5rem;
-    min-width: 90px;
-  }
-  .location-info-card .info-value {
-    font-family: 'Courier New', monospace;
-    background: rgba(255,255,255,0.2);
-    padding: 0.25rem 0.75rem;
-    border-radius: 0.25rem;
-    font-size: 0.9rem;
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+    }
   }
   .name-input-group {
     transition: all 0.3s ease;
@@ -51,6 +38,9 @@
   .form-control:focus {
     border-color: #667eea;
     box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+  .coordinate-input {
+    font-family: 'Courier New', monospace;
   }
 </style>
 @endsection
@@ -87,10 +77,6 @@
         <div class="d-flex flex-column h-100">
           <!-- Name Inputs -->
           <div class="card mb-3 flex-grow-1">
-            {{-- <div class="card-header d-flex align-items-center">
-              <i class='bx bx-edit-alt me-2'></i>
-              <h5 class="mb-0">{{ __('app.wilaya_details') ?? 'Wilaya Details' }}</h5>
-            </div> --}}
             <div class="card-body">
               @php
                 $locales = config('app.available_locales', ['ar', 'en', 'fr']);
@@ -102,35 +88,68 @@
               @endphp
 
               @foreach($locales as $locale)
-                <div class="mb-3 name-input-group">
-                  <label for="name_{{ $locale }}" class="form-label">
-                    {{ __('app.name') }} ({{ $localeLabels[$locale] ?? ucfirst($locale) }})
-                  </label>
-                  <input 
-                    type="text" 
-                    name="name[{{ $locale }}]" 
-                    class="form-control @error("name.{$locale}") is-invalid @enderror" 
-                    id="name_{{ $locale }}"
-                    placeholder="{{ __('app.enter_name') ?? 'Enter name' }} {{ strtolower($localeLabels[$locale]) }}"
-                    value="{{ old("name.{$locale}", $wilaya->translate('name', $locale) ?? '') }}" 
-                    required>
-                  @error("name.{$locale}")
-                    <span class="invalid-feedback">{{ $message }}</span>
-                  @enderror
-                </div>
-              @endforeach
+              <div class="mb-3 col-md-auto">
+                <label for="name_{{ $locale }}" class="form-label">{{ __('app.name') }} ({{ $localeLabels[$locale] ?? ucfirst($locale) }})</label>
+                <input 
+                  type="text" 
+                  name="name[{{ $locale }}]" 
+                  class="form-control @error("name.{$locale}") is-invalid @enderror" 
+                  id="name_{{ $locale }}"
+                  placeholder="{{ __('app.name') }}"
+                  value="{{ old("name.{$locale}", $wilaya->translate('name', $locale) ?? '') }}" 
+                  required>
+                @error("name.{$locale}")
+                  <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+              </div>
+            @endforeach
             </div>
           </div>
 
-          <!-- Location Info -->
-          <div id="location-info" class="location-info-card flex-shrink-0">
-            <div class="info-item">
-              <span class="info-label">{{ __('app.latitude') }}:</span>
-              <span class="info-value" id="display-latitude">{{ number_format($wilaya->latitude ?? 0, 6) }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">{{ __('app.longitude') }}:</span>
-              <span class="info-value" id="display-longitude">{{ number_format($wilaya->longitude ?? 0, 6) }}</span>
+          <!-- Coordinates Input -->
+          <div class="card flex-shrink-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                  <label for="latitude" class="form-label">
+                    <i class='bx bx-target-lock me-1'></i>{{ __('app.latitude') }}
+                  </label>
+                  <input 
+                    type="number" 
+                    step="any" 
+                    name="latitude" 
+                    id="latitude" 
+                    class="form-control coordinate-input @error('latitude') is-invalid @enderror" 
+                    placeholder="36.7538"
+                    value="{{ old('latitude', $wilaya->latitude ?? '') }}"
+                    required>
+                  @error('latitude')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="col-md-6">
+                  <label for="longitude" class="form-label">
+                    <i class='bx bx-target-lock me-1'></i>{{ __('app.longitude') }}
+                  </label>
+                  <input 
+                    type="number" 
+                    step="any" 
+                    name="longitude" 
+                    id="longitude" 
+                    class="form-control coordinate-input @error('longitude') is-invalid @enderror" 
+                    placeholder="3.0588"
+                    value="{{ old('longitude', $wilaya->longitude ?? '') }}"
+                    required>
+                  @error('longitude')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                  @enderror
+                </div>
+              </div>
+              <div class="mt-2">
+                <small class="text-muted">
+                  <i class='bx bx-info-circle me-1'></i>{{ __('app.click_map_or_enter_coordinates') }}
+                </small>
+              </div>
             </div>
           </div>
         </div>
@@ -139,20 +158,12 @@
       <!-- Right Column - Map Section -->
       <div class="col-xl-5 col-lg-5 mb-4">
         <div class="card h-100">
-          {{-- <div class="card-header d-flex align-items-center">
-            <i class='bx bx-map me-2'></i>
-            <h5 class="mb-0">{{ __('app.location') ?? 'Location' }}</h5>
-          </div> --}}
           <div class="card-body">
             <div id="map"></div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Hidden inputs for coordinates -->
-    <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', $wilaya->latitude ?? '') }}" required>
-    <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', $wilaya->longitude ?? '') }}" required>
   </form>
 @endsection
 
@@ -167,9 +178,13 @@
     const defaultLat = 36.7538;
     const defaultLng = 3.0588;
     
+    // Get input fields
+    const latInput = document.getElementById('latitude');
+    const lngInput = document.getElementById('longitude');
+    
     // Get existing values from the database
-    const existingLat = parseFloat(document.getElementById('latitude').value) || defaultLat;
-    const existingLng = parseFloat(document.getElementById('longitude').value) || defaultLng;
+    const existingLat = parseFloat(latInput.value) || defaultLat;
+    const existingLng = parseFloat(lngInput.value) || defaultLng;
     
     // Initialize map centered on existing location
     const map = L.map('map').setView([existingLat, existingLng], existingLat === defaultLat ? 6 : 12);
@@ -190,13 +205,10 @@
     
     // Create marker
     let marker = null;
-    
-    // Show location info
-    const displayLat = document.getElementById('display-latitude');
-    const displayLng = document.getElementById('display-longitude');
+    let isUpdatingFromInput = false;
     
     // Add marker with existing location
-    if (document.getElementById('latitude').value && document.getElementById('longitude').value) {
+    if (latInput.value && lngInput.value) {
       marker = L.marker([existingLat, existingLng], {
         draggable: true,
         icon: customIcon
@@ -204,7 +216,7 @@
       
       marker.on('dragend', function(e) {
         const position = marker.getLatLng();
-        updateCoordinates(position.lat, position.lng);
+        updateCoordinates(position.lat, position.lng, false);
       });
     }
     
@@ -222,7 +234,7 @@
         icon: customIcon
       }).addTo(map);
       
-      updateCoordinates(lat, lng);
+      updateCoordinates(lat, lng, false);
       
       // Smooth zoom to clicked location
       if (map.getZoom() < 12) {
@@ -234,30 +246,71 @@
       
       marker.on('dragend', function(e) {
         const position = marker.getLatLng();
-        updateCoordinates(position.lat, position.lng);
+        updateCoordinates(position.lat, position.lng, false);
       });
     });
     
-    // Update coordinates in input fields and display
-    function updateCoordinates(lat, lng) {
-      document.getElementById('latitude').value = lat.toFixed(8);
-      document.getElementById('longitude').value = lng.toFixed(8);
-      updateLocationDisplay(lat, lng);
+    // Update coordinates in input fields
+    function updateCoordinates(lat, lng, fromInput = false) {
+      if (!fromInput) {
+        latInput.value = lat.toFixed(8);
+        lngInput.value = lng.toFixed(8);
+      }
     }
     
-    function updateLocationDisplay(lat, lng) {
-      displayLat.textContent = lat.toFixed(6);
-      displayLng.textContent = lng.toFixed(6);
+    // Update map when input changes
+    function updateMapFromInputs() {
+      const lat = parseFloat(latInput.value);
+      const lng = parseFloat(lngInput.value);
+      
+      if (isNaN(lat) || isNaN(lng)) return;
+      
+      // Validate coordinates
+      if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        return;
+      }
+      
+      isUpdatingFromInput = true;
+      
+      if (marker) {
+        marker.setLatLng([lat, lng]);
+      } else {
+        marker = L.marker([lat, lng], {
+          draggable: true,
+          icon: customIcon
+        }).addTo(map);
+        
+        marker.on('dragend', function(e) {
+          const position = marker.getLatLng();
+          updateCoordinates(position.lat, position.lng, false);
+        });
+      }
+      
+      map.setView([lat, lng], Math.max(map.getZoom(), 12));
+      
+      setTimeout(() => {
+        isUpdatingFromInput = false;
+      }, 100);
     }
+    
+    // Add input event listeners
+    latInput.addEventListener('input', updateMapFromInputs);
+    lngInput.addEventListener('input', updateMapFromInputs);
     
     // Form validation
     document.querySelector('form').addEventListener('submit', function(e) {
-      const lat = document.getElementById('latitude').value;
-      const lng = document.getElementById('longitude').value;
+      const lat = parseFloat(latInput.value);
+      const lng = parseFloat(lngInput.value);
       
-      if (!lat || !lng) {
+      if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
         e.preventDefault();
-        alert('{{ __("app.please_select_location") ?? "Please select a location on the map" }}');
+        alert('{{ __("app.please_select_location") }}');
+        return false;
+      }
+      
+      if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        e.preventDefault();
+        alert('{{ __("app.invalid_coordinates") }}');
         return false;
       }
     });

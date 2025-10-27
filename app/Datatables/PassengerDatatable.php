@@ -40,7 +40,7 @@ class PassengerDatatable
                         ->makeLabelledIcons();
                 })
                 ->addColumn('passenger', function ($model) {
-                    return $this->thumbnailTitleMeta($model->passenger->avatar_url, $model->passenger->fullname);
+                    return $this->thumbnailTitleMeta($model->passenger->avatar_url, $model->passenger->fullname, null, route('passengers.show', $model->id));
                 })
                 ->addColumn('phone', function ($model) {
                     return $model->phone;
@@ -60,7 +60,7 @@ class PassengerDatatable
 
     public function query($request)
     {
-        $query = User::whereDoesntHave('driver')->whereDoesntHave('federation');
+        $query = User::passengers();
 
         if ($request->user_status_filter) {
             $query->where('status', $request->user_status_filter);

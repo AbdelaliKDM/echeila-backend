@@ -102,6 +102,7 @@ class CreateTripRequest extends FormRequest
             'delivery_point.latitude' => 'required|numeric|between:-90,90',
             'delivery_point.name' => 'required|string|max:255',
             'delivery_time' => 'required|date|after:now',
+            'total_fees' => 'required|numeric|min:0',
 
             // Cargo details
             'cargo.description' => 'required|string|max:1000',

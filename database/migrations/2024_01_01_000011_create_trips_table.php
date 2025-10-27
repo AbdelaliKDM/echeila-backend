@@ -12,6 +12,7 @@ return new class extends Migration {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->foreignId('driver_id')->constrained()->onDelete('cascade');
+            $table->string('identifier')->unique();
             $table->enum('type', TripType::all());
             $table->enum('status', TripStatus::all())->default(TripStatus::PENDING);
             $table->text('note')->nullable();

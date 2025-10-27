@@ -91,6 +91,8 @@ return [
     'deleted_successfully' => ':name deleted successfully',
     'submit' => 'Submit',
     'no_data_available' => 'No data available',
+    'no_comment' => 'No comment',
+    'view_on_map' => 'View on Map',
 
     'light' => 'Light',
     'dark' => 'Dark',
@@ -123,6 +125,19 @@ return [
     'seat-prices' => 'Seat Prices',
     'wilaya' => 'Wilaya',
     'wilayas' => 'Wilayas',
+    'vehicles' => 'Vehicles',
+    'lost-and-founds' => 'Lost & Found',
+    
+    // Trips menu
+    'trips' => 'Trips',
+    'all_trips' => 'All Trips',
+    'taxi_rides' => 'Taxi Rides',
+    'car_rescues' => 'Car Rescues',
+    'cargo_transports' => 'Cargo Transports',
+    'water_transports' => 'Water Transports',
+    'paid_driving' => 'Paid Driving',
+    'mrt_trips' => 'Mauritania Trips',
+    'esp_trips' => 'Spain Trips',
 
     // Create/Edit titles
     'create-brand' => 'Create Brand',
@@ -160,6 +175,9 @@ return [
     'email' => 'Email',
 
     'longitude' => 'Longitude',
-    'latitude' => 'Latitude'
-
+    'latitude' => 'Latitude',
+    'enter_name' => 'Enter name',
+    'click_map_or_enter_coordinates' => 'Click on the map or enter coordinates manually',
+    'please_select_location' => 'Please select a location on the map',
+    'invalid_coordinates' => 'Invalid coordinates. Latitude must be between -90 and 90, Longitude between -180 and 180',
 ];

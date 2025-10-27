@@ -188,7 +188,7 @@
     <input type="hidden" name="id" value="">
     <input type="hidden" name="status" value="approved">
   '
-    theme="success"
+    theme="green"
     Optional
     confirmationTitle="{{ __('driver.approve.confirmation') }}"
     confirmationText="{{ __('driver.approve.notice') }}"
@@ -205,7 +205,7 @@
     <input type="hidden" name="id" value="">
     <input type="hidden" name="status" value="denied">
   '
-    theme="danger"
+    theme="warning"
     confirmationTitle="{{ __('driver.suspend.confirmation') }}"
     confirmationText="{{ __('driver.suspend.notice') }}"
     checkboxLabel="{{ __('driver.suspend.confirm_checkbox') }}"

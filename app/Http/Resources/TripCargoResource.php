@@ -23,7 +23,7 @@ class TripCargoResource extends JsonResource
             //'updated_at' => $this->updated_at,
             'description' => $this->cargo->description,
             'weight' => $this->cargo->weight,
-            'images' => $this->cargo->getMedia('image')->map(function ($item) {
+            'images' => $this->cargo->getMedia('images')->map(function ($item) {
                 return $item->getUrl();
             }),
             

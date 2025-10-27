@@ -77,13 +77,14 @@ class User extends Authenticatable
   public function scopeType($query, string $type)
   {
     switch ($type) {
-      case UserType::DRIVER:
-        return $query->whereHas('driver')->with('driver', 'passenger');
       case UserType::FEDERATION:
         return $query->whereHas('federation')->with('federation', 'passenger');
+      case UserType::DRIVER:
+        return $query->whereHas('driver')->with('driver', 'passenger');
       case UserType::PASSENGER:
+        return $query->whereHas('passenger')->with('passenger');
       default:
-        return $query->whereDoesntHave('driver')->whereDoesntHave('federation')->with('passenger');
+        return $query;
     }
   }
 

@@ -16,6 +16,7 @@ class LostAndFound extends Model implements HasMedia
     protected $fillable = [
         'passenger_id',
         'description',
+        'status'
     ];
 
     public function registerMediaCollections(): void

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard\Users;
 
 use App\Models\User;
 use App\Models\Driver;
+use App\Models\Federation;
 use App\Constants\UserType;
 use App\Constants\NotificationMessages;
 use App\Http\Resources\SubscriptionResource;
@@ -154,6 +155,85 @@ return view('dashboard.driver.show', compact('driver', 'stats', 'transactions', 
 
       DB::commit();
       return redirect()->back()->with('success', __('app.subscription_purchased_successfully'));
+    } catch (\Exception $e) {
+      DB::rollBack();
+      return redirect()->back()->with('error', $e->getMessage());
+    }
+  }
+
+  public function addToFederation(Request $request)
+  {
+    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_DRIVERS)) {
+      return redirect()->route('unauthorized');
+    }
+
+    $data = $request->validate([
+      'federation_id' => 'required|exists:federations,id',
+      'driver_id' => 'required|exists:drivers,id',
+    ]);
+
+    try {
+      DB::beginTransaction();
+
+      $federation = Federation::findOrFail($data['federation_id']);
+      $driver = Driver::findOrFail($data['driver_id']);
+
+      // Check if driver already belongs to a federation
+      if ($driver->federation_id) {
+        throw new \Exception(__('federation.driver_already_has_federation'));
+      }
+
+      // Add driver to federation
+      $driver->update(['federation_id' => $federation->id]);
+
+      // Send notification to driver
+      /* $driver->user->notify(new NewMessageNotification(
+        key: NotificationMessages::DRIVER_ADDED_TO_FEDERATION,
+        data: ['federation_name' => $federation->name]
+      )); */
+
+      DB::commit();
+      return redirect()->back()->with('success', __('federation.driver_added_successfully'));
+    } catch (\Exception $e) {
+      DB::rollBack();
+      return redirect()->back()->with('error', $e->getMessage());
+    }
+  }
+
+  public function removeFromFederation(Request $request)
+  {
+    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_DRIVERS)) {
+      return redirect()->route('unauthorized');
+    }
+
+    $data = $request->validate([
+      'federation_id' => 'required|exists:federations,id',
+      'driver_id' => 'required|exists:drivers,id',
+      'confirmed' => 'required|accepted',
+    ]);
+
+    try {
+      DB::beginTransaction();
+
+      $federation = Federation::findOrFail($data['federation_id']);
+      $driver = Driver::findOrFail($data['driver_id']);
+
+      // Check if driver belongs to this federation
+      if ($driver->federation_id != $federation->id) {
+        throw new \Exception(__('federation.driver_not_in_federation'));
+      }
+
+      // Remove driver from federation
+      $driver->update(['federation_id' => null]);
+
+      // Send notification to driver
+      /* $driver->user->notify(new NewMessageNotification(
+        key: NotificationMessages::DRIVER_REMOVED_FROM_FEDERATION,
+        data: ['federation_name' => $federation->name]
+      )); */
+
+      DB::commit();
+      return redirect()->back()->with('success', __('federation.driver_removed_successfully'));
     } catch (\Exception $e) {
       DB::rollBack();
       return redirect()->back()->with('error', $e->getMessage());

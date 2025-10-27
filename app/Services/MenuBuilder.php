@@ -13,6 +13,7 @@ class MenuBuilder
    * @param string $name The name of the menu item
    * @param array|string $slug The slug(s) for the menu item
    * @param string|null $route The route for the menu item
+   * @param string|null $url The URL for the menu item (alternative to route)
    * @param string|null $icon The icon class for the menu item
    * @param array|string|null $permission The permission(s) required to access this item
    * @param array $submenu The submenu items, if any
@@ -21,6 +22,7 @@ class MenuBuilder
     string $name,
     array|string $slug,
     ?string $route = null,
+    ?string $url = null,
     ?string $icon = 'bx bx-circle', // Default icon class (without 'menu-icon tf-icons')
     array|string|null $permission = null,
     array $submenu = []
@@ -36,9 +38,12 @@ class MenuBuilder
       $item['permission'] = $permission;
     }
 
-    // If route is provided, add it to the item
+    // If route is provided, add it to the item (route takes precedence over url)
     if ($route) {
       $item['route'] = $route;
+    } elseif ($url) {
+      // If url is provided and route is not, add url to the item
+      $item['url'] = $url;
     }
 
     // If submenu is provided, add it to the item
@@ -55,7 +60,8 @@ class MenuBuilder
    *
    * @param string $name The name of the submenu item
    * @param string $slug The slug for the submenu item
-   * @param string $route The route for the submenu item
+   * @param string|null $route The route for the submenu item
+   * @param string|null $url The URL for the submenu item (alternative to route)
    * @param string|null $icon The icon class for the submenu item
    * @param string|array|null $permission The permission required to access the submenu
    * @return array The submenu item
@@ -63,16 +69,24 @@ class MenuBuilder
   public static function submenu(
     string $name,
     string $slug,
-    string $route,
+    ?string $route = null,
+    ?string $url = null,
     ?string $icon = null, // Default icon class (without 'menu-icon tf-icons')
     string|array|null $permission = null
   ): array {
     $sub = [
       'name' => $name,
-      'route' => $route,
       'slug' => $slug,
       'icon' => $icon? 'menu-icon tf-icons ' . $icon : '', // Add the default prefix
     ];
+
+    // If route is provided, add it to the submenu (route takes precedence over url)
+    if ($route) {
+      $sub['route'] = $route;
+    } elseif ($url) {
+      // If url is provided and route is not, add url to the submenu
+      $sub['url'] = $url;
+    }
 
     // If permission is provided, add it to the submenu
     if ($permission) {

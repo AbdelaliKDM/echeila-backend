@@ -164,8 +164,8 @@ class UsersController extends Controller
 
       // Send notification
       $notificationKey = $data['status'] === 'active' 
-        ? NotificationMessages::ACCOUNT_ACTIVATED 
-        : NotificationMessages::ACCOUNT_SUSPENDED;
+        ? NotificationMessages::USER_ACTIVATED 
+        : NotificationMessages::USER_BANNED;
       
       $user->notify(new NewMessageNotification(
         key: $notificationKey,

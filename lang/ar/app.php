@@ -1,4 +1,5 @@
 <?php
+
 return [
     'add' => 'إضافة',
     'edit' => 'تعديل',
@@ -89,6 +90,8 @@ return [
     'deleted_successfully' => 'تم حذف :name بنجاح',
     'submit' => 'إرسال',
     'no_data_available' => 'لا توجد بيانات متاحة',
+    'no_comment' => 'لا يوجد تعليق',
+    'view_on_map' => 'عرض على الخريطة',
 
     'light' => 'فاتح',
     'dark' => 'داكن',
@@ -121,6 +124,19 @@ return [
     'seat-prices' => 'أسعار المقاعد',
     'wilaya' => 'الولاية',
     'wilayas' => 'الولايات',
+    'vehicles' => 'المركبات',
+    'lost-and-founds' => 'المفقودات والموجودات',
+    
+    // قائمة الرحلات
+    'trips' => 'الرحلات',
+    'all_trips' => 'جميع الرحلات',
+    'taxi_rides' => 'رحلات التاكسي',
+    'car_rescues' => 'إنقاذ السيارات',
+    'cargo_transports' => 'نقل البضائع',
+    'water_transports' => 'نقل المياه',
+    'paid_driving' => 'القيادة المدفوعة',
+    'mrt_trips' => 'رحلات موريتانيا',
+    'esp_trips' => 'رحلات إسبانيا',
 
     // عناوين الإنشاء / التعديل
     'create-brand' => 'إنشاء علامة تجارية',
@@ -158,5 +174,8 @@ return [
     'email' => 'البريد الإلكتروني',
     'longitude' => 'خط الطول',
     'latitude' => 'خط العرض',
-
+    'enter_name' => 'أدخل الاسم',
+    'click_map_or_enter_coordinates' => 'انقر على الخريطة أو أدخل الإحداثيات يدويًا',
+    'please_select_location' => 'يرجى اختيار موقع على الخريطة',
+    'invalid_coordinates' => 'إحداثيات غير صالحة. يجب أن يكون خط العرض بين -90 و 90، وخط الطول بين -180 و 180',
 ];

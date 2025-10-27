@@ -31,4 +31,8 @@ class Location extends Model
     {
         return $this->morphMany(TaxiRideDetail::class, 'arrival_point');
     }
+
+    public function getUrlAttribute(){
+        return "https://maps.google.com/?q={$this->latitude},{$this->longitude}";
+    }
 }

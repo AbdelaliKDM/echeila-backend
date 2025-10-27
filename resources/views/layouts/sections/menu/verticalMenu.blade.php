@@ -1,5 +1,6 @@
 @php
   use Illuminate\Support\Facades\Route;
+  use Illuminate\Support\Facades\Request;
   use App\Support\Enum\Roles;
   $configData = Helper::appClasses();
 @endphp
@@ -42,28 +43,37 @@
         @php
         $activeClass = null;
         $currentRouteName = Route::currentRouteName();
+        $currentPath = request()->path();
 
         if (!isset($menu->submenu)) {
         if (gettype($menu->slug) === 'array') {
         foreach ($menu->slug as $slug) {
-        if (str_contains($currentRouteName, $slug) and strpos($currentRouteName, $slug) === 0) {
+        // Check both route name and URL path
+        if ((str_contains($currentRouteName, $slug) and strpos($currentRouteName, $slug) === 0) ||
+            (str_contains($currentPath, $slug) and strpos($currentPath, $slug) === 0)) {
         $activeClass = 'active';
         }
         }
         } else {
-        if (str_contains($currentRouteName, $menu->slug) and strpos($currentRouteName, $menu->slug) === 0) {
+        // Check both route name and URL path
+        if ((str_contains($currentRouteName, $menu->slug) and strpos($currentRouteName, $menu->slug) === 0) ||
+            (str_contains($currentPath, $menu->slug) and strpos($currentPath, $menu->slug) === 0)) {
         $activeClass = 'active';
         }
         }
         } elseif (isset($menu->submenu)) {
         if (gettype($menu->slug) === 'array') {
         foreach ($menu->slug as $slug) {
-        if (str_contains($currentRouteName, $slug) and strpos($currentRouteName, $slug) === 0) {
+        // Check both route name and URL path
+        if ((str_contains($currentRouteName, $slug) and strpos($currentRouteName, $slug) === 0) ||
+            (str_contains($currentPath, $slug) and strpos($currentPath, $slug) === 0)) {
         $activeClass = 'active open';
         }
         }
         } else {
-        if (str_contains($currentRouteName, $menu->slug) and strpos($currentRouteName, $menu->slug) === 0) {
+        // Check both route name and URL path
+        if ((str_contains($currentRouteName, $menu->slug) and strpos($currentRouteName, $menu->slug) === 0) ||
+            (str_contains($currentPath, $menu->slug) and strpos($currentPath, $menu->slug) === 0)) {
         $activeClass = 'active open';
         }
         }
@@ -81,7 +91,7 @@
 
         @if ($hasPermission)
         <li class="menu-item {{$activeClass}}">
-        <a href="{{ isset($menu->route) ? route($menu->route) : 'javascript:void(0);' }}"
+        <a href="{{ isset($menu->url) ? url($menu->url) : (isset($menu->route) ? route($menu->route) : 'javascript:void(0);') }}"
         class="{{ isset($menu->submenu) ? 'menu-link menu-toggle' : 'menu-link' }}" @if (isset($menu->target) and !empty($menu->target)) target="_blank" @endif>
         @isset($menu->icon)
         <i class="{{ $menu->icon }}"></i>

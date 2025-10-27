@@ -91,6 +91,8 @@ return [
     'deleted_successfully' => ':name supprimé avec succès',
     'submit' => 'Soumettre',
     'no_data_available' => 'Aucune donnée disponible',
+    'no_comment' => 'Aucun commentaire',
+    'view_on_map' => 'Voir sur la carte',
 
     'light' => 'Clair',
     'dark' => 'Sombre',
@@ -123,6 +125,19 @@ return [
     'seat-prices' => 'Prix des Sièges',
     'wilaya' => 'Wilaya',
     'wilayas' => 'Wilayas',
+    'vehicles' => 'Véhicules',
+    'lost-and-founds' => 'Objets Trouvés',
+    
+    // Menu des voyages
+    'trips' => 'Voyages',
+    'all_trips' => 'Tous les Voyages',
+    'taxi_rides' => 'Courses de Taxi',
+    'car_rescues' => 'Dépannages',
+    'cargo_transports' => 'Transports de Marchandises',
+    'water_transports' => 'Transports d\'Eau',
+    'paid_driving' => 'Conduite Payée',
+    'mrt_trips' => 'Voyages Mauritanie',
+    'esp_trips' => 'Voyages Espagne',
 
     // Titres Créer/Modifier
     'create-brand' => 'Créer une Marque',
@@ -160,4 +175,8 @@ return [
     'email' => 'Email',
     'longitude' => 'Longitude',
     'latitude' => 'Latitude',
+    'enter_name' => 'Entrez le nom',
+    'click_map_or_enter_coordinates' => 'Cliquez sur la carte ou entrez les coordonnées manuellement',
+    'please_select_location' => 'Veuillez sélectionner un emplacement sur la carte',
+    'invalid_coordinates' => 'Coordonnées invalides. La latitude doit être entre -90 et 90, la longitude entre -180 et 180',
 ];
