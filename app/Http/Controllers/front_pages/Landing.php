@@ -9,7 +9,9 @@ class Landing extends Controller
 {
   public function index()
   {
-    $pageConfigs = ['myLayout' => 'front'];
-    return view('front-pages.landing-page', ['pageConfigs' => $pageConfigs]);
+    /* $pageConfigs = ['myLayout' => 'front'];
+    return view('front-pages.landing-page', ['pageConfigs' => $pageConfigs]); */
+
+    return view('landing.index');
   }
 }
