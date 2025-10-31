@@ -14,7 +14,7 @@ class VehicleModelController extends Controller
 {
     public function index(Request $request)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::VEHICLE_MODEL_INDEX)) {
             return redirect()->route('unauthorized');
         }
         $vehicleModels = new VehicleModelDatatable;
@@ -29,7 +29,7 @@ class VehicleModelController extends Controller
 
     public function create()
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::VEHICLE_MODEL_CREATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -40,7 +40,7 @@ class VehicleModelController extends Controller
 
     public function edit($id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::VEHICLE_MODEL_UPDATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -55,7 +55,7 @@ class VehicleModelController extends Controller
 
     public function store(Request $request)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::VEHICLE_MODEL_CREATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -95,7 +95,7 @@ class VehicleModelController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::VEHICLE_MODEL_UPDATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -137,7 +137,7 @@ class VehicleModelController extends Controller
 
     public function destroy($id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::VEHICLE_MODEL_DELETE)) {
             return redirect()->route('unauthorized');
         }
 

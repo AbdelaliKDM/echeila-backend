@@ -7,7 +7,9 @@ use App\Models\Trip;
 use App\Constants\TripType;
 use App\Constants\Direction;
 use App\Constants\TripStatus;
+use App\Support\Enum\Permissions;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Traits\DataTableActionsTrait;
 
 class InternationalTripDatatable
@@ -31,10 +33,15 @@ class InternationalTripDatatable
     public function datatables($request, $tripType)
     {
         try {
+            // Determine which permission to check based on trip type
+            $permission = $tripType == TripType::MRT_TRIP 
+                ? Permissions::MRT_TRIP_SHOW 
+                : Permissions::ESP_TRIP_SHOW;
+            
             return datatables($this->query($request, $tripType))
-                ->addColumn('actions', function ($model) {
+                ->addColumn('actions', function ($model) use ($permission) {
                     return $this
-                        ->show(route('trips.show', $model->id))
+                        ->show(route('trips.show', $model->id), Auth::user()->hasPermissionTo($permission))
                         ->makeLabelledIcons();
                 })
                 ->addColumn('identifier', function ($model) {

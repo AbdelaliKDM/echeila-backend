@@ -42,10 +42,10 @@ class TransactionType
         return [
             self::RESERVATION => 'blue',
             self::REFUND => 'warning',
-            self::DEPOSIT => 'success',
-            self::WITHDRAW => 'info',
+            self::DEPOSIT => 'info',
+            self::WITHDRAW => 'teal',
             self::SUBSCRIBTION => 'purple',
-            self::SERVICE => 'teal',
+            self::SERVICE => 'red',
         ];
     }
 

@@ -142,7 +142,7 @@
                     <small class="text-muted mb-0">@lang('app.manage-settings')</small>
                   </div>
                   @endpermission()
-                  @permission(\App\Support\Enum\Permissions::MANAGE_SETTINGS)
+                  @permission(\App\Support\Enum\Permissions::MANAGE_DOCUMENTATIONS)
                   <div class="dropdown-shortcuts-item col">
                     <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
                       <i class="bx bx-book fs-4"></i>
@@ -169,7 +169,7 @@
                     <a href="{{ url('/') }}" class="stretched-link">@lang('app.home')</a>
                     <small class="text-muted mb-0">@lang('app.landing')</small>
                   </div>
-                  @permission(\App\Support\Enum\Permissions::MANAGE_SETTINGS)
+                  @permission(\App\Support\Enum\Permissions::MANAGE_NOTIFICATIONS)
                   <div class="dropdown-shortcuts-item col">
                     <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
                       <i class="bx bx-bell fs-4"></i>

@@ -27,8 +27,8 @@ class BrandDatatable
             return datatables($this->query($request))
                 ->addColumn('actions', function ($model) {
                     return $this
-                        ->edit(route('brands.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_VEHICLES))
-                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::MANAGE_VEHICLES))
+                        ->edit(route('brands.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::BRAND_UPDATE))
+                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::BRAND_DELETE))
                         ->makeLabelledIcons();
                 })
                 ->addColumn('name', function ($model) {

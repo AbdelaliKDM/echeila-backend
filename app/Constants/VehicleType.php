@@ -28,7 +28,7 @@ class VehicleType
     public static function colors(): array
     {
         return [
-            self::CAR => 'primary',
+            self::CAR => 'warning',
             self::TRUCK => 'info',
         ];
     }

@@ -17,7 +17,7 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_ADMINS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::ADMIN_INDEX)) {
             return redirect()->route('unauthorized');
         }
         $admins = new AdminDatatable;
@@ -32,7 +32,7 @@ class AdminController extends Controller
 
     public function create()
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_ADMINS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::ADMIN_CREATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -41,7 +41,7 @@ class AdminController extends Controller
 
     public function edit($id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_ADMINS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::ADMIN_UPDATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -50,7 +50,7 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_ADMINS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::ADMIN_CREATE)) {
             return redirect()->route('unauthorized');
         }
         $data = $request->validate([
@@ -91,7 +91,7 @@ class AdminController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_ADMINS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::ADMIN_UPDATE)) {
             return redirect()->route('unauthorized');
         }
         $data = $request->validate([
@@ -132,7 +132,7 @@ class AdminController extends Controller
 
     public function destroy($id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_ADMINS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::ADMIN_DELETE)) {
             return redirect()->route('unauthorized');
         }
 

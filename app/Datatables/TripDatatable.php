@@ -6,7 +6,9 @@ use Exception;
 use App\Models\Trip;
 use App\Constants\TripStatus;
 use App\Constants\TripType;
+use App\Support\Enum\Permissions;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Traits\DataTableActionsTrait;
 
 class TripDatatable
@@ -31,7 +33,7 @@ class TripDatatable
             return datatables($this->query($request))
                 ->addColumn('actions', function ($model) {
                     return $this
-                        ->show(route('trips.show', $model->id))
+                        ->show(route('trips.show', $model->id), Auth::user()->hasPermissionTo(Permissions::ALL_TRIPS_INDEX))
                         ->makeLabelledIcons();
                 })
                 ->addColumn('identifier', function ($model) {

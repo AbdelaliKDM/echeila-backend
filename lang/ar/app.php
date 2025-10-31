@@ -178,4 +178,43 @@ return [
     'click_map_or_enter_coordinates' => 'انقر على الخريطة أو أدخل الإحداثيات يدويًا',
     'please_select_location' => 'يرجى اختيار موقع على الخريطة',
     'invalid_coordinates' => 'إحداثيات غير صالحة. يجب أن يكون خط العرض بين -90 و 90، وخط الطول بين -180 و 180',
+
+    // إجراءات المسؤولين
+    'admin_actions' => 'إجراءات المسؤولين',
+    'action_type' => 'نوع الإجراء',
+    'target' => 'المستخدم المستهدف',
+    'wallet_charge' => 'شحن المحفظة',
+    'withdraw_sum' => 'سحب المبلغ',
+    'change_user_status' => 'تغيير حالة المستخدم',
+    'change_driver_status' => 'تغيير حالة السائق',
+    'total_actions' => 'إجمالي الإجراءات',
+    'today' => 'اليوم',
+    'this_week' => 'هذا الأسبوع',
+    'this_month' => 'هذا الشهر',
+    'from' => 'من',
+    'to' => 'إلى',
+    'select_date' => 'اختر التاريخ',
+    'note' => 'ملاحظة',
+    'created_at' => 'تاريخ الإنشاء',
+
+    // الإشعارات
+    'channels' => 'القنوات',
+    'database-notifications' => 'إشعارات قاعدة البيانات',
+    'fcm-notifications' => 'إشعارات FCM',
+    'admin_notification' => 'إشعار المسؤول',
+    'system_update' => 'تحديث النظام',
+    'send_to' => 'إرسال إلى',
+    'notification_title' => 'عنوان الإشعار',
+    'notification_body' => 'نص الإشعار',
+
+    // التوثيق
+    'about_us' => 'من نحن',
+    'privacy_policy' => 'سياسة الخصوصية',
+    'delete_account' => 'حذف الحساب',
+    'reset_password' => 'إعادة تعيين كلمة المرور',
+
+    // عام
+    'success' => 'نجاح',
+    'updated_successful' => 'تم التحديث بنجاح',
+    'continue' => 'متابعة',
 ];

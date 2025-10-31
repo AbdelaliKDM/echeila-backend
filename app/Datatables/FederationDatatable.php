@@ -33,9 +33,9 @@ class FederationDatatable
                 ->addColumn('action', function ($model) {
                     $walletBalance = $model->wallet?->balance ?? 0;
                     return $this
-                        ->show(route('federations.show', $model->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_USERS))
-                        ->modalButton('user-status-activate-modal', __('app.activate'), 'bx bx-lock-open', ['id' => $model->id], $model->status === UserStatus::BANNED, UserStatus::get_color(UserStatus::ACTIVE))
-                        ->modalButton('user-status-suspend-modal', __('app.suspend'), 'bx bx-lock', ['id' => $model->id], $model->status === UserStatus::ACTIVE, UserStatus::get_color(UserStatus::BANNED))
+                        ->show(route('federations.show', $model->id), Auth::user()->hasPermissionTo(Permissions::FEDERATION_SHOW))
+                        ->modalButton('user-status-activate-modal', __('app.activate'), 'bx bx-lock-open', ['id' => $model->id], $model->status === UserStatus::BANNED && Auth::user()->hasPermissionTo(Permissions::FEDERATION_CHANGE_USER_STATUS), UserStatus::get_color(UserStatus::ACTIVE))
+                        ->modalButton('user-status-suspend-modal', __('app.suspend'), 'bx bx-lock', ['id' => $model->id], $model->status === UserStatus::ACTIVE && Auth::user()->hasPermissionTo(Permissions::FEDERATION_CHANGE_USER_STATUS), UserStatus::get_color(UserStatus::BANNED))
                         //->modalButton('charge-wallet-modal', __('app.charge_wallet'), 'bx bx-wallet', ['id' => $model->id, 'wallet-balance' => $walletBalance], true, 'blue')
                         //->modalButton('withdraw-sum-modal', __('app.withdraw'), 'bx bx-money', ['id' => $model->id, 'wallet-balance' => $walletBalance], true, 'teal')
                         ->makeLabelledIcons();

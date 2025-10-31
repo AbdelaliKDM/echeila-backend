@@ -28,8 +28,8 @@ class WaterType
     public static function colors(): array
     {
         return [
-            self::DRINK => 'primary',
-            self::TEA => 'success',
+            self::DRINK => 'info',
+            self::TEA => 'warning',
         ];
     }
 

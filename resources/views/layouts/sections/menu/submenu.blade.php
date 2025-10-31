@@ -47,13 +47,13 @@
     @endphp
 
     {{-- main menu --}}
-    {{-- @php
+    @php
     $hasPermission = empty($submenu->permission) || (
     is_array($submenu->permission)
-    ? collect($submenu->permission)->some(fn($perm) => Auth::user()->hasPermissionTo($perm))
-    : Auth::user()->hasPermissionTo($submenu->permission)
+    ? collect($submenu->permission)->some(fn($perm) => auth()->user()?->hasPermissionTo($perm))
+    : auth()->user()?->hasPermissionTo($submenu->permission)
     );
-    @endphp --}}
+    @endphp
 
     @if ($hasPermission)
     <li class="menu-item {{$activeClass}}">

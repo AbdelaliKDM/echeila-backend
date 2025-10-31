@@ -28,8 +28,8 @@ class SeatPriceDatatable
             return datatables($this->query($request))
                 ->addColumn('actions', function ($model) {
                     return $this
-                        ->edit(route('seat-prices.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_WILAYAS))
-                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::MANAGE_WILAYAS))
+                        ->edit(route('seat-prices.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::SEAT_PRICE_UPDATE))
+                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::SEAT_PRICE_DELETE))
                         ->makeLabelledIcons();
                 })
 

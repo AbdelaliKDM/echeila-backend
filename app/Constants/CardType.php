@@ -28,7 +28,7 @@ class CardType
     public static function colors(): array
     {
         return [
-            self::NATIONAL_ID => 'primary',
+            self::NATIONAL_ID => 'warning',
             self::DRIVING_LICENSE => 'info',
         ];
     }

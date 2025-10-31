@@ -91,216 +91,63 @@
             <div class="col-xl">
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">{{ __('Clinic') }}</h5>
-                        <small class="text-muted float-end">{{ __('Clinic contact information') }}</small>
+                        <h5 class="mb-0">{{ __('Contact') }}</h5>
+                        <small class="text-muted float-end">{{ __('Contact information') }}</small>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <label class="form-label" for="clinic_whatsapp">{{ __('Phone Number') }}</label>
-                            <input type="tel" class="form-control" id="clinic_whatsapp" name="clinic_whatsapp"
-                                value="{{ $settings['clinic_whatsapp'] ?? '' }}">
+                            <label class="form-label" for="contact_phone">{{ __('Phone Number') }}</label>
+                            <input type="tel" class="form-control" id="contact_phone" name="contact_phone"
+                                value="{{ $settings['contact_phone'] ?? '' }}">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="clinic_email">{{ __('Email') }}</label>
-                            <input type="email" class="form-control" id="clinic_email" name="clinic_email"
-                                value="{{ $settings['clinic_email'] ?? '' }}">
+                            <label class="form-label" for="contact_email">{{ __('Email') }}</label>
+                            <input type="email" class="form-control" id="contact_email" name="contact_email"
+                                value="{{ $settings['contact_email'] ?? '' }}">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="clinic_facebook">{{ __('Facebook') }}</label>
-                            <input type="url" class="form-control" id="clinic_facebook" name="clinic_facebook"
-                                value="{{ $settings['clinic_facebook'] ?? '' }}">
+                            <label class="form-label" for="contact_facebook">{{ __('Facebook') }}</label>
+                            <input type="url" class="form-control" id="contact_facebook" name="contact_facebook"
+                                value="{{ $settings['contact_facebook'] ?? '' }}">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="clinic_instagram">{{ __('Instagram') }}</label>
-                            <input type="url" class="form-control" id="clinic_instagram" name="clinic_instagram"
-                                value="{{ $settings['clinic_instagram'] ?? '' }}">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl">
-                <div class="card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">{{ __('Pharmacy') }}</h5>
-                        <small class="text-muted float-end">{{ __('Pharmacy contact information') }}</small>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label" for="pharmacy_whatsapp">{{ __('Phone Number') }}</label>
-                            <input type="tel" class="form-control" id="pharmacy_whatsapp" name="pharmacy_whatsapp"
-                                value="{{ $settings['pharmacy_whatsapp'] ?? '' }}">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="pharmacy_email">{{ __('Email') }}</label>
-                            <input type="email" class="form-control" id="pharmacy_email" name="pharmacy_email"
-                                value="{{ $settings['pharmacy_email'] ?? '' }}">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="pharmacy_facebook">{{ __('Facebook') }}</label>
-                            <input type="url" class="form-control" id="pharmacy_facebook" name="pharmacy_facebook"
-                                value="{{ $settings['pharmacy_facebook'] ?? '' }}">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="pharmacy_instagram">{{ __('Instagram') }}</label>
-                            <input type="url" class="form-control" id="pharmacy_instagram" name="pharmacy_instagram"
-                                value="{{ $settings['pharmacy_instagram'] ?? '' }}">
+                            <label class="form-label" for="contact_instagram">{{ __('Instagram') }}</label>
+                            <input type="url" class="form-control" id="contact_instagram" name="contact_instagram"
+                                value="{{ $settings['contact_instagram'] ?? '' }}">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Financial Information -->
+        <!-- Pricing Settings -->
         <h4 class="fw-bold py-3 mb-3">
-            <span class="text-muted fw-light"></span> {{ __('Financial Information') }}
-        </h4>
-        <div class="row">
-            <div class="col-md-9">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <!-- Left side content remains the same -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label" for="ccp">{{ __('CCP Account') }}</label>
-                                <input type="text" class="form-control" id="ccp" name="ccp"
-                                    value="{{ $settings['ccp'] ?? '' }}">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="baridi">{{ __('Baridi Mob') }}</label>
-                                <input type="text" class="form-control" id="baridi" name="baridi"
-                                    value="{{ $settings['baridi'] ?? '' }}">
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-5">
-                                <label class="form-label" for="chargily_pk">{{ __('Chargily Public Key') }}</label>
-                                <input type="text" class="form-control" id="chargily_pk" name="chargily_pk"
-                                    value="{{ $settings['chargily_pk'] ?? '' }}">
-                            </div>
-                            <div class="col-md-5">
-                                <label class="form-label" for="chargily_sk">{{ __('Chargily Secret Key') }}</label>
-                                <input type="password" class="form-control" id="chargily_sk" name="chargily_sk"
-                                    value="{{ $settings['chargily_sk'] ?? '' }}">
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label" for="chargily_mode">{{ __('Chargily Mode') }}</label>
-                                <select class="form-select" id="chargily_mode" name="chargily_mode">
-                                    <option value="test" @if (($settings['chargily_mode'] ?? '') === 'test') selected @endif>
-                                        {{ __('Test') }}</option>
-                                    <option value="live" @if (($settings['chargily_mode'] ?? '') === 'live') selected @endif>
-                                        {{ __('Live') }}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="mb-3">
-                            {{-- <label class="form-label">{{ __('Payment Methods') }}</label> --}}
-
-                            <!-- Cash Payment -->
-                            <input type="hidden" name="cash_enabled" value="0">
-                            <div class="form-check form-switch my-3">
-                                <input class="form-check-input" type="checkbox" id="cash_enabled" name="cash_enabled"
-                                    value="1" @if ($settings['cash_enabled'] ?? false) checked @endif>
-                                <label class="form-check-label"
-                                    for="cash_enabled">{{ __('Enable Cash Payment') }}</label>
-                            </div>
-
-                            <!-- Baridi Mob -->
-                            <input type="hidden" name="baridi_enabled" value="0">
-                            <div class="form-check form-switch mb-3">
-                                <input class="form-check-input" type="checkbox" id="baridi_enabled"
-                                    name="baridi_enabled" value="1" @if ($settings['baridi_enabled'] ?? false) checked @endif>
-                                <label class="form-check-label"
-                                    for="baridi_enabled">{{ __('Enable Baridi Mob') }}</label>
-                            </div>
-
-                            <!-- CCP -->
-                            <input type="hidden" name="ccp_enabled" value="0">
-                            <div class="form-check form-switch mb-3">
-                                <input class="form-check-input" type="checkbox" id="ccp_enabled" name="ccp_enabled"
-                                    value="1" @if ($settings['ccp_enabled'] ?? false) checked @endif>
-                                <label class="form-check-label" for="ccp_enabled">{{ __('Enable CCP') }}</label>
-                            </div>
-
-                            <!-- Chargily -->
-                            <input type="hidden" name="chargily_enabled" value="0">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="chargily_enabled"
-                                    name="chargily_enabled" value="1"
-                                    @if ($settings['chargily_enabled'] ?? false) checked @endif>
-                                <label class="form-check-label"
-                                    for="chargily_enabled">{{ __('Enable Chargily') }}</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <h4 class="fw-bold py-3 mb-3">
-            <span class="text-muted fw-light"></span> {{ __('Alerts Settings') }}
+            <span class="text-muted fw-light"></span> {{ __('Pricing Settings') }}
         </h4>
         <div class="card mb-4">
             <div class="card-body">
                 <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label" for="pusher_instance_id">{{ __('Pusher Instance ID') }}</label>
-                        <input type="text" class="form-control" id="pusher_instance_id" name="pusher_instance_id"
-                            value="{{ $settings['pusher_instance_id'] ?? '' }}">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label" for="pusher_primary_key">{{ __('Pusher Primary Key') }}</label>
-                        <input type="password" class="form-control" id="pusher_primary_key" name="pusher_primary_key"
-                            value="{{ $settings['pusher_primary_key'] ?? '' }}">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delivery Settings -->
-        <h4 class="fw-bold py-3 mb-3">
-            <span class="text-muted fw-light"></span> {{ __('Delivery Settings') }}
-        </h4>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label" for="price_per_km">{{ __('Price Per Kilometer') }}</label>
+                    <div class="col-md-4">
+                        <label class="form-label" for="subscription_month_price">{{ __('Subscription Month Price') }}</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="price_per_km" name="price_per_km"
-                                value="{{ $settings['price_per_km'] ?? '' }}">
+                            <input type="number" step="0.01" class="form-control" id="subscription_month_price" name="subscription_month_price"
+                                value="{{ $settings['subscription_month_price'] ?? '' }}">
                             <span class="input-group-text">{{ __('DA') }}</span>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label" for="free_threshold">{{ __('Free Delivery Threshold') }}</label>
+                    <div class="col-md-4">
+                        <label class="form-label" for="water_price_per_litre">{{ __('Water Price Per Litre') }}</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="free_threshold" name="free_threshold"
-                                value="{{ $settings['free_threshold'] ?? '' }}">
+                            <input type="number" step="0.01" class="form-control" id="water_price_per_litre" name="water_price_per_litre"
+                                value="{{ $settings['water_price_per_litre'] ?? '' }}">
                             <span class="input-group-text">{{ __('DA') }}</span>
                         </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label" for="min_price">{{ __('Minimum Delivery Price') }}</label>
+                    <div class="col-md-4">
+                        <label class="form-label" for="cargo_price_per_kg">{{ __('Cargo Price Per Kg') }}</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="min_price" name="min_price"
-                                value="{{ $settings['min_price'] ?? '' }}">
-                            <span class="input-group-text">{{ __('DA') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label" for="max_price">{{ __('Maximum Delivery Price') }}</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="max_price" name="max_price"
-                                value="{{ $settings['max_price'] ?? '' }}">
+                            <input type="number" step="0.01" class="form-control" id="cargo_price_per_kg" name="cargo_price_per_kg"
+                                value="{{ $settings['cargo_price_per_kg'] ?? '' }}">
                             <span class="input-group-text">{{ __('DA') }}</span>
                         </div>
                     </div>

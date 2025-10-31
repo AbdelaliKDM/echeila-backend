@@ -2,6 +2,7 @@
     "app-name": "Echeila",
     "dashboard" : "Tableau de bord",
     "admins": "Administrateurs",
+    "admin-actions" : "Actions des administrateurs",
     "roles-permissions": "Rôles et permissions",
     "roles": "Rôles",
     "permissions": "Permissions",

@@ -2,6 +2,7 @@
     "app-name": "Echeila",
     "dashboard": "Dashboard",
     "admins": "Admins",
+    "admin-actions" : "Admin Actions",
     "roles-permissions": "Roles & Permissions",
     "roles": "Roles",
     "permissions": "Permissions",

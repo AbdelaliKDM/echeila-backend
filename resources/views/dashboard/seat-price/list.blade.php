@@ -46,7 +46,7 @@
               <x-table.custom-datatable-search />
               <div class="dt-buttons btn-group flex-wrap">
                 <!-- Custom buttons can be added here if needed -->
-                @permission(\App\Support\Enum\Permissions::MANAGE_WILAYAS)
+                @permission(\App\Support\Enum\Permissions::SEAT_PRICE_CREATE)
                 <a href="{{ route('seat-prices.create') }}" class="text-white text-decoration-none">
                   <button type="button" class="btn btn-primary">
                     <span class="tf-icons bx bx-plus"></span> @lang('app.add-new-seat-price')

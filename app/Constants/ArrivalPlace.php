@@ -28,8 +28,8 @@ class ArrivalPlace
     public static function colors(): array
     {
         return [
-            self::MAURITANIA => 'success',
-            self::SPAIN => 'primary',
+            self::MAURITANIA => 'warning',
+            self::SPAIN => 'info',
         ];
     }
 

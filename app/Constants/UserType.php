@@ -27,9 +27,9 @@ class UserType
   public static function colors():array
   {
     return [
-      self::PASSENGER => 'primary',
+      self::PASSENGER => 'info',
       self::DRIVER => 'warning',
-      self::FEDERATION => 'info',
+      self::FEDERATION => 'purple',
     ];
   }
 

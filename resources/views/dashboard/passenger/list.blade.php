@@ -30,7 +30,7 @@
               <p class="mb-0">{{ __('passenger.stats.registered') }}</p>
             </div>
             <div class="avatar">
-              <span class="avatar-initial rounded bg-label-primary">
+              <span class="avatar-initial rounded bg-label-purple">
                 <i class="bx bx-user bx-sm"></i>
               </span>
             </div>

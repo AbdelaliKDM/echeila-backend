@@ -2,14 +2,15 @@
 
 namespace App\Datatables;
 
-use App\Constants\DriverStatus;
-use App\Constants\UserStatus;
-use App\Models\User;
-use App\Support\Enum\Permissions;
-use App\Traits\DataTableActionsTrait;
 use Exception;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Setting;
+use App\Constants\UserStatus;
+use App\Constants\DriverStatus;
+use App\Support\Enum\Permissions;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\DataTableActionsTrait;
 
 class DriverDatatable
 {
@@ -36,17 +37,17 @@ class DriverDatatable
                 ->addColumn('action', function ($model) {
                     $walletBalance = $model->wallet?->balance ?? 0;
                     $subscriptionEndDate = $model->driver->subscription?->end_date ?? null;
-                    $monthlyFee = 1000;
+                    $monthlyFee = Setting::getValue('subscription_month_price') ?? 0;
 
                     return $this
-                        ->show(route('drivers.show', $model->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_USERS))
-                        ->modalButton('user-status-activate-modal', __('app.activate'), 'bx bx-lock-open', ['id' => $model->id], $model->status === UserStatus::BANNED, UserStatus::get_color(UserStatus::ACTIVE))
-                        ->modalButton('user-status-suspend-modal', __('app.suspend'), 'bx bx-lock', ['id' => $model->id], $model->status === UserStatus::ACTIVE, UserStatus::get_color(UserStatus::BANNED))
-                        ->modalButton('driver-status-approve-modal', __('app.approve'), 'bx bx-check-circle', ['id' => $model->id], $model->driver->status !== DriverStatus::APPROVED, DriverStatus::get_color(DriverStatus::APPROVED))
-                        ->modalButton('driver-status-deny-modal', __('app.deny'), 'bx bx-x-circle', ['id' => $model->id], $model->driver->status !== DriverStatus::DENIED, DriverStatus::get_color(DriverStatus::DENIED))
-                        ->modalButton('charge-wallet-modal', __('app.charge_wallet'), 'bx bx-wallet', ['id' => $model->id, 'wallet-balance' => $walletBalance], true, 'blue')
-                        ->modalButton('withdraw-sum-modal', __('app.withdraw'), 'bx bx-money', ['id' => $model->id, 'wallet-balance' => $walletBalance], true, 'teal')
-                        ->modalButton('purchase-subscription-modal', __('app.purchase_subscription'), 'bx bx-calendar', ['id' => $model->id, 'subscription-end-date' => $subscriptionEndDate, 'monthly-fee' => $monthlyFee], true, 'purple')
+                        ->show(route('drivers.show', $model->id), Auth::user()->hasPermissionTo(Permissions::DRIVER_SHOW))
+                        ->modalButton('user-status-activate-modal', __('app.activate'), 'bx bx-lock-open', ['id' => $model->id], $model->status === UserStatus::BANNED && Auth::user()->hasPermissionTo(Permissions::DRIVER_CHANGE_USER_STATUS), UserStatus::get_color(UserStatus::ACTIVE))
+                        ->modalButton('user-status-suspend-modal', __('app.suspend'), 'bx bx-lock', ['id' => $model->id], $model->status === UserStatus::ACTIVE && Auth::user()->hasPermissionTo(Permissions::DRIVER_CHANGE_USER_STATUS), UserStatus::get_color(UserStatus::BANNED))
+                        ->modalButton('driver-status-approve-modal', __('app.approve'), 'bx bx-check-circle', ['id' => $model->id], $model->driver->status !== DriverStatus::APPROVED && Auth::user()->hasPermissionTo(Permissions::DRIVER_CHANGE_STATUS), DriverStatus::get_color(DriverStatus::APPROVED))
+                        ->modalButton('driver-status-deny-modal', __('app.deny'), 'bx bx-x-circle', ['id' => $model->id], $model->driver->status !== DriverStatus::DENIED && Auth::user()->hasPermissionTo(Permissions::DRIVER_CHANGE_STATUS), DriverStatus::get_color(DriverStatus::DENIED))
+                        ->modalButton('charge-wallet-modal', __('app.charge_wallet'), 'bx bx-wallet', ['id' => $model->id, 'wallet-balance' => $walletBalance], Auth::user()->hasPermissionTo(Permissions::DRIVER_CHARGE_WALLET), 'blue')
+                        ->modalButton('withdraw-sum-modal', __('app.withdraw'), 'bx bx-money', ['id' => $model->id, 'wallet-balance' => $walletBalance], Auth::user()->hasPermissionTo(Permissions::DRIVER_WITHDRAW_SUM), 'teal')
+                        ->modalButton('purchase-subscription-modal', __('app.purchase_subscription'), 'bx bx-calendar', ['id' => $model->id, 'subscription-end-date' => $subscriptionEndDate, 'monthly-fee' => $monthlyFee], Auth::user()->hasPermissionTo(Permissions::DRIVER_PURCHASE_SUBSCRIPTION), 'purple')
                         ->makeLabelledIcons();
                 })
                 ->addColumn('driver', function ($model) {

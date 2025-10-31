@@ -29,8 +29,8 @@ class WilayaDatatable
             return datatables($this->query($request))
                 ->addColumn('actions', function ($model) {
                     return $this
-                        ->edit(route('wilayas.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_WILAYAS))
-                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::MANAGE_WILAYAS))
+                        ->edit(route('wilayas.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::WILAYA_UPDATE))
+                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::WILAYA_DELETE))
                         ->makeLabelledIcons();
                 })
                 ->addColumn('wilaya', function ($model) {

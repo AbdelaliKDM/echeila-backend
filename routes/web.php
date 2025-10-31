@@ -28,6 +28,7 @@ use App\Http\Controllers\Dashboard\Users\FederationController;
 use App\Http\Controllers\Dashboard\Permissions\PermissionsController;
 use App\Http\Controllers\Dashboard\Documentation\DocumentationController;
 use App\Http\Controllers\Dashboard\Notifications\NotificationsController;
+use App\Http\Controllers\Dashboard\AdminActionController;
 
 // locale
 Route::get('/{locale}', function ($locale) {
@@ -77,6 +78,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('permissions', [PermissionsController::class, 'update'])->name('permissions.update');
 
         Route::resource('settings', SettingController::class)->only('index', 'store');
+        Route::resource('admin-actions', AdminActionController::class)->only('index');
         Route::resource('documentations', DocumentationController::class)->only('index', 'store');
         Route::resource('admins', AdminController::class)->except(['show']);
         Route::resource('wilayas', WilayaController::class)->except(['show']);
@@ -122,6 +124,8 @@ Route::group(['prefix' => 'admin'], function () {
 
         Route::resource('lost-and-founds', LostAndFoundController::class);
         Route::post('lost-and-founds/update-status', [LostAndFoundController::class, 'updateStatus'])->name('lost-and-founds.status.update');
+
+        Route::resource('admin-actions', AdminActionController::class)->only('index');
         
     });
 });

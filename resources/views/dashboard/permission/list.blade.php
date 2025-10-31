@@ -24,7 +24,7 @@
         <thead class="table-light">
           <tr>
             <th>{{__('Permission')}}</th>
-            <th>{{__('Name')}}</th>
+            {{-- <th>{{__('Name')}}</th> --}}
             @foreach ($roles as $role)
               <th>{{ $role->name }} <br> <small>({{ \App\Support\Enum\Roles::get_name($role->name) }})</small></th>
             @endforeach
@@ -35,7 +35,7 @@
           @foreach ($permissions as $permission)
             <tr>
               <td>{{ \App\Support\Enum\Permissions::get_permission_slug($permission->name) }}</td>
-              <td>{{ $permission->name }}</td>
+              {{-- <td>{{ $permission->name }}</td> --}}
 
               @foreach ($roles as $role)
                 <td class="text-center">

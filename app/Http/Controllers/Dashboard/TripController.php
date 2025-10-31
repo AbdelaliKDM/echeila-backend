@@ -6,6 +6,7 @@ use App\Models\Trip;
 use App\Constants\TripType;
 use Illuminate\Http\Request;
 use App\Constants\TripStatus;
+use App\Support\Enum\Permissions;
 use App\Datatables\TripDatatable;
 use App\Http\Controllers\Controller;
 use App\Datatables\TaxiRideDatatable;
@@ -19,6 +20,8 @@ class TripController extends Controller
 {
     public function index(Request $request, $type = 'all')
     {
+        // Check permissions based on trip type
+        $this->checkTripPermission($type);
         
         if ($request->wantsJson()) {
             return $this->getDatatable($request, $type);
@@ -137,5 +140,24 @@ class TripController extends Controller
             TripType::ESP_TRIP => 'dashboard.trip.show-international-trip',
             default => 'dashboard.trip.show',
         };
+    }
+
+    private function checkTripPermission($type)
+    {
+        $permission = match($type) {
+            'all' => Permissions::ALL_TRIPS_INDEX,
+            'taxi_ride' => Permissions::TAXI_RIDE_INDEX,
+            'car_rescue' => Permissions::CAR_RESCUE_INDEX,
+            'cargo_transport' => Permissions::CARGO_TRANSPORT_INDEX,
+            'water_transport' => Permissions::WATER_TRANSPORT_INDEX,
+            'paid_driving' => Permissions::PAID_DRIVING_INDEX,
+            'mrt_trip' => Permissions::MRT_TRIP_INDEX,
+            'esp_trip' => Permissions::ESP_TRIP_INDEX,
+            default => Permissions::ALL_TRIPS_INDEX,
+        };
+
+        if (! auth()->user()->hasPermissionTo($permission)) {
+            abort(403, 'Unauthorized');
+        }
     }
 }

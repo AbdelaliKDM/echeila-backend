@@ -37,19 +37,27 @@
         <div class="card mb-4">
           <div class="card-body">
             <div class="row">
-              <div class="mb-3 col-md-6">
+              <div class="mb-3 col-md-4">
                 <label for="channels[]" class="form-label">@lang('app.channels')</label>
                 <select name="channels[]" id="select2Multiple" class="select2 form-select" multiple required>
                   <option value="database" selected>@lang('app.database-notifications')</option>
                   <option value="fcm" selected>@lang('app.fcm-notifications')</option>
                 </select>
               </div>
-              <div class="mb-3 col-md-6">
+              <div class="mb-3 col-md-4">
                 <label for="key" class="form-label">@lang('app.notification')</label>
                 <select name="key" id="notification-select" class="form-select" required>
                   <option value="" selected disabled>@lang('app.select_option')</option>
                   @foreach(\App\Constants\NotificationMessages::customNotifications() as $notification)
                     <option value="{{ $notification }}">{{ __("app.{$notification}")}}</option>
+                  @endforeach
+                </select>
+              </div>
+              <div class="mb-3 col-md-4">
+                <label for="user_types[]" class="form-label">@lang('app.send_to')</label>
+                <select name="user_types[]" id="select2UserTypes" class="select2 form-select" multiple required>
+                  @foreach(\App\Constants\UserType::all(true) as $type => $label)
+                    <option value="{{ $type }}" selected>{{ $label }}</option>
                   @endforeach
                 </select>
               </div>
@@ -109,7 +117,9 @@
       // JavaScript to update title and body fields when notification type changes
       $(document).ready(function() {
 
-        $('.select2').select2();
+        $('.select2').select2({
+          placeholder: "@lang('app.select_option')"
+        });
         const $notificationSelect = $('#notification-select');
         updateNotificationFields();
 

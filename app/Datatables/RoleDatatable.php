@@ -20,7 +20,7 @@ class RoleDatatable
     return [
       "name",
       "guard_name",
-      "action",
+      //"action",
     ];
   }
 

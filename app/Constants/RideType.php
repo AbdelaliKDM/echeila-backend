@@ -29,7 +29,7 @@ class RideType
     {
         return [
             self::SHARED => 'info',
-            self::PRIVATE => 'primary',
+            self::PRIVATE => 'warning',
         ];
     }
 

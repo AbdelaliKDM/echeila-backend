@@ -7,6 +7,7 @@ use App\Datatables\LostAndFoundDatatable;
 use App\Models\LostAndFound;
 use App\Models\Passenger;
 use App\Constants\LostAndFoundStatus;
+use App\Support\Enum\Permissions;
 use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,10 @@ class LostAndFoundController extends Controller
 
     public function index(Request $request)
     {
+        if (! auth()->user()->hasPermissionTo(Permissions::LOST_AND_FOUND_INDEX)) {
+            return redirect()->route('unauthorized');
+        }
+        
         $lostAndFounds = new LostAndFoundDatatable;
         if ($request->wantsJson()) {
             return $lostAndFounds->datatables($request);
@@ -30,6 +35,10 @@ class LostAndFoundController extends Controller
 
     public function create()
     {
+        if (! auth()->user()->hasPermissionTo(Permissions::LOST_AND_FOUND_INDEX)) {
+            return redirect()->route('unauthorized');
+        }
+        
         return view('dashboard.lost-and-found.create')->with([
             'passengers' => Passenger::all(),
             'statuses' => LostAndFoundStatus::all2(),
@@ -38,6 +47,10 @@ class LostAndFoundController extends Controller
 
     public function show($id)
     {
+        if (! auth()->user()->hasPermissionTo(Permissions::LOST_AND_FOUND_INDEX)) {
+            return redirect()->route('unauthorized');
+        }
+        
         $lostAndFound = LostAndFound::with('passenger')->findOrFail($id);
         
         return view('dashboard.lost-and-found.show')->with([
@@ -47,6 +60,10 @@ class LostAndFoundController extends Controller
 
     public function edit($id)
     {
+        if (! auth()->user()->hasPermissionTo(Permissions::LOST_AND_FOUND_UPDATE)) {
+            return redirect()->route('unauthorized');
+        }
+        
         return view('dashboard.lost-and-found.edit')->with([
             'lostAndFound' => LostAndFound::findOrFail($id),
             'passengers' => Passenger::all(),
@@ -56,6 +73,10 @@ class LostAndFoundController extends Controller
 
     public function store(Request $request)
     {
+        if (! auth()->user()->hasPermissionTo(Permissions::LOST_AND_FOUND_INDEX)) {
+            return redirect()->route('unauthorized');
+        }
+        
         $data = $request->validate([
             'passenger_id' => 'required|exists:passengers,id',
             'description' => 'required|string',
@@ -84,6 +105,10 @@ class LostAndFoundController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (! auth()->user()->hasPermissionTo(Permissions::LOST_AND_FOUND_UPDATE)) {
+            return redirect()->route('unauthorized');
+        }
+        
         $data = $request->validate([
             'description' => 'required|string',
             'status' => 'required|in:' . implode(',', LostAndFoundStatus::all()),
@@ -113,6 +138,10 @@ class LostAndFoundController extends Controller
 
     public function updateStatus(Request $request)
     {
+        if (! auth()->user()->hasPermissionTo(Permissions::LOST_AND_FOUND_CHANGE_STATUS)) {
+            return redirect()->route('unauthorized');
+        }
+        
         $data = $request->validate([
             'id' => 'required|exists:lost_and_founds,id',
             'status' => 'required|in:' . implode(',', LostAndFoundStatus::all()),
@@ -131,6 +160,10 @@ class LostAndFoundController extends Controller
 
     public function destroy($id)
     {
+        if (! auth()->user()->hasPermissionTo(Permissions::LOST_AND_FOUND_DELETE)) {
+            return redirect()->route('unauthorized');
+        }
+        
         try {
             $lostAndFound = LostAndFound::findOrFail($id);
             $lostAndFound->delete();

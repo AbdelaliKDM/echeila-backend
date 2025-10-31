@@ -42,7 +42,7 @@ class MenuServiceProvider extends ServiceProvider
             route: 'dashboard',
             icon: 'bx bx-home-circle',
         );
-        //MenuBuilder::header('Users & Roles');
+        // MenuBuilder::header('Users & Roles');
         MenuBuilder::add(
             name: 'roles-permissions',
             slug: ['roles', 'permissions'],
@@ -67,34 +67,48 @@ class MenuServiceProvider extends ServiceProvider
         MenuBuilder::add(
             name: 'admins',
             slug: 'admins',
-            route: 'admins.index',
+            //route: 'admins.index',
             icon: 'bx bxs-user',
-            permission: ['manage_admins'],
+            permission: ['admin_index', 'adminAction_index'],
+            submenu: [
+                MenuBuilder::submenu(
+                    name: 'admins',
+                    slug: 'admins',
+                    route: 'admins.index',
+                    permission: ['admin_index'],
+                ),
+                MenuBuilder::submenu(
+                    name: 'admin-actions',
+                    slug: 'admin-actions',
+                    route: 'admin-actions.index',
+                    permission: ['adminAction_index'],
+                ),
+            ]
         );
 
         MenuBuilder::add(
             name: 'users',
             slug: ['passengers', 'drivers', 'federations'],
             icon: 'bx bx-user',
-            permission: ['manage_users'],
+            permission: ['passenger_index', 'driver_index', 'federation_index'],
             submenu: [
                 MenuBuilder::submenu(
                     name: 'passengers',
                     slug: 'passengers',
                     route: 'passengers.index',
-                    permission: ['manage_passengers']
+                    permission: ['passenger_index']
                 ),
                 MenuBuilder::submenu(
                     name: 'drivers',
                     slug: 'drivers',
                     route: 'drivers.index',
-                    permission: ['manage_drivers']
+                    permission: ['driver_index']
                 ),
                 MenuBuilder::submenu(
                     name: 'federations',
                     slug: 'federations',
                     route: 'federations.index',
-                    permission: ['manage_federations']
+                    permission: ['federation_index']
                 ),
             ]
         );
@@ -103,19 +117,19 @@ class MenuServiceProvider extends ServiceProvider
             name: 'wilayas',
             slug: ['wilayas', 'seat-prices'],
             icon: 'bx bx-map',
-            permission: ['manage_wilayas'],
+            permission: ['wilaya_index', 'seatPrice_index'],
             submenu: [
                 MenuBuilder::submenu(
                     name: 'wilayas',
                     slug: 'wilayas',
                     route: 'wilayas.index',
-                    permission: ['manage_wilayas']
+                    permission: ['wilaya_index']
                 ),
                 MenuBuilder::submenu(
                     name: 'seat-prices',
                     slug: 'seat-prices',
                     route: 'seat-prices.index',
-                    permission: ['manage_wilayas']
+                    permission: ['seatPrice_index']
                 ),
             ]
         );
@@ -124,26 +138,26 @@ class MenuServiceProvider extends ServiceProvider
             name: 'vehicles',
             slug: ['brands', 'vehicle-models', 'colors'],
             icon: 'bx bx-car',
-            permission: ['manage_vehicles'],
+            permission: ['brand_index', 'vehicleModel_index', 'color_index'],
             submenu: [
                 MenuBuilder::submenu(
                     name: 'brands',
                     slug: 'brands',
                     route: 'brands.index',
-                    permission: ['manage_vehicles']
+                    permission: ['brand_index']
                 ),
                 MenuBuilder::submenu(
                     name: 'vehicle-models',
                     slug: 'vehicle-models',
                     route: 'vehicle-models.index',
-                    permission: ['manage_vehicles']
+                    permission: ['vehicleModel_index']
                 ),
                 MenuBuilder::submenu(
                     name: 'colors',
                     slug: 'colors',
                     route: 'colors.index',
-                    permission: ['manage_vehicles']
-                )
+                    permission: ['color_index']
+                ),
             ]
         );
 
@@ -151,55 +165,55 @@ class MenuServiceProvider extends ServiceProvider
             name: 'trips',
             slug: ['admin/trips/all', 'admin/trips/taxi_ride', 'admin/trips/car_rescue', 'admin/trips/cargo_transport', 'admin/trips/water_transport', 'admin/trips/paid_driving', 'admin/trips/mrt_trip', 'admin/trips/esp_trip'],
             icon: 'bx bx-trip',
-            permission: [],
+            permission: ['allTrips_index', 'taxiRide_index', 'carRescue_index', 'cargoTransport_index', 'waterTransport_index', 'paidDriving_index', 'mrtTrip_index', 'espTrip_index'],
             submenu: [
                 MenuBuilder::submenu(
                     name: 'all_trips',
                     slug: 'admin/trips/all',
                     url: 'admin/trips/all',
-                    permission: [],
+                    permission: ['allTrips_index'],
                 ),
                 MenuBuilder::submenu(
                     name: 'taxi_rides',
                     slug: 'admin/trips/taxi_ride',
                     url: 'admin/trips/taxi_ride',
-                    permission: [],
+                    permission: ['taxiRide_index'],
                 ),
                 MenuBuilder::submenu(
                     name: 'car_rescues',
                     slug: 'admin/trips/car_rescue',
                     url: 'admin/trips/car_rescue',
-                    permission: [],
+                    permission: ['carRescue_index'],
                 ),
                 MenuBuilder::submenu(
                     name: 'cargo_transports',
                     slug: 'admin/trips/cargo_transport',
                     url: 'admin/trips/cargo_transport',
-                    permission: [],
+                    permission: ['cargoTransport_index'],
                 ),
                 MenuBuilder::submenu(
                     name: 'water_transports',
                     slug: 'admin/trips/water_transport',
                     url: 'admin/trips/water_transport',
-                    permission: [],
+                    permission: ['waterTransport_index'],
                 ),
                 MenuBuilder::submenu(
                     name: 'paid_drivings',
                     slug: 'admin/trips/paid_driving',
                     url: 'admin/trips/paid_driving',
-                    permission: [],
+                    permission: ['paidDriving_index'],
                 ),
                 MenuBuilder::submenu(
                     name: 'mrt_trips',
                     slug: 'admin/trips/mrt_trip',
                     url: 'admin/trips/mrt_trip',
-                    permission: [],
+                    permission: ['mrtTrip_index'],
                 ),
                 MenuBuilder::submenu(
                     name: 'esp_trips',
                     slug: 'admin/trips/esp_trip',
                     url: 'admin/trips/esp_trip',
-                    permission: [],
+                    permission: ['espTrip_index'],
                 ),
             ]
         );
@@ -209,7 +223,7 @@ class MenuServiceProvider extends ServiceProvider
             slug: 'lost-and-founds',
             route: 'lost-and-founds.index',
             icon: 'bx bx-search',
-            permission: [],
+            permission: ['lostAndFound_index'],
         );
 
     }

@@ -6,12 +6,14 @@ use App\Datatables\UserDatatable;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Transaction;
+use App\Models\AdminAction;
 use App\Support\Enum\Permissions;
 use App\Support\Enum\Roles;
 use App\Constants\UserType;
 use App\Constants\NotificationMessages;
 use App\Constants\TransactionType;
 use App\Notifications\NewMessageNotification;
+use App\Traits\LogsAdminActions;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
+  use LogsAdminActions;
 
   public function index(Request $request)
   {
@@ -146,9 +149,9 @@ class UsersController extends Controller
 
   public function updateStatus(Request $request)
   {
-    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
+    /* if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
       return redirect()->route('unauthorized');
-    }
+    } */
 
     $data = $request->validate([
       'id' => 'required|exists:users,id',
@@ -159,8 +162,16 @@ class UsersController extends Controller
     try {
       DB::beginTransaction();
       $user = User::findOrFail($data['id']);
+      $oldStatus = $user->status;
+      
       $user->status = $data['status'];
       $user->save();
+
+      // Log admin action
+      $target = $user->driver ?? $user->passenger;
+      if ($target) {
+        $this->logChangeUserStatus($target, $oldStatus, $data['status'], $request->input('note'));
+      }
 
       // Send notification
       $notificationKey = $data['status'] === 'active' 
@@ -187,9 +198,9 @@ class UsersController extends Controller
 
   public function chargeWallet(Request $request)
   {
-    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
+    /* if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
       return redirect()->route('unauthorized');
-    }
+    } */
 
     $data = $request->validate([
       'id' => 'required|exists:users,id',
@@ -200,6 +211,15 @@ class UsersController extends Controller
       DB::beginTransaction();
       $user = User::findOrFail($data['id']);
       $wallet = $user->wallet;
+      
+      // Get target (driver or passenger)
+      $target = $user->driver ?? $user->passenger;
+      
+      // Log the action BEFORE incrementing
+      if ($target) {
+        $this->logWalletCharge($target, $data['amount'], $request->input('note'));
+      }
+      
       $wallet->increment('balance', $data['amount']);
 
       $transaction = Transaction::create([
@@ -223,9 +243,9 @@ class UsersController extends Controller
 
   public function withdrawSum(Request $request)
   {
-    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
+    /* if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
       return redirect()->route('unauthorized');
-    }
+    } */
 
     $data = $request->validate([
       'id' => 'required|exists:users,id',
@@ -239,6 +259,14 @@ class UsersController extends Controller
 
       if ($wallet->balance < $data['amount']) {
         throw new \Exception('Insufficient balance');
+      }
+
+      // Get target (driver or passenger)
+      $target = $user->driver ?? $user->passenger;
+      
+      // Log the action BEFORE decrementing
+      if ($target) {
+        $this->logWithdrawSum($target, $data['amount'], $request->input('note'));
       }
 
       $wallet->decrement('balance', $data['amount']);

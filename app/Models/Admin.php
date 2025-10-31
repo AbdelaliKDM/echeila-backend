@@ -54,4 +54,14 @@ class Admin extends Authenticatable implements HasMedia
         return empty($image) ? asset('assets/img/avatars/1.png') : $image;
     }
 
+    // Relationships
+    
+    /**
+     * Get all actions performed by this admin
+     */
+    public function actions()
+    {
+        return $this->hasMany(AdminAction::class);
+    }
+
 }

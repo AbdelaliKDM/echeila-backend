@@ -179,4 +179,43 @@ return [
     'click_map_or_enter_coordinates' => 'Cliquez sur la carte ou entrez les coordonnées manuellement',
     'please_select_location' => 'Veuillez sélectionner un emplacement sur la carte',
     'invalid_coordinates' => 'Coordonnées invalides. La latitude doit être entre -90 et 90, la longitude entre -180 et 180',
+
+    // Actions Admin
+    'admin_actions' => 'Actions Admin',
+    'action_type' => 'Type d\'Action',
+    'target' => 'Utilisateur Cible',
+    'wallet_charge' => 'Recharge Portefeuille',
+    'withdraw_sum' => 'Retrait',
+    'change_user_status' => 'Changement Statut Utilisateur',
+    'change_driver_status' => 'Changement Statut Conducteur',
+    'total_actions' => 'Total Actions',
+    'today' => 'Aujourd\'hui',
+    'this_week' => 'Cette Semaine',
+    'this_month' => 'Ce Mois',
+    'from' => 'De',
+    'to' => 'À',
+    'select_date' => 'Sélectionner Date',
+    'note' => 'Note',
+    'created_at' => 'Créé le',
+
+    // Notifications
+    'channels' => 'Canaux',
+    'database-notifications' => 'Notifications Base de Données',
+    'fcm-notifications' => 'Notifications FCM',
+    'admin_notification' => 'Notification Admin',
+    'system_update' => 'Mise à Jour Système',
+    'send_to' => 'Envoyer À',
+    'notification_title' => 'Titre de Notification',
+    'notification_body' => 'Corps de Notification',
+
+    // Documentation
+    'about_us' => 'À Propos',
+    'privacy_policy' => 'Politique de Confidentialité',
+    'delete_account' => 'Supprimer Compte',
+    'reset_password' => 'Réinitialiser Mot de Passe',
+
+    // Général
+    'success' => 'Succès',
+    'updated_successful' => 'Mis à Jour avec Succès',
+    'continue' => 'Continuer',
 ];

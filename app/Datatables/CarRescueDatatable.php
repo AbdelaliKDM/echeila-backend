@@ -7,7 +7,9 @@ use App\Models\Trip;
 use App\Constants\TripType;
 use App\Constants\TripStatus;
 use App\Constants\MalfunctionType;
+use App\Support\Enum\Permissions;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Traits\DataTableActionsTrait;
 
 class CarRescueDatatable
@@ -34,7 +36,7 @@ class CarRescueDatatable
             return datatables($this->query($request))
                 ->addColumn('actions', function ($model) {
                     return $this
-                        ->show(route('trips.show', $model->id))
+                        ->show(route('trips.show', $model->id), Auth::user()->hasPermissionTo(Permissions::CAR_RESCUE_INDEX))
                         ->makeLabelledIcons();
                 })
                 ->addColumn('identifier', function ($model) {

@@ -21,7 +21,7 @@ class DocumentationKey
   public static function colors(): array
   {
     return [
-      self::about_us => 'primary',
+      self::about_us => 'info',
       self::privacy_policy => 'secondary',
       self::delete_account => 'danger',
     ];

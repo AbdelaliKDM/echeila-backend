@@ -376,9 +376,9 @@ trait DataTableActionsTrait
     $formattedAmount = number_format($amount, 2, '.', ' ');
     $currency = __('app.DZD');
     if (app()->getLocale() == 'ar') {
-      return '<span class="badge bg-label-primary me-1" dir="ltr">' . $currency . ' &lrm;' . $formattedAmount . '</span>';
+      return '<span class="badge bg-label-purple me-1" dir="ltr">' . $currency . ' &lrm;' . $formattedAmount . '</span>';
     } else {
-      return '<span class="badge bg-label-primary me-1">' . $formattedAmount . ' ' . $currency . '</span>';
+      return '<span class="badge bg-label-purple me-1">' . $formattedAmount . ' ' . $currency . '</span>';
     }
   }
 
@@ -439,6 +439,11 @@ trait DataTableActionsTrait
   public static function time($time): string
   {
     return $time ? $time->format('H:i') : '';
+  }
+
+  public static function datetime($datetime): string
+  {
+    return $datetime ? $datetime->format('Y-m-d H:i') : '';
   }
 
   public static function link($url, $displayUrl = null, $maxLength = 30): string

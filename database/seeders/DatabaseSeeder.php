@@ -21,6 +21,11 @@ class DatabaseSeeder extends Seeder
             ColorSeeder::class,
             WilayaSeeder::class,
             SeatPriceSeeder::class,
+            FederationSeeder::class,
+            PassengerSeeder::class,
+            DriverSeeder::class,
+            TripSeeder::class,
+            LostAndFoundSeeder::class,
         ]);
     }
 }

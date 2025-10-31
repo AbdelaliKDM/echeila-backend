@@ -14,7 +14,7 @@ class PassengerController extends Controller
 {
   public function index(Request $request)
   {
-    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
+    if (!auth()->user()->hasPermissionTo(Permissions::PASSENGER_INDEX)) {
       return redirect()->route('unauthorized');
     }
 
@@ -38,7 +38,7 @@ class PassengerController extends Controller
 
   public function show($id)
   {
-    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
+    if (!auth()->user()->hasPermissionTo(Permissions::PASSENGER_SHOW)) {
       return redirect()->route('unauthorized');
     }
 

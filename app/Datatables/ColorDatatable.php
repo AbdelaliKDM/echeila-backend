@@ -28,8 +28,8 @@ class ColorDatatable
             return datatables($this->query($request))
                 ->addColumn('actions', function ($model) {
                     return $this
-                        ->edit(route('colors.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_VEHICLES))
-                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::MANAGE_VEHICLES))
+                        ->edit(route('colors.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::COLOR_UPDATE))
+                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::COLOR_DELETE))
                         ->makeLabelledIcons();
                 })
                 ->addColumn('name', function ($model) {

@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Constants\NotificationMessages;
+use Exception;
+use App\Models\Setting;
+use App\Models\Transaction;
+use App\Models\Subscription;
+use Illuminate\Http\Request;
+use App\Traits\ApiResponseTrait;
 use App\Constants\TransactionType;
 use App\Http\Controllers\Controller;
+use App\Constants\NotificationMessages;
 use App\Http\Resources\SubscriptionResource;
-use App\Models\Subscription;
-use App\Models\Transaction;
 use App\Notifications\NewMessageNotification;
-use App\Traits\ApiResponseTrait;
-use Exception;
-use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
 {
@@ -32,7 +33,7 @@ class SubscriptionController extends Controller
 
             $wallet = $user->wallet;
             $months = (int) $request->months;
-            $monthlyFee = 1000; // Change as needed
+            $monthlyFee = Setting::getValue('subscription_month_price') ?? 0;
             $totalFee = $months * $monthlyFee;
 
             if ($wallet->balance < $totalFee) {

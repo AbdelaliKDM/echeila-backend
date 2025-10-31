@@ -28,8 +28,8 @@ class VehicleModelDatatable
             return datatables($this->query($request))
                 ->addColumn('actions', function ($model) {
                     return $this
-                        ->edit(route('vehicle-models.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_VEHICLES))
-                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::MANAGE_VEHICLES))
+                        ->edit(route('vehicle-models.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::VEHICLE_MODEL_UPDATE))
+                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::VEHICLE_MODEL_DELETE))
                         ->makeLabelledIcons();
                 })
                 ->addColumn('name', function ($model) {

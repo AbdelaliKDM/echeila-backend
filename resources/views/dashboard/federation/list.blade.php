@@ -30,7 +30,7 @@
               <p class="mb-0">{{ __('federation.stats.registered') }}</p>
             </div>
             <div class="avatar">
-              <span class="avatar-initial rounded bg-label-primary">
+              <span class="avatar-initial rounded bg-label-purple">
                 <i class="bx bx-building bx-sm"></i>
               </span>
             </div>
@@ -125,7 +125,7 @@
               <x-table.custom-datatable-search />
               <div class="dt-buttons btn-group flex-wrap">
                 <!-- Custom buttons can be added here if needed -->
-                @permission(\App\Support\Enum\Permissions::MANAGE_FEDERATIONS)
+                @permission(\App\Support\Enum\Permissions::FEDERATION_CREATE)
                 <a href="{{ route('federations.create') }}" class="text-white text-decoration-none">
                   <button type="button" class="btn btn-primary">
                     <span class="tf-icons bx bx-plus"></span> @lang('federation.add-new')

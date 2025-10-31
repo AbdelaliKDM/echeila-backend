@@ -14,7 +14,7 @@ class DocumentationController extends Controller
    */
   public function index()
   {
-    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_SETTINGS)) {
+    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_DOCUMENTATIONS)) {
       return redirect()->route('unauthorized');
     }
 
@@ -25,7 +25,7 @@ class DocumentationController extends Controller
   public function store(Request $request)
   {
 
-    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_SETTINGS)) {
+    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_DOCUMENTATIONS)) {
       return redirect()->route('unauthorized');
     }
 

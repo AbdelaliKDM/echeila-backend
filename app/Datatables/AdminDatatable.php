@@ -30,8 +30,8 @@ class AdminDatatable
             return datatables($this->query($request))
                 ->addColumn('actions', function ($model) {
                     return $this
-                        ->edit(route('admins.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::MANAGE_ADMINS))
-                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::MANAGE_ADMINS))
+                        ->edit(route('admins.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::ADMIN_UPDATE))
+                        ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::ADMIN_DELETE))
                         ->makeLabelledIcons();
                 })
                 ->addColumn('admin', function ($model) {

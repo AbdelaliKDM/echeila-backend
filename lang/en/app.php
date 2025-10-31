@@ -180,4 +180,43 @@ return [
     'click_map_or_enter_coordinates' => 'Click on the map or enter coordinates manually',
     'please_select_location' => 'Please select a location on the map',
     'invalid_coordinates' => 'Invalid coordinates. Latitude must be between -90 and 90, Longitude between -180 and 180',
+
+    // Admin Actions
+    'admin_actions' => 'Admin Actions',
+    'action_type' => 'Action Type',
+    'target' => 'Target User',
+    'wallet_charge' => 'Wallet Charge',
+    'withdraw_sum' => 'Withdraw Sum',
+    'change_user_status' => 'Change User Status',
+    'change_driver_status' => 'Change Driver Status',
+    'total_actions' => 'Total Actions',
+    'today' => 'Today',
+    'this_week' => 'This Week',
+    'this_month' => 'This Month',
+    'from' => 'From',
+    'to' => 'To',
+    'select_date' => 'Select Date',
+    'note' => 'Note',
+    'created_at' => 'Created At',
+
+    // Notifications
+    'channels' => 'Channels',
+    'database-notifications' => 'Database Notifications',
+    'fcm-notifications' => 'FCM Notifications',
+    'admin_notification' => 'Admin Notification',
+    'system_update' => 'System Update',
+    'send_to' => 'Send To',
+    'notification_title' => 'Notification Title',
+    'notification_body' => 'Notification Body',
+
+    // Documentation
+    'about_us' => 'About Us',
+    'privacy_policy' => 'Privacy Policy',
+    'delete_account' => 'Delete Account',
+    'reset_password' => 'Reset Password',
+
+    // General
+    'success' => 'Success',
+    'updated_successful' => 'Updated Successfully',
+    'continue' => 'Continue',
 ];

@@ -13,7 +13,7 @@ class ColorController extends Controller
 {
     public function index(Request $request)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::COLOR_INDEX)) {
             return redirect()->route('unauthorized');
         }
         $colors = new ColorDatatable;
@@ -28,7 +28,7 @@ class ColorController extends Controller
 
     public function create()
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::COLOR_CREATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -37,7 +37,7 @@ class ColorController extends Controller
 
     public function edit($id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::COLOR_UPDATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -46,7 +46,7 @@ class ColorController extends Controller
 
     public function store(Request $request)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::COLOR_CREATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -86,7 +86,7 @@ class ColorController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::COLOR_UPDATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -128,7 +128,7 @@ class ColorController extends Controller
 
     public function destroy($id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_VEHICLES)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::COLOR_DELETE)) {
             return redirect()->route('unauthorized');
         }
 

@@ -21,7 +21,7 @@ class FederationController extends Controller
   use ImageUpload;
   public function index(Request $request)
   {
-    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
+    if (!auth()->user()->hasPermissionTo(Permissions::FEDERATION_INDEX)) {
       return redirect()->route('unauthorized');
     }
 
@@ -45,7 +45,7 @@ class FederationController extends Controller
 
   public function show($id)
   {
-    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
+    if (!auth()->user()->hasPermissionTo(Permissions::FEDERATION_SHOW)) {
       return redirect()->route('unauthorized');
     }
     
@@ -79,7 +79,7 @@ class FederationController extends Controller
 
     public function create()
     {
-      if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
+      if (!auth()->user()->hasPermissionTo(Permissions::FEDERATION_CREATE)) {
         return redirect()->route('unauthorized');
       }
       $users = User::passengers()->whereDoesntHave('federation')->get();
@@ -88,7 +88,7 @@ class FederationController extends Controller
 
     public function store(Request $request)
     {
-      if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_USERS)) {
+      if (!auth()->user()->hasPermissionTo(Permissions::FEDERATION_CREATE)) {
         return redirect()->route('unauthorized');
       }
       $validated = $request->validate([

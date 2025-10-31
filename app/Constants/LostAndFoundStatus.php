@@ -28,8 +28,8 @@ class LostAndFoundStatus
     public static function colors(): array
     {
         return [
-            self::FOUND => 'blue',
-            self::RETURNED => 'success',
+            self::FOUND => 'info',
+            self::RETURNED => 'warning',
         ];
     }
 

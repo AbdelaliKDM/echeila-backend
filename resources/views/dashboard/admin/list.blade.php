@@ -40,7 +40,7 @@
               <x-table.custom-datatable-search />
               <div class="dt-buttons btn-group flex-wrap">
                 <!-- Custom buttons can be added here if needed -->
-                @permission(\App\Support\Enum\Permissions::MANAGE_ADMINS)
+                @permission(\App\Support\Enum\Permissions::ADMIN_CREATE)
                 <a href="{{ route('admins.create') }}" class="text-white text-decoration-none">
                   <button type="button" class="btn btn-primary">
                     <span class="tf-icons bx bx-plus"></span> @lang('admin.add-new-admin')

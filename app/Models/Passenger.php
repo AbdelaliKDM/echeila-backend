@@ -91,4 +91,9 @@ class Passenger extends Model implements HasMedia
         $image  = $this->getFirstMediaUrl('image');
         return empty($image) ? asset('assets/img/avatars/1.png') : $image;
     }
+
+    public function adminActions()
+    {
+        return $this->morphMany(AdminAction::class, 'target');
+    }
 }

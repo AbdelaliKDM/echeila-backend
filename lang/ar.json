@@ -2,6 +2,7 @@
     "app-name": "الشيلة",
     "dashboard": "لوحة التحكم", 
     "admins": "المسؤولون",
+    "admin-actions" : "إجراءات المسؤولين",
     "roles-permissions": "الأدوار والصلاحيات",
     "roles": "الأدوار",
     "permissions": "الصلاحيات",

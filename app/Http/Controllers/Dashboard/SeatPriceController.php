@@ -14,7 +14,7 @@ class SeatPriceController extends Controller
 {
     public function index(Request $request)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_WILAYAS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::SEAT_PRICE_INDEX)) {
             return redirect()->route('unauthorized');
         }
         $seatPrices = new SeatPriceDatatable;
@@ -29,7 +29,7 @@ class SeatPriceController extends Controller
 
     public function create()
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_WILAYAS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::SEAT_PRICE_CREATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -40,7 +40,7 @@ class SeatPriceController extends Controller
 
     public function edit($id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_WILAYAS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::SEAT_PRICE_UPDATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -55,7 +55,7 @@ class SeatPriceController extends Controller
 
     public function store(Request $request)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_WILAYAS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::SEAT_PRICE_CREATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -82,7 +82,7 @@ class SeatPriceController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_WILAYAS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::SEAT_PRICE_UPDATE)) {
             return redirect()->route('unauthorized');
         }
 
@@ -110,7 +110,7 @@ class SeatPriceController extends Controller
 
     public function destroy($id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::MANAGE_WILAYAS)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::SEAT_PRICE_DELETE)) {
             return redirect()->route('unauthorized');
         }
 

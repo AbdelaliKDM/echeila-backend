@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
+use App\Models\User;
+use App\Models\Driver;
+use App\Models\Setting;
+use App\Models\Transaction;
+use Illuminate\Http\Request;
 use App\Constants\DriverStatus;
-use App\Constants\NotificationMessages;
+use App\Traits\ApiResponseTrait;
 use App\Constants\TransactionType;
 use App\Http\Controllers\Controller;
+use App\Constants\NotificationMessages;
 use App\Http\Resources\SubscriptionResource;
-use App\Models\Driver;
-use App\Models\Transaction;
-use App\Models\User;
 use App\Notifications\NewMessageNotification;
-use App\Traits\ApiResponseTrait;
-use Exception;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -114,8 +115,7 @@ class DashboardController extends Controller
             'months' => 'required|integer|min:1',
         ]);
 
-        // Fixed monthly fee
-        $monthlyFee = 1000; // Change as needed
+        $monthlyFee = Setting::getValue('subscription_month_price') ?? 0;
 
         try {
             $user = User::find($request->user_id);

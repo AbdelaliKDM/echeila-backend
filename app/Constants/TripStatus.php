@@ -36,7 +36,7 @@ class TripStatus
         return [
             self::PENDING => 'warning',
             self::ONGOING => 'info',
-            self::COMPLETED => 'success',
+            self::COMPLETED => 'blue',
             self::CANCELED => 'danger',
         ];
     }

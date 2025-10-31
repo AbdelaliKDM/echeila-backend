@@ -15,7 +15,7 @@ class NotificationsController extends Controller
 {
   public function index(Request $request)
   {
-    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_SETTINGS)) {
+    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_NOTIFICATIONS)) {
       return redirect()->route('unauthorized');
     }
     return view("dashboard.notification.send");
@@ -23,7 +23,7 @@ class NotificationsController extends Controller
 
   public function send(Request $request)
   {
-    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_SETTINGS)) {
+    if (!auth()->user()->hasPermissionTo(Permissions::MANAGE_NOTIFICATIONS)) {
       return redirect()->route('unauthorized');
     }
 
@@ -31,6 +31,8 @@ class NotificationsController extends Controller
       'channels' => ['required', 'array'],
       'channels.*' => ['required', 'string', 'in:database,fcm'],
       'key' => ['required', 'string', 'in:' . implode(',', NotificationMessages::customNotifications())],
+      'user_types' => ['required', 'array'],
+      'user_types.*' => ['required', 'string', 'in:passenger,driver,federation'],
       'title' => ['required', 'array'],
       'body' => ['required', 'array'],
       'title.en' => ['required', 'string'],
@@ -42,7 +44,13 @@ class NotificationsController extends Controller
     ]);
 
     // Send notifications logic here
-    $users = User::where('status', UserStatus::ACTIVE)->get();
+    $users = User::where('status', UserStatus::ACTIVE);
+
+    $users = $users->where(function ($query) use ($data) {
+      foreach ($data['user_types'] as $type) {
+        $query->orWhereHas($type);
+      }
+    })->get();
 
     foreach ($users as $user) {
       $user->notify(new NewMessageNotification(
