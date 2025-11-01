@@ -15,9 +15,22 @@
           </ol>
         </nav>
       </div>
-      <a href="{{ route('federations.index') }}" class="btn btn-label-secondary">
-        <i class="bx bx-arrow-back me-1"></i>{{ __('app.back') }}
-      </a>
+      <div class="d-flex gap-2">
+        @can(\App\Support\Enum\Permissions::FEDERATION_CHANGE_USER_STATUS)
+          @if($federation->user->status === \App\Constants\UserStatus::BANNED)
+            <button type="button" class="btn btn-label-success" data-bs-toggle="modal" data-bs-target="#user-status-activate-modal" data-id="{{ $federation->user->id }}">
+              <i class="bx bx-lock-open me-1"></i>{{ __('app.activate') }}
+            </button>
+          @elseif($federation->user->status === \App\Constants\UserStatus::ACTIVE)
+            <button type="button" class="btn btn-label-danger" data-bs-toggle="modal" data-bs-target="#user-status-suspend-modal" data-id="{{ $federation->user->id }}">
+              <i class="bx bx-lock me-1"></i>{{ __('app.suspend') }}
+            </button>
+          @endif
+        @endcan
+        <a href="{{ url()->previous() }}" class="btn btn-label-secondary">
+          <i class="bx bx-arrow-back me-1"></i>{{ __('app.back') }}
+        </a>
+      </div>
     </div>
 
     <div class="row">
@@ -296,6 +309,42 @@
     </div>
   </div>
 
+  <!-- Modals for Federation Actions -->
+  <x-modal.confirmation
+    id="user-status-activate-modal"
+    title="{{ __('user.modals.activate') }}"
+    action="{{ route('users.status.update') }}"
+    method="POST"
+    inputs='
+    <input type="hidden" name="id" value="">
+    <input type="hidden" name="status" value="active">
+    <input type="hidden" name="type" value="federation">
+  '
+    theme="success"
+    confirmationTitle="{{ __('user.activate.confirmation') }}"
+    confirmationText="{{ __('user.activate.notice') }}"
+    checkboxLabel="{{ __('user.activate.confirm_checkbox') }}"
+    submitLabel="{{ __('app.submit') }}"
+    cancelLabel="{{ __('app.cancel') }}"
+  />
+  <x-modal.confirmation
+    id="user-status-suspend-modal"
+    title="{{ __('user.modals.suspend') }}"
+    action="{{ route('users.status.update') }}"
+    method="POST"
+    inputs='
+    <input type="hidden" name="id" value="">
+    <input type="hidden" name="status" value="banned">
+    <input type="hidden" name="type" value="federation">
+  '
+    theme="danger"
+    confirmationTitle="{{ __('user.suspend.confirmation') }}"
+    confirmationText="{{ __('user.suspend.notice') }}"
+    checkboxLabel="{{ __('user.suspend.confirm_checkbox') }}"
+    submitLabel="{{ __('app.submit') }}"
+    cancelLabel="{{ __('app.cancel') }}"
+  />
+
   <!-- Add Driver Modal -->
   @php
     $driverOptions = '<option value="">' . __("federation.choose_driver") . '</option>';
@@ -356,6 +405,18 @@
 @section('page-script')
   <script>
     $(document).ready(function() {
+      // Handle activate modal
+      $(document).on('click', '[data-bs-target="#user-status-activate-modal"]', function() {
+        const userId = $(this).data('id');
+        $('#user-status-activate-modal').find('input[name="id"]').val(userId);
+      });
+
+      // Handle suspend modal
+      $(document).on('click', '[data-bs-target="#user-status-suspend-modal"]', function() {
+        const userId = $(this).data('id');
+        $('#user-status-suspend-modal').find('input[name="id"]').val(userId);
+      });
+
       // Handle Add Driver Modal
       $(document).on('click', '[data-bs-target="#add-driver-modal"]', function() {
         const federationId = $(this).data('federation-id');

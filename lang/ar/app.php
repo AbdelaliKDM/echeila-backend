@@ -214,7 +214,18 @@ return [
     'reset_password' => 'إعادة تعيين كلمة المرور',
 
     // عام
+        // عام
     'success' => 'نجاح',
     'updated_successful' => 'تم التحديث بنجاح',
     'continue' => 'متابعة',
+
+    // رسائل معاملات المحفظة
+    'min_charge_amount' => 'يجب أن يكون المبلغ أكبر من :amount دج',
+    'max_withdraw_amount' => 'يجب ألا يتجاوز المبلغ :amount دج',
+    'wallet_charged_successfully' => 'تم شحن المحفظة بنجاح',
+    'withdrawal_completed_successfully' => 'تم إتمام السحب بنجاح',
+    'subscription_purchased_successfully' => 'تم شراء الاشتراك بنجاح',
+
+    // المفقودات والموجودات
+    'mark_as_returned' => 'وضع علامة كمُعاد',
 ];

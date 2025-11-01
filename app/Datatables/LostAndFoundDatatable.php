@@ -32,6 +32,7 @@ class LostAndFoundDatatable
             return datatables($this->query($request))
                 ->addColumn('actions', function ($model) {
                     return $this
+                        ->show(route('lost-and-founds.show', $model->id), Auth::user()->hasPermissionTo(Permissions::LOST_AND_FOUND_SHOW))
                         ->edit(route('lost-and-founds.edit', $model->id), Auth::user()->hasPermissionTo(Permissions::LOST_AND_FOUND_UPDATE))
                         ->modalButton('mark-as-returned-modal', __('app.mark_as_returned'), 'bx bx-check-circle', ['id' => $model->id], $model->status === LostAndFoundStatus::FOUND && Auth::user()->hasPermissionTo(Permissions::LOST_AND_FOUND_CHANGE_STATUS), LostAndFoundStatus::get_color(LostAndFoundStatus::RETURNED))
                         ->delete($model->id, Auth::user()->hasPermissionTo(Permissions::LOST_AND_FOUND_DELETE))

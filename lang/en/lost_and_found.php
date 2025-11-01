@@ -42,6 +42,12 @@ return [
     'deleted_successfully' => 'Lost and found item deleted successfully',
     'status_updated_successfully' => 'Status updated successfully',
     
+    // Show Page
+    'details' => 'Details',
+    'passenger_information' => 'Passenger Information',
+    'view_profile' => 'View Profile',
+    'view_image' => 'View Image',
+    
     // Statistics
     'total_items' => 'Total Items',
     'found_items' => 'Found Items',

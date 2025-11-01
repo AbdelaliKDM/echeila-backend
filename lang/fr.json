@@ -26,6 +26,9 @@
     "mrt_trips": "Voyages Mauritanie",
     "esp_trips": "Voyages Espagne",
     "lost-and-founds": "Objets trouvés",
+    "Minimum Charge Amount": "Montant minimum de recharge",
+    "Maximum Withdraw Amount": "Montant maximum de retrait",
+    "DA": "DA",
 
     "(and :count more error)": "(et :count erreur en plus)",
     "(and :count more errors)": "(et :count erreur en plus)|(et :count erreurs en plus)|(et :count erreurs en plus)",

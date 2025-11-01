@@ -15,7 +15,7 @@
           </ol>
         </nav>
       </div>
-      <a href="{{ route('trips.index', 'international_trip') }}" class="btn btn-label-secondary">
+      <a href="{{ url()->previous() }}" class="btn btn-label-secondary">
         <i class="bx bx-arrow-back me-1"></i>{{ __('app.back') }}
       </a>
     </div>
@@ -227,6 +227,95 @@
           </div>
         </div>
 
+        <!-- Vehicle Information Card -->
+        @if($trip->driver && $trip->driver->vehicle)
+          <div class="card shadow-sm mb-4">
+            <div class="card-header pb-3">
+              <h6 class="m-0"><i class="bx bx-car me-2"></i>{{ __('driver.vehicle_info') }}</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <!-- Vehicle Details -->
+                <div class="col-md-6 mb-3">
+                  <div class="d-flex align-items-center">
+                    <i class="bx bx-shape-circle text-muted me-2"></i>
+                    <div>
+                      <small class="text-muted d-block">{{ __('vehicle.model') }}</small>
+                      <span class="fw-medium">{{ $trip->driver->vehicle->model->brand->name ?? 'N/A' }} {{ $trip->driver->vehicle->model->name ?? '' }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="d-flex align-items-center">
+                    <i class="bx bx-palette text-muted me-2"></i>
+                    <div>
+                      <small class="text-muted d-block">{{ __('vehicle.color') }}</small>
+                      <div class="d-flex align-items-center gap-2">
+                        @if($trip->driver->vehicle->color)
+                          <span class="d-inline-block rounded" 
+                                style="width: 24px; height: 24px; background-color: {{ $trip->driver->vehicle->color->code }}; border: 2px solid #ddd;"
+                                title="{{ $trip->driver->vehicle->color->code }}"></span>
+                        @endif
+                        <span class="fw-medium">{{ $trip->driver->vehicle->color->name ?? 'N/A' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="d-flex align-items-center">
+                    <i class="bx bx-calendar text-muted me-2"></i>
+                    <div>
+                      <small class="text-muted d-block">{{ __('vehicle.production_year') }}</small>
+                      <span class="fw-medium">{{ $trip->driver->vehicle->production_year ?? 'N/A' }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="d-flex align-items-center">
+                    <i class="bx bx-hash text-muted me-2"></i>
+                    <div>
+                      <small class="text-muted d-block">{{ __('vehicle.plate_number') }}</small>
+                      <span class="fw-medium">{{ $trip->driver->vehicle->plate_number ?? 'N/A' }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Vehicle Images -->
+                @php
+                  $vehicleImage = $trip->driver->vehicle->getFirstMediaUrl('image');
+                  $vehiclePermit = $trip->driver->vehicle->getFirstMediaUrl('permit');
+                @endphp
+
+                @if($vehicleImage || $vehiclePermit)
+                  <div class="col-12 mt-3">
+                    <hr class="my-3">
+                    <div id="vehicleImagesGallery" class="d-none">
+                      @if($vehicleImage)
+                        <img src="{{ $vehicleImage }}" alt="{{ __('vehicle.image') }}" data-title="{{ __('vehicle.image') }}">
+                      @endif
+                      @if($vehiclePermit)
+                        <img src="{{ $vehiclePermit }}" alt="{{ __('vehicle.permit') }}" data-title="{{ __('vehicle.permit') }}">
+                      @endif
+                    </div>
+                    <div class="d-flex gap-2 flex-wrap">
+                      @if($vehicleImage)
+                        <button type="button" class="btn btn-outline-primary btn-sm view-vehicle-image" data-index="0">
+                          <i class="bx bx-image me-1"></i>{{ __('vehicle.image') }}
+                        </button>
+                      @endif
+                      @if($vehiclePermit)
+                        <button type="button" class="btn btn-outline-primary btn-sm view-vehicle-image" data-index="{{ $vehicleImage ? '1' : '0' }}">
+                          <i class="bx bx-file me-1"></i>{{ __('vehicle.permit') }}
+                        </button>
+                      @endif
+                    </div>
+                  </div>
+                @endif
+              </div>
+            </div>
+          </div>
+        @endif
+
         <!-- Tabs for organized content -->
         <ul class="nav nav-pills mb-3" role="tablist">
           <li class="nav-item">
@@ -431,6 +520,47 @@
   
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Vehicle Images Gallery
+      const vehicleGalleryElement = document.getElementById('vehicleImagesGallery');
+      if (vehicleGalleryElement) {
+        const vehicleGallery = new Viewer(vehicleGalleryElement, {
+          inline: false,
+          title: function(image) {
+            return image.alt + ' (' + (this.index + 1) + '/' + this.length + ')';
+          },
+          toolbar: {
+            zoomIn: 1,
+            zoomOut: 1,
+            oneToOne: 1,
+            reset: 1,
+            prev: 1,
+            play: 0,
+            next: 1,
+            rotateLeft: 1,
+            rotateRight: 1,
+            flipHorizontal: 1,
+            flipVertical: 1,
+          },
+          navbar: true,
+          tooltip: true,
+          movable: true,
+          zoomable: true,
+          rotatable: true,
+          scalable: true,
+          transition: true,
+          fullscreen: true,
+          keyboard: true,
+        });
+
+        // Vehicle image buttons
+        document.querySelectorAll('.view-vehicle-image').forEach(button => {
+          button.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-index'));
+            vehicleGallery.view(index);
+          });
+        });
+      }
+
       // Initialize Cargo Images Galleries
       @if($trip->cargos->count() > 0)
         @foreach($trip->cargos as $tripCargo)

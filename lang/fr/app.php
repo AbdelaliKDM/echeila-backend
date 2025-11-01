@@ -218,4 +218,15 @@ return [
     'success' => 'Succès',
     'updated_successful' => 'Mis à Jour avec Succès',
     'continue' => 'Continuer',
+
+    // Messages de transactions du portefeuille
+    'min_charge_amount' => 'Le montant doit être supérieur à :amount DZD',
+    'max_withdraw_amount' => 'Le montant ne doit pas dépasser :amount DZD',
+    'wallet_charged_successfully' => 'Portefeuille rechargé avec succès',
+    'withdrawal_completed_successfully' => 'Retrait effectué avec succès',
+    'subscription_purchased_successfully' => 'Abonnement acheté avec succès',
+
+    // Objets Trouvés
+    'mark_as_returned' => 'Marquer comme Retourné',
 ];
+

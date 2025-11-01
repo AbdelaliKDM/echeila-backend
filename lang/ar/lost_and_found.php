@@ -42,6 +42,12 @@ return [
     'deleted_successfully' => 'تم حذف عنصر المفقودات والموجودات بنجاح',
     'status_updated_successfully' => 'تم تحديث الحالة بنجاح',
     
+    // Show Page
+    'details' => 'التفاصيل',
+    'passenger_information' => 'معلومات الراكب',
+    'view_profile' => 'عرض الملف الشخصي',
+    'view_image' => 'عرض الصورة',
+    
     // Statistics
     'total_items' => 'إجمالي العناصر',
     'found_items' => 'العناصر الموجودة',

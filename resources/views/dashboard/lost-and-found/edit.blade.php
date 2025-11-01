@@ -16,7 +16,7 @@
         </ol>
       </nav>
     </div>
-    <a href="{{ route('lost-and-founds.index') }}" class="btn btn-label-secondary">
+    <a href="{{ url()->previous() }}" class="btn btn-label-secondary">
       <i class="bx bx-arrow-back me-1"></i>{{ __('app.back') }}
     </a>
   </div>

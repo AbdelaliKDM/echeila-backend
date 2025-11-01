@@ -219,4 +219,14 @@ return [
     'success' => 'Success',
     'updated_successful' => 'Updated Successfully',
     'continue' => 'Continue',
+
+    // Wallet transaction messages
+    'min_charge_amount' => 'The amount must be greater than :amount DZD',
+    'max_withdraw_amount' => 'The amount must not exceed :amount DZD',
+    'wallet_charged_successfully' => 'Wallet charged successfully',
+    'withdrawal_completed_successfully' => 'Withdrawal completed successfully',
+    'subscription_purchased_successfully' => 'Subscription purchased successfully',
+
+    // Lost and Found
+    'mark_as_returned' => 'Mark as Returned',
 ];

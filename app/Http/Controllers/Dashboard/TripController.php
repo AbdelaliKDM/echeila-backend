@@ -36,12 +36,15 @@ class TripController extends Controller
 
     public function show($id)
     {
+        
         $trip = Trip::with([
             'driver',
             'client.client',
             'reviews.passenger',
             'transactions'
         ])->findOrFail($id);
+
+        $this->checkTripShowPermission($trip->type);
 
         // Load type-specific relationships
         switch ($trip->type) {
@@ -153,6 +156,24 @@ class TripController extends Controller
             'paid_driving' => Permissions::PAID_DRIVING_INDEX,
             'mrt_trip' => Permissions::MRT_TRIP_INDEX,
             'esp_trip' => Permissions::ESP_TRIP_INDEX,
+            default => Permissions::ALL_TRIPS_INDEX,
+        };
+
+        if (! auth()->user()->hasPermissionTo($permission)) {
+            abort(403, 'Unauthorized');
+        }
+    }
+
+    public function checkTripShowPermission($type)
+    {
+        $permission = match($type) {
+            TripType::TAXI_RIDE => Permissions::TAXI_RIDE_SHOW,
+            TripType::CAR_RESCUE => Permissions::CAR_RESCUE_SHOW,
+            TripType::CARGO_TRANSPORT => Permissions::CARGO_TRANSPORT_SHOW,
+            TripType::WATER_TRANSPORT => Permissions::WATER_TRANSPORT_SHOW,
+            TripType::PAID_DRIVING => Permissions::PAID_DRIVING_SHOW,
+            TripType::MRT_TRIP => Permissions::MRT_TRIP_SHOW,
+            TripType::ESP_TRIP => Permissions::ESP_TRIP_SHOW,
             default => Permissions::ALL_TRIPS_INDEX,
         };
 

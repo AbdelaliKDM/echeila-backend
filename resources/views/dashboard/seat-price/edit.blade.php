@@ -16,7 +16,7 @@
       </nav>
     </div>
     <div>
-      <a href="{{ route('seat-prices.index') }}" class="btn btn-label-secondary me-2">
+      <a href="{{ url()->previous() }}" class="btn btn-label-secondary me-2">
         <i class="bx bx-arrow-back me-1"></i>{{ __('app.back') }}
       </a>
       <button type="submit" form="seat-price-form" class="btn btn-primary">

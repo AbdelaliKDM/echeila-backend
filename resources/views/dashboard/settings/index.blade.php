@@ -152,6 +152,24 @@
                         </div>
                     </div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="min_charge_amount">{{ __('Minimum Charge Amount') }}</label>
+                        <div class="input-group">
+                            <input type="number" step="0.01" class="form-control" id="min_charge_amount" name="min_charge_amount"
+                                value="{{ $settings['min_charge_amount'] ?? '' }}">
+                            <span class="input-group-text">{{ __('DA') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="max_withdraw_amount">{{ __('Maximum Withdraw Amount') }}</label>
+                        <div class="input-group">
+                            <input type="number" step="0.01" class="form-control" id="max_withdraw_amount" name="max_withdraw_amount"
+                                value="{{ $settings['max_withdraw_amount'] ?? '' }}">
+                            <span class="input-group-text">{{ __('DA') }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="mb-3" style="text-align: center">

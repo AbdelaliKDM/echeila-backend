@@ -2,6 +2,28 @@
 
 @section('title', __('app.permissions'))
 
+@section('page-style')
+<style>
+  .table-primary td {
+    background-color: #e7f1ff !important;
+    font-size: 0.95rem;
+    padding: 0.75rem !important;
+  }
+  
+  .table tbody tr:not(.table-primary):hover {
+    background-color: #f8f9fa;
+  }
+  
+  .ps-4 {
+    padding-left: 2rem !important;
+  }
+  
+  .permission-group-header i {
+    margin-right: 0.5rem;
+  }
+</style>
+@endsection
+
 @section('content')
   <!-- Header Section -->
   <div class="d-flex justify-content-between align-items-center mb-4">
@@ -32,30 +54,40 @@
         </thead>
         <tbody>
         @if (count($permissions))
-          @foreach ($permissions as $permission)
-            <tr>
-              <td>{{ \App\Support\Enum\Permissions::get_permission_slug($permission->name) }}</td>
-              {{-- <td>{{ $permission->name }}</td> --}}
-
-              @foreach ($roles as $role)
-                <td class="text-center">
-                  <div class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">
-                    <input type="checkbox"
-                           class="form-check-input"
-                           id="cb-{{ $role->id }}-{{ $permission->id }}"
-                           name="roles[{{ $role->id }}][]"
-                           value="{{ $permission->id }}"
-                          {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}
-                          {{ ($role->name === \App\Support\Enum\Roles::SUPER_ADMIN
-                          && ($permission->name === \App\Support\Enum\Permissions::MANAGE_ROLES
-                          || $permission->name === \App\Support\Enum\Permissions::MANAGE_PERMISSIONS)) ? 'disabled' : '' }}
-                    >
-                    <label class="custom-control-label d-inline" for="cb-{{ $role->id }}-{{ $permission->id }}">
-                    </label>
-                  </div>
-                </td>
-              @endforeach
+          @foreach ($groupedPermissions as $groupKey => $groupPerms)
+            <!-- Group Header -->
+            <tr class="table-primary permission-group-header">
+              <td colspan="{{ count($roles) + 1 }}" class="fw-bold">
+                <i class="bx bx-folder"></i> {{ \App\Support\Enum\Permissions::get_group_name($groupKey) }}
+              </td>
             </tr>
+            
+            <!-- Group Permissions -->
+            @foreach ($groupPerms as $permission)
+              <tr>
+                <td class="ps-4">{{ \App\Support\Enum\Permissions::get_permission_slug($permission->name) }}</td>
+                {{-- <td>{{ $permission->name }}</td> --}}
+
+                @foreach ($roles as $role)
+                  <td class="text-center">
+                    <div class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">
+                      <input type="checkbox"
+                             class="form-check-input"
+                             id="cb-{{ $role->id }}-{{ $permission->id }}"
+                             name="roles[{{ $role->id }}][]"
+                             value="{{ $permission->id }}"
+                            {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}
+                            {{ ($role->name === \App\Support\Enum\Roles::SUPER_ADMIN
+                            && ($permission->name === \App\Support\Enum\Permissions::MANAGE_ROLES
+                            || $permission->name === \App\Support\Enum\Permissions::MANAGE_PERMISSIONS)) ? 'disabled' : '' }}
+                      >
+                      <label class="custom-control-label d-inline" for="cb-{{ $role->id }}-{{ $permission->id }}">
+                      </label>
+                    </div>
+                  </td>
+                @endforeach
+              </tr>
+            @endforeach
           @endforeach
         @else
           <tr>

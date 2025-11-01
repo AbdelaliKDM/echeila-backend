@@ -42,6 +42,12 @@ return [
     'deleted_successfully' => 'Article objet trouvé supprimé avec succès',
     'status_updated_successfully' => 'Statut mis à jour avec succès',
     
+    // Show Page
+    'details' => 'Détails',
+    'passenger_information' => 'Informations du passager',
+    'view_profile' => 'Voir le profil',
+    'view_image' => 'Voir l\'image',
+    
     // Statistics
     'total_items' => 'Total des articles',
     'found_items' => 'Articles trouvés',

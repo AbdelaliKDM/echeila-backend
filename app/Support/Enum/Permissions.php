@@ -72,28 +72,27 @@ class Permissions
 
     // Lost and Found permissions
     const LOST_AND_FOUND_INDEX = 'lostAndFound_index';
+    const LOST_AND_FOUND_SHOW = 'lostAndFound_show';
     const LOST_AND_FOUND_UPDATE = 'lostAndFound_update';
     const LOST_AND_FOUND_DELETE = 'lostAndFound_delete';
     const LOST_AND_FOUND_CHANGE_STATUS = 'lostAndFound_changeStatus';
 
     // Trip permissions
     const ALL_TRIPS_INDEX = 'allTrips_index';
-    
     const TAXI_RIDE_INDEX = 'taxiRide_index';
-    const TAXI_RIDE_SHOW = 'taxiRide_show';
-    
     const CAR_RESCUE_INDEX = 'carRescue_index';
-    
     const CARGO_TRANSPORT_INDEX = 'cargoTransport_index';
-    
     const WATER_TRANSPORT_INDEX = 'waterTransport_index';
-    
     const PAID_DRIVING_INDEX = 'paidDriving_index';
-    
     const MRT_TRIP_INDEX = 'mrtTrip_index';
-    const MRT_TRIP_SHOW = 'mrtTrip_show';
-    
     const ESP_TRIP_INDEX = 'espTrip_index';
+
+    const TAXI_RIDE_SHOW = 'taxiRide_show';
+    const CAR_RESCUE_SHOW = 'carRescue_show';
+    const CARGO_TRANSPORT_SHOW = 'cargoTransport_show';
+    const WATER_TRANSPORT_SHOW = 'waterTransport_show';
+    const PAID_DRIVING_SHOW = 'paidDriving_show';
+    const MRT_TRIP_SHOW = 'mrtTrip_show';
     const ESP_TRIP_SHOW = 'espTrip_show';
 
     public static function lists(): array
@@ -166,6 +165,7 @@ class Permissions
             
             // Lost and Found
             self::LOST_AND_FOUND_INDEX => self::LOST_AND_FOUND_INDEX,
+            self::LOST_AND_FOUND_SHOW => self::LOST_AND_FOUND_SHOW,
             self::LOST_AND_FOUND_UPDATE => self::LOST_AND_FOUND_UPDATE,
             self::LOST_AND_FOUND_DELETE => self::LOST_AND_FOUND_DELETE,
             self::LOST_AND_FOUND_CHANGE_STATUS => self::LOST_AND_FOUND_CHANGE_STATUS,
@@ -173,200 +173,126 @@ class Permissions
             // Trips
             self::ALL_TRIPS_INDEX => self::ALL_TRIPS_INDEX,
             self::TAXI_RIDE_INDEX => self::TAXI_RIDE_INDEX,
-            self::TAXI_RIDE_SHOW => self::TAXI_RIDE_SHOW,
             self::CAR_RESCUE_INDEX => self::CAR_RESCUE_INDEX,
             self::CARGO_TRANSPORT_INDEX => self::CARGO_TRANSPORT_INDEX,
             self::WATER_TRANSPORT_INDEX => self::WATER_TRANSPORT_INDEX,
             self::PAID_DRIVING_INDEX => self::PAID_DRIVING_INDEX,
             self::MRT_TRIP_INDEX => self::MRT_TRIP_INDEX,
-            self::MRT_TRIP_SHOW => self::MRT_TRIP_SHOW,
             self::ESP_TRIP_INDEX => self::ESP_TRIP_INDEX,
+
+            self::TAXI_RIDE_SHOW => self::TAXI_RIDE_SHOW,
+            self::CAR_RESCUE_SHOW => self::CAR_RESCUE_SHOW,
+            self::CARGO_TRANSPORT_SHOW => self::CARGO_TRANSPORT_SHOW,
+            self::WATER_TRANSPORT_SHOW => self::WATER_TRANSPORT_SHOW,
+            self::PAID_DRIVING_SHOW => self::PAID_DRIVING_SHOW,
+            self::MRT_TRIP_SHOW => self::MRT_TRIP_SHOW,
             self::ESP_TRIP_SHOW => self::ESP_TRIP_SHOW,
-        ];
-    }
-
-    public static function permission_slugs()
-    {
-        return [
-            // Roles & Permissions
-            self::MANAGE_ROLES => 'roles',
-            self::MANAGE_PERMISSIONS => 'permissions',
-            self::MANAGE_SETTINGS => 'settings',
-            self::MANAGE_NOTIFICATIONS => 'notifications',
-            self::MANAGE_DOCUMENTATIONS => 'documentations',
-            
-            // Admin
-            self::ADMIN_INDEX => 'admins',
-            self::ADMIN_CREATE => 'create admin',
-            self::ADMIN_UPDATE => 'update admin',
-            self::ADMIN_DELETE => 'delete admin',
-            self::ADMIN_ACTION_INDEX => 'admin actions',
-            
-            // Passenger
-            self::PASSENGER_INDEX => 'passengers',
-            self::PASSENGER_SHOW => 'show passenger',
-            self::PASSENGER_CHANGE_USER_STATUS => 'change passenger status',
-            self::PASSENGER_CHARGE_WALLET => 'charge passenger wallet',
-            self::PASSENGER_WITHDRAW_SUM => 'withdraw from passenger',
-            
-            // Driver
-            self::DRIVER_INDEX => 'drivers',
-            self::DRIVER_SHOW => 'show driver',
-            self::DRIVER_CHANGE_STATUS => 'change driver status',
-            self::DRIVER_CHANGE_USER_STATUS => 'change driver user status',
-            self::DRIVER_CHARGE_WALLET => 'charge driver wallet',
-            self::DRIVER_WITHDRAW_SUM => 'withdraw from driver',
-            self::DRIVER_PURCHASE_SUBSCRIPTION => 'purchase subscription',
-            
-            // Federation
-            self::FEDERATION_INDEX => 'federations',
-            self::FEDERATION_SHOW => 'show federation',
-            self::FEDERATION_CREATE => 'create federation',
-            self::FEDERATION_CHANGE_USER_STATUS => 'change federation status',
-            
-            // Wilaya
-            self::WILAYA_INDEX => 'wilayas',
-            self::WILAYA_CREATE => 'create wilaya',
-            self::WILAYA_UPDATE => 'update wilaya',
-            self::WILAYA_DELETE => 'delete wilaya',
-            
-            // Seat Price
-            self::SEAT_PRICE_INDEX => 'seat prices',
-            self::SEAT_PRICE_CREATE => 'create seat price',
-            self::SEAT_PRICE_UPDATE => 'update seat price',
-            self::SEAT_PRICE_DELETE => 'delete seat price',
-            
-            // Brand
-            self::BRAND_INDEX => 'brands',
-            self::BRAND_CREATE => 'create brand',
-            self::BRAND_UPDATE => 'update brand',
-            self::BRAND_DELETE => 'delete brand',
-            
-            // Vehicle Model
-            self::VEHICLE_MODEL_INDEX => 'vehicle models',
-            self::VEHICLE_MODEL_CREATE => 'create vehicle model',
-            self::VEHICLE_MODEL_UPDATE => 'update vehicle model',
-            self::VEHICLE_MODEL_DELETE => 'delete vehicle model',
-            
-            // Color
-            self::COLOR_INDEX => 'colors',
-            self::COLOR_CREATE => 'create color',
-            self::COLOR_UPDATE => 'update color',
-            self::COLOR_DELETE => 'delete color',
-            
-            // Lost and Found
-            self::LOST_AND_FOUND_INDEX => 'lost and found',
-            self::LOST_AND_FOUND_UPDATE => 'update lost and found',
-            self::LOST_AND_FOUND_DELETE => 'delete lost and found',
-            self::LOST_AND_FOUND_CHANGE_STATUS => 'change lost and found status',
-            
-            // Trips
-            self::ALL_TRIPS_INDEX => 'all trips',
-            self::TAXI_RIDE_INDEX => 'taxi rides',
-            self::TAXI_RIDE_SHOW => 'show taxi ride',
-            self::CAR_RESCUE_INDEX => 'car rescue',
-            self::CARGO_TRANSPORT_INDEX => 'cargo transport',
-            self::WATER_TRANSPORT_INDEX => 'water transport',
-            self::PAID_DRIVING_INDEX => 'paid driving',
-            self::MRT_TRIP_INDEX => 'MRT trips',
-            self::MRT_TRIP_SHOW => 'show MRT trip',
-            self::ESP_TRIP_INDEX => 'ESP trips',
-            self::ESP_TRIP_SHOW => 'show ESP trip',
-        ];
-    }
-
-    public static function permission_arabic_slugs()
-    {
-        return [
-            // Roles & Permissions
-            self::MANAGE_ROLES => 'الأدوار',
-            self::MANAGE_PERMISSIONS => 'الصلاحيات',
-            self::MANAGE_SETTINGS => 'الإعدادات',
-            self::MANAGE_NOTIFICATIONS => 'الإشعارات',
-            self::MANAGE_DOCUMENTATIONS => 'المستندات',
-            
-            // Admin
-            self::ADMIN_INDEX => 'المسؤولين',
-            self::ADMIN_CREATE => 'إنشاء مسؤول',
-            self::ADMIN_UPDATE => 'تحديث مسؤول',
-            self::ADMIN_DELETE => 'حذف مسؤول',
-            self::ADMIN_ACTION_INDEX => 'إجراءات المسؤولين',
-            
-            // Passenger
-            self::PASSENGER_INDEX => 'الركاب',
-            self::PASSENGER_SHOW => 'عرض راكب',
-            self::PASSENGER_CHANGE_USER_STATUS => 'تغيير حالة الراكب',
-            self::PASSENGER_CHARGE_WALLET => 'شحن محفظة الراكب',
-            self::PASSENGER_WITHDRAW_SUM => 'سحب من الراكب',
-            
-            // Driver
-            self::DRIVER_INDEX => 'السائقين',
-            self::DRIVER_SHOW => 'عرض سائق',
-            self::DRIVER_CHANGE_STATUS => 'تغيير حالة السائق',
-            self::DRIVER_CHANGE_USER_STATUS => 'تغيير حالة مستخدم السائق',
-            self::DRIVER_CHARGE_WALLET => 'شحن محفظة السائق',
-            self::DRIVER_WITHDRAW_SUM => 'سحب من السائق',
-            self::DRIVER_PURCHASE_SUBSCRIPTION => 'شراء اشتراك',
-            
-            // Federation
-            self::FEDERATION_INDEX => 'الاتحادات',
-            self::FEDERATION_SHOW => 'عرض اتحاد',
-            self::FEDERATION_CREATE => 'إنشاء اتحاد',
-            self::FEDERATION_CHANGE_USER_STATUS => 'تغيير حالة الاتحاد',
-            
-            // Wilaya
-            self::WILAYA_INDEX => 'الولايات',
-            self::WILAYA_CREATE => 'إنشاء ولاية',
-            self::WILAYA_UPDATE => 'تحديث ولاية',
-            self::WILAYA_DELETE => 'حذف ولاية',
-            
-            // Seat Price
-            self::SEAT_PRICE_INDEX => 'أسعار المقاعد',
-            self::SEAT_PRICE_CREATE => 'إنشاء سعر مقعد',
-            self::SEAT_PRICE_UPDATE => 'تحديث سعر مقعد',
-            self::SEAT_PRICE_DELETE => 'حذف سعر مقعد',
-            
-            // Brand
-            self::BRAND_INDEX => 'العلامات التجارية',
-            self::BRAND_CREATE => 'إنشاء علامة تجارية',
-            self::BRAND_UPDATE => 'تحديث علامة تجارية',
-            self::BRAND_DELETE => 'حذف علامة تجارية',
-            
-            // Vehicle Model
-            self::VEHICLE_MODEL_INDEX => 'موديلات المركبات',
-            self::VEHICLE_MODEL_CREATE => 'إنشاء موديل مركبة',
-            self::VEHICLE_MODEL_UPDATE => 'تحديث موديل مركبة',
-            self::VEHICLE_MODEL_DELETE => 'حذف موديل مركبة',
-            
-            // Color
-            self::COLOR_INDEX => 'الألوان',
-            self::COLOR_CREATE => 'إنشاء لون',
-            self::COLOR_UPDATE => 'تحديث لون',
-            self::COLOR_DELETE => 'حذف لون',
-            
-            // Lost and Found
-            self::LOST_AND_FOUND_INDEX => 'المفقودات',
-            self::LOST_AND_FOUND_UPDATE => 'تحديث مفقودات',
-            self::LOST_AND_FOUND_DELETE => 'حذف مفقودات',
-            self::LOST_AND_FOUND_CHANGE_STATUS => 'تغيير حالة المفقودات',
-            
-            // Trips
-            self::ALL_TRIPS_INDEX => 'جميع الرحلات',
-            self::TAXI_RIDE_INDEX => 'رحلات التاكسي',
-            self::TAXI_RIDE_SHOW => 'عرض رحلة تاكسي',
-            self::CAR_RESCUE_INDEX => 'إنقاذ السيارات',
-            self::CARGO_TRANSPORT_INDEX => 'نقل البضائع',
-            self::WATER_TRANSPORT_INDEX => 'نقل المياه',
-            self::PAID_DRIVING_INDEX => 'القيادة المدفوعة',
-            self::MRT_TRIP_INDEX => 'رحلات MRT',
-            self::MRT_TRIP_SHOW => 'عرض رحلة MRT',
-            self::ESP_TRIP_INDEX => 'رحلات ESP',
-            self::ESP_TRIP_SHOW => 'عرض رحلة ESP',
         ];
     }
 
     public static function get_permission_slug($permission)
     {
-        return app()->getLocale() == 'ar' ? self::permission_arabic_slugs()[$permission] : self::permission_slugs()[$permission];
+        return __('permissions.' . $permission);
+    }
+
+    public static function get_group_name($groupKey)
+    {
+        return __('permissions.groups.' . $groupKey);
+    }
+
+    public static function getPermissionGroups()
+    {
+        return [
+            'system_management' => [
+                self::MANAGE_ROLES,
+                self::MANAGE_PERMISSIONS,
+                self::MANAGE_SETTINGS,
+                self::MANAGE_NOTIFICATIONS,
+                self::MANAGE_DOCUMENTATIONS,
+            ],
+            'admin_management' => [
+                self::ADMIN_INDEX,
+                self::ADMIN_CREATE,
+                self::ADMIN_UPDATE,
+                self::ADMIN_DELETE,
+                self::ADMIN_ACTION_INDEX,
+            ],
+            'passenger_management' => [
+                self::PASSENGER_INDEX,
+                self::PASSENGER_SHOW,
+                self::PASSENGER_CHANGE_USER_STATUS,
+                self::PASSENGER_CHARGE_WALLET,
+                self::PASSENGER_WITHDRAW_SUM,
+            ],
+            'driver_management' => [
+                self::DRIVER_INDEX,
+                self::DRIVER_SHOW,
+                self::DRIVER_CHANGE_STATUS,
+                self::DRIVER_CHANGE_USER_STATUS,
+                self::DRIVER_CHARGE_WALLET,
+                self::DRIVER_WITHDRAW_SUM,
+                self::DRIVER_PURCHASE_SUBSCRIPTION,
+            ],
+            'federation_management' => [
+                self::FEDERATION_INDEX,
+                self::FEDERATION_SHOW,
+                self::FEDERATION_CREATE,
+                self::FEDERATION_CHANGE_USER_STATUS,
+            ],
+            'wilaya_management' => [
+                self::WILAYA_INDEX,
+                self::WILAYA_CREATE,
+                self::WILAYA_UPDATE,
+                self::WILAYA_DELETE,
+            ],
+            'seat_price_management' => [
+                self::SEAT_PRICE_INDEX,
+                self::SEAT_PRICE_CREATE,
+                self::SEAT_PRICE_UPDATE,
+                self::SEAT_PRICE_DELETE,
+            ],
+            'brand_management' => [
+                self::BRAND_INDEX,
+                self::BRAND_CREATE,
+                self::BRAND_UPDATE,
+                self::BRAND_DELETE,
+            ],
+            'vehicle_model_management' => [
+                self::VEHICLE_MODEL_INDEX,
+                self::VEHICLE_MODEL_CREATE,
+                self::VEHICLE_MODEL_UPDATE,
+                self::VEHICLE_MODEL_DELETE,
+            ],
+            'color_management' => [
+                self::COLOR_INDEX,
+                self::COLOR_CREATE,
+                self::COLOR_UPDATE,
+                self::COLOR_DELETE,
+            ],
+            'lost_and_found_management' => [
+                self::LOST_AND_FOUND_INDEX,
+                self::LOST_AND_FOUND_SHOW,
+                self::LOST_AND_FOUND_UPDATE,
+                self::LOST_AND_FOUND_DELETE,
+                self::LOST_AND_FOUND_CHANGE_STATUS,
+            ],
+            'trip_management' => [
+                self::ALL_TRIPS_INDEX,
+                self::TAXI_RIDE_INDEX,
+                self::CAR_RESCUE_INDEX,
+                self::CARGO_TRANSPORT_INDEX,
+                self::WATER_TRANSPORT_INDEX,
+                self::PAID_DRIVING_INDEX,
+                self::MRT_TRIP_INDEX,            
+                self::ESP_TRIP_INDEX,
+                self::TAXI_RIDE_SHOW,
+                self::CAR_RESCUE_SHOW,
+                self::CARGO_TRANSPORT_SHOW,
+                self::WATER_TRANSPORT_SHOW,
+                self::PAID_DRIVING_SHOW,
+                self::MRT_TRIP_SHOW,
+                self::ESP_TRIP_SHOW,
+            ],
+        ];
     }
 }

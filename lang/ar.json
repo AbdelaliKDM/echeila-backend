@@ -26,6 +26,9 @@
     "mrt_trips": "رحلات موريتانيا",
     "esp_trips": "رحلات إسبانيا",
     "lost-and-founds": "المفقودات والموجودات",
+    "Minimum Charge Amount": "الحد الأدنى لمبلغ الشحن",
+    "Maximum Withdraw Amount": "الحد الأقصى لمبلغ السحب",
+    "DA": "دج",
 
     "(and :count more error)": "(و :count خطأ إضافي)",
     "(and :count more errors)": "(و :count خطأ إضافي)|(و :count أخطاء إضافية)|(و :count أخطاء إضافية)",

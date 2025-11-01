@@ -43,7 +43,7 @@ class MenuServiceProvider extends ServiceProvider
             icon: 'bx bx-home-circle',
         );
         // MenuBuilder::header('Users & Roles');
-        MenuBuilder::add(
+/*         MenuBuilder::add(
             name: 'roles-permissions',
             slug: ['roles', 'permissions'],
             icon: 'bx bx-shield',
@@ -62,7 +62,7 @@ class MenuServiceProvider extends ServiceProvider
                     permission: ['manage_permissions']
                 ),
             ]
-        );
+        ); */
 
         MenuBuilder::add(
             name: 'admins',

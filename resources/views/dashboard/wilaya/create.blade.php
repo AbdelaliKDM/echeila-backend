@@ -59,7 +59,7 @@
       </nav>
     </div>
     <div>
-      <a href="{{ route('wilayas.index') }}" class="btn btn-label-secondary me-2">
+      <a href="{{ url()->previous() }}" class="btn btn-label-secondary me-2">
         <i class="bx bx-arrow-back me-1"></i>{{ __('app.back') }}
       </a>
       <button type="submit" form="wilaya-form" class="btn btn-primary">

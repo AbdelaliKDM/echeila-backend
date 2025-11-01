@@ -19,9 +19,25 @@ class PermissionsController extends Controller
 
     $roles = Role::with('permissions')->get();
     $permissions = Permission::with('roles')->get();
+    
+    // Get permission groups from Permissions enum
+    $permissionGroups = Permissions::getPermissionGroups();
+    
+    // Group permissions by category
+    $groupedPermissions = [];
+    foreach ($permissions as $permission) {
+      foreach ($permissionGroups as $groupKey => $groupPermissions) {
+        if (in_array($permission->name, $groupPermissions)) {
+          $groupedPermissions[$groupKey][] = $permission;
+          break;
+        }
+      }
+    }
+    
     return view('dashboard.permission.list', [
       'roles' => $roles,
-      'permissions' => $permissions
+      'permissions' => $permissions,
+      'groupedPermissions' => $groupedPermissions
     ]);
   }
 

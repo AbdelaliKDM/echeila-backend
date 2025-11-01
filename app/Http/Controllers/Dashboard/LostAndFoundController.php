@@ -47,11 +47,11 @@ class LostAndFoundController extends Controller
 
     public function show($id)
     {
-        if (! auth()->user()->hasPermissionTo(Permissions::LOST_AND_FOUND_INDEX)) {
+        if (! auth()->user()->hasPermissionTo(Permissions::LOST_AND_FOUND_SHOW)) {
             return redirect()->route('unauthorized');
         }
         
-        $lostAndFound = LostAndFound::with('passenger')->findOrFail($id);
+        $lostAndFound = LostAndFound::with(['passenger.user', 'passenger.lostAndFounds'])->findOrFail($id);
         
         return view('dashboard.lost-and-found.show')->with([
             'lostAndFound' => $lostAndFound,

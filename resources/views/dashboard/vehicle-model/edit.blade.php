@@ -16,7 +16,7 @@
       </nav>
     </div>
     <div>
-      <a href="{{ route('vehicle-models.index') }}" class="btn btn-label-secondary me-2">
+      <a href="{{ url()->previous() }}" class="btn btn-label-secondary me-2">
         <i class="bx bx-arrow-back me-1"></i>{{ __('app.back') }}
       </a>
       <button type="submit" form="vehicle-model-form" class="btn btn-primary">

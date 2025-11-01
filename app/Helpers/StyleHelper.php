@@ -3,7 +3,7 @@
 if (!function_exists('primary_color')) {
     function primary_color(): string
     {
-        return '#696cff';
+        return '#33CC33';
     }
 }
 

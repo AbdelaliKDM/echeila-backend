@@ -154,6 +154,7 @@
     inputs='
     <input type="hidden" name="id" value="">
     <input type="hidden" name="status" value="active">
+    <input type="hidden" name="type" value="driver">
   '
     theme="success"
     Optional
@@ -187,6 +188,7 @@
     inputs='
     <input type="hidden" name="id" value="">
     <input type="hidden" name="status" value="approved">
+    <input type="hidden" name="type" value="driver">
   '
     theme="green"
     Optional
@@ -219,7 +221,7 @@
     method="POST"
     inputs='
     <input type="hidden" name="id" value="">
-    
+    <input type="hidden" name="type" value="driver">
     <!-- Amount Input -->
     <div class="mb-4">
       <label class="form-label fw-bold" for="charge_amount">
@@ -277,7 +279,7 @@
     method="POST"
     inputs='
     <input type="hidden" name="id" value="">
-    
+    <input type="hidden" name="type" value="driver">
     <!-- Amount Input -->
     <div class="mb-4">
       <label class="form-label fw-bold" for="withdraw_amount">
