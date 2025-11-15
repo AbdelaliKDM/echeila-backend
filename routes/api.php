@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\WilayaController;
-use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\PassengerController;
 use App\Http\Controllers\Api\SeatPriceController;
 use App\Http\Controllers\Api\TripCargoController;
@@ -18,6 +17,8 @@ use App\Http\Controllers\Api\LostAndFoundController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\VehicleModelController;
+use App\Http\Controllers\Api\DocumentationController;
+use App\Http\Controllers\Api\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,14 +48,6 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-    // Temp Dashboard Routes
-    Route::prefix('dashboard')->group(function () {
-        Route::post('/driver/update-status', [DashboardController::class, 'updateDriverStatus']);
-        Route::post('/charge-wallet', [DashboardController::class, 'chargeWallet']);
-        Route::post('/withdraw-sum', [DashboardController::class, 'withdrawSum']);
-        Route::post('/purchase-subscription', [DashboardController::class, 'purchaseSubscription']);
-    });
-
     // Wilaya routes
     Route::prefix('wilayas')->group(function () {
         Route::get('/', [WilayaController::class, 'index']);
@@ -79,6 +72,14 @@ Route::prefix('v1')->group(function () {
     // Color routes
     Route::prefix('colors')->group(function () {
         Route::get('/', [ColorController::class, 'index']);
+    });
+
+    Route::prefix('documentations')->group(function () {
+        Route::get('/{key}', [DocumentationController::class, 'index']);
+    });
+
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [SettingController::class, 'index']);
     });
 
     // Protected routes
@@ -150,10 +151,6 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('subscriptions')->group(function () {
             Route::post('/', [SubscriptionController::class, 'store']);
-        });
-
-        Route::prefix('documentations')->group(function () {
-            Route::post('/{key}', [DocumentationController::class, 'index']);
         });
 
     });

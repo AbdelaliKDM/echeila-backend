@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('trip_reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('trip_id')->constrained()->onDelete('cascade');
-            $table->foreignId('passenger_id')->constrained()->onDelete('cascade');
+            $table->morphs('reviewer'); // Creates reviewer_id and reviewer_type
+            $table->morphs('reviewee'); // Creates reviewee_id and reviewee_type
             $table->integer('rating')->comment('Range 1-5');
             $table->text('comment')->nullable();
             $table->timestamps();

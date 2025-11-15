@@ -54,13 +54,14 @@ class DriverController extends Controller
             'services',
             'subscription',
             'trips',
-            'reviews',
+            'reviewsReceived',
+            'reviewsGiven',
         ])->where('user_id', $id)->first();
 
         $stats = [
             'trips_count' => $driver->trips()->count(),
-            'reviews_count' => $driver->reviews()->count(),
-            'avg_rating' => $driver->reviews()->avg('rating') ?? 0,
+            'reviews_count' => $driver->reviewsReceived()->count(),
+            'avg_rating' => $driver->reviewsReceived()->avg('rating') ?? 0,
             'transactions_count' => $driver->user->wallet->transactions()->count(),
             'services_count' => $driver->services()->count(),
             'total_earned' => $driver->trips()->join('trip_clients', 'trips.id', '=', 'trip_clients.trip_id')
@@ -69,7 +70,7 @@ class DriverController extends Controller
 
         $transactions = $driver->user->wallet->transactions()->latest()->paginate(15);
         $recentTrips = $driver->trips()->latest()->paginate(10);
-        $reviews = $driver->reviews()->latest()->paginate(5);
+        $reviews = $driver->reviewsReceived()->with(['reviewer'])->latest()->paginate(5);
 
         return view('dashboard.driver.show', compact('driver', 'stats', 'transactions', 'recentTrips', 'reviews'));
     }

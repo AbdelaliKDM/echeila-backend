@@ -41,9 +41,14 @@ class Passenger extends Model implements HasMedia
         return $this->morphMany(TripClient::class, 'client');
     }
 
-    public function tripReviews()
+    public function reviewsGiven()
     {
-        return $this->hasMany(TripReview::class);
+        return $this->morphMany(TripReview::class, 'reviewer');
+    }
+
+    public function reviewsReceived()
+    {
+        return $this->morphMany(TripReview::class, 'reviewee');
     }
 
     public function trips()

@@ -11,7 +11,10 @@ class TripReview extends Model
 
     protected $fillable = [
         'trip_id',
-        'passenger_id',
+        'reviewer_id',
+        'reviewer_type',    // 'App\Models\Passenger' or 'App\Models\Driver'
+        'reviewee_id',
+        'reviewee_type',    // 'App\Models\Driver' or 'App\Models\Passenger'
         'rating',
         'comment',
     ];
@@ -22,8 +25,13 @@ class TripReview extends Model
         return $this->belongsTo(Trip::class);
     }
 
-    public function passenger()
+    public function reviewer()
     {
-        return $this->belongsTo(Passenger::class);
+        return $this->morphTo();
+    }
+
+    public function reviewee()
+    {
+        return $this->morphTo();
     }
 }

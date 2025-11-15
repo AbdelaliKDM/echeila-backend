@@ -42,12 +42,12 @@ class PassengerController extends Controller
       return redirect()->route('unauthorized');
     }
 
-    $passenger = Passenger::with(['user.wallet.transactions', 'tripClients', 'tripReviews', 'cargos', 'lostAndFounds'])->where('user_id', $id)->first();
+    $passenger = Passenger::with(['user.wallet.transactions', 'tripClients', 'reviewsReceived', 'reviewsGiven', 'cargos', 'lostAndFounds'])->where('user_id', $id)->first();
 
 $stats = [
     'trips_count' => $passenger->tripClients()->count(),
-    'reviews_count' => $passenger->tripReviews()->count(),
-    'avg_rating' => $passenger->tripReviews()->avg('rating') ?? 0,
+    'reviews_count' => $passenger->reviewsReceived()->count(),
+    'avg_rating' => $passenger->reviewsReceived()->avg('rating') ?? 0,
     'cargos_count' => $passenger->cargos()->count(),
     'lost_and_founds_count' => $passenger->lostAndFounds()->count(),
     'total_spent' => $passenger->tripClients()->sum('total_fees'),
@@ -55,7 +55,7 @@ $stats = [
 
 $transactions = $passenger->user->wallet->transactions()->paginate(15);
 $recentTrips = $passenger->trips()->with('driver')->latest()->paginate(10);
-$reviews = $passenger->tripReviews()->paginate(5);
+$reviews = $passenger->reviewsReceived()->with(['reviewer'])->paginate(5);
 
 return view('dashboard.passenger.show', compact('passenger', 'stats', 'transactions', 'recentTrips', 'reviews'));
   }

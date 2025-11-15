@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DocumentationResource;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use App\Models\Documentation;
@@ -22,8 +21,6 @@ class DocumentationController extends Controller
       );
     }
 
-    return $this->successResponse(
-      data: new DocumentationResource($model),
-    );
+    return $this->successResponse($model->value ?? " ");
   }
 }

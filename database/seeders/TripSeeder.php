@@ -81,11 +81,26 @@ class TripSeeder extends Seeder
                 'total_fees' => 1500.00,
             ]);
 
+            // Passenger reviews driver
             TripReview::create([
                 'trip_id' => $trip1->id,
-                'passenger_id' => $passenger1->id,
+                'reviewer_id' => $passenger1->id,
+                'reviewer_type' => Passenger::class,
+                'reviewee_id' => $driver1->id,
+                'reviewee_type' => Driver::class,
                 'rating' => 5,
                 'comment' => 'Excellent service! Very professional driver.',
+            ]);
+
+            // Driver reviews passenger
+            TripReview::create([
+                'trip_id' => $trip1->id,
+                'reviewer_id' => $driver1->id,
+                'reviewer_type' => Driver::class,
+                'reviewee_id' => $passenger1->id,
+                'reviewee_type' => Passenger::class,
+                'rating' => 5,
+                'comment' => 'Great passenger, very polite and on time.',
             ]);
         }
 
@@ -209,11 +224,26 @@ class TripSeeder extends Seeder
                     'total_fees' => 8000.00,
                 ]);
 
+                // Passenger reviews driver
                 TripReview::create([
                     'trip_id' => $trip4->id,
-                    'passenger_id' => $passenger2->id,
+                    'reviewer_id' => $passenger2->id,
+                    'reviewer_type' => Passenger::class,
+                    'reviewee_id' => $driver3->id,
+                    'reviewee_type' => Driver::class,
                     'rating' => 4,
                     'comment' => 'Good trip, arrived on time.',
+                ]);
+
+                // Driver reviews passenger
+                TripReview::create([
+                    'trip_id' => $trip4->id,
+                    'reviewer_id' => $driver3->id,
+                    'reviewer_type' => Driver::class,
+                    'reviewee_id' => $passenger2->id,
+                    'reviewee_type' => Passenger::class,
+                    'rating' => 4,
+                    'comment' => 'Pleasant passenger, no issues.',
                 ]);
             }
 
@@ -272,11 +302,26 @@ class TripSeeder extends Seeder
                 'total_fees' => 2500.00,
             ]);
 
+            // Passenger reviews driver
             TripReview::create([
                 'trip_id' => $trip5->id,
-                'passenger_id' => $passenger3->id,
+                'reviewer_id' => $passenger3->id,
+                'reviewer_type' => Passenger::class,
+                'reviewee_id' => $driver4->id,
+                'reviewee_type' => Driver::class,
                 'rating' => 5,
                 'comment' => 'Quick delivery, good quality water.',
+            ]);
+
+            // Driver reviews passenger
+            TripReview::create([
+                'trip_id' => $trip5->id,
+                'reviewer_id' => $driver4->id,
+                'reviewer_type' => Driver::class,
+                'reviewee_id' => $passenger3->id,
+                'reviewee_type' => Passenger::class,
+                'rating' => 5,
+                'comment' => 'Very cooperative and easy to work with.',
             ]);
         }
 
@@ -313,11 +358,26 @@ class TripSeeder extends Seeder
                 'total_fees' => 4000.00,
             ]);
 
+            // Passenger reviews driver
             TripReview::create([
                 'trip_id' => $trip6->id,
-                'passenger_id' => $passenger1->id,
+                'reviewer_id' => $passenger1->id,
+                'reviewer_type' => Passenger::class,
+                'reviewee_id' => $driver4->id,
+                'reviewee_type' => Driver::class,
                 'rating' => 5,
                 'comment' => 'Saved my day! Very responsive and professional.',
+            ]);
+
+            // Driver reviews passenger
+            TripReview::create([
+                'trip_id' => $trip6->id,
+                'reviewer_id' => $driver4->id,
+                'reviewer_type' => Driver::class,
+                'reviewee_id' => $passenger1->id,
+                'reviewee_type' => Passenger::class,
+                'rating' => 5,
+                'comment' => 'Patient customer during the rescue process.',
             ]);
         }
 

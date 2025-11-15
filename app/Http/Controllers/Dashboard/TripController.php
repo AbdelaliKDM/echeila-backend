@@ -40,7 +40,8 @@ class TripController extends Controller
         $trip = Trip::with([
             'driver',
             'client.client',
-            'reviews.passenger',
+            'reviews.reviewer',
+            'reviews.reviewee',
             'transactions'
         ])->findOrFail($id);
 

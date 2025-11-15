@@ -323,8 +323,8 @@
               <div class="d-flex mb-4 pb-4 {{ !$loop->last ? 'border-bottom' : '' }}">
                 <div class="flex-shrink-0">
                   <div class="avatar">
-                    @if($review->passenger)
-                      <img src="{{ $review->passenger->avatar_url }}" alt="Avatar" class="rounded-circle">
+                    @if($review->reviewer)
+                      <img src="{{ $review->reviewer->avatar_url }}" alt="Avatar" class="rounded-circle">
                     @else
                       <div class="avatar-initial bg-label-primary rounded-circle">
                         <i class="bx bx-user"></i>
@@ -336,10 +336,20 @@
                   <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
                       <h6 class="mb-1">
-                        @if($review->passenger)
-                          {{ $review->passenger->fullname }}
+                        @if($review->reviewer)
+                          {{ $review->reviewer->fullname }}
+                          <span class="badge bg-label-{{ $review->reviewer_type === 'App\Models\Driver' ? 'info' : 'primary' }} ms-2">
+                            {{ $review->reviewer_type === 'App\Models\Driver' ? __('app.driver') : __('app.passenger') }}
+                          </span>
                         @else
-                          {{ __('app.passenger') }}
+                          {{ __('app.user') }}
+                        @endif
+                        <i class="bx bx-right-arrow-alt mx-1"></i>
+                        @if($review->reviewee)
+                          {{ $review->reviewee->fullname }}
+                          <span class="badge bg-label-{{ $review->reviewee_type === 'App\Models\Driver' ? 'info' : 'primary' }} ms-2">
+                            {{ $review->reviewee_type === 'App\Models\Driver' ? __('app.driver') : __('app.passenger') }}
+                          </span>
                         @endif
                       </h6>
                       <div class="mb-2">

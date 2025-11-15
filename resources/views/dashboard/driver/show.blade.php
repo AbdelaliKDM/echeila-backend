@@ -630,15 +630,26 @@
                   <div class="d-flex mb-4 pb-4 border-bottom">
                     <div class="flex-shrink-0">
                       <div class="avatar">
-                        <div class="avatar-initial bg-label-primary rounded">
-                          <i class="bx bx-star"></i>
-                        </div>
+                        @if($review->reviewer)
+                          <img src="{{ $review->reviewer->avatar_url }}" alt="Avatar" class="rounded-circle">
+                        @else
+                          <div class="avatar-initial bg-label-primary rounded">
+                            <i class="bx bx-star"></i>
+                          </div>
+                        @endif
                       </div>
                     </div>
                     <div class="flex-grow-1 ms-3">
                       <div class="d-flex justify-content-between align-items-start mb-2">
                         <div>
                           <h6 class="mb-1">
+                            @if($review->reviewer)
+                              {{ $review->reviewer->fullname }}
+                              <span class="badge bg-label-{{ $review->reviewer_type === 'App\Models\Driver' ? 'info' : 'primary' }} ms-2">
+                                {{ $review->reviewer_type === 'App\Models\Driver' ? __('app.driver') : __('app.passenger') }}
+                              </span>
+                            @endif
+                            -
                             <a href="{{ route('trips.show', $review->trip->id) }}" class="text-decoration-none">
                               <span class="fw-medium">#{{ $review->trip->identifier }}</span>
                           </a>

@@ -81,9 +81,14 @@ class Driver extends Model implements HasMedia
         ->where('end_date', '>=', now())->latestOfMany();
     }
 
-    public function reviews()
+    public function reviewsGiven()
     {
-        return $this->hasManyThrough(TripReview::class, Trip::class);
+        return $this->morphMany(TripReview::class, 'reviewer');
+    }
+
+    public function reviewsReceived()
+    {
+        return $this->morphMany(TripReview::class, 'reviewee');
     }
 
     public function getTripCountAttribute()
@@ -93,7 +98,7 @@ class Driver extends Model implements HasMedia
 
     public function getReviewAverageAttribute()
     {
-        return $this->reviews()->avg('rating') ?? 0;
+        return $this->reviewsReceived()->avg('rating') ?? 0;
     }
 
         public function getFullnameAttribute()
