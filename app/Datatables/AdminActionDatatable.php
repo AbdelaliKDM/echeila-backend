@@ -57,7 +57,7 @@ class AdminActionDatatable
                         AdminAction::CHANGE_DRIVER_STATUS => 'bx bx-badge-check',
                     ];
 
-                    return $this->statusBadge(
+                    return $this->badge(
                         $model->action_type_label,
                         $colors[$model->action_type] ?? 'secondary',
                         $icons[$model->action_type] ?? 'bx bx-info-circle'
