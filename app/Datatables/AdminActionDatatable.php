@@ -18,8 +18,8 @@ class AdminActionDatatable
         return [
             'id',
             'admin',
-            'action_type',
             'target',
+            'action_type',
             'amount',
             //'note',
             'created_at',
