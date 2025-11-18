@@ -33,7 +33,7 @@ class DriverSeeder extends Seeder
         // Create driver 1 - Taxi service
         $user1 = User::create([
             'username' => 'ECH-25-DRV1K1',
-            'phone' => '0666111111',
+            'phone' => '+213666111111',
             'password' => Hash::make('password'),
             'status' => UserStatus::ACTIVE,
         ]);
@@ -93,7 +93,7 @@ class DriverSeeder extends Seeder
         // Create driver 2 - Cargo transport service
         $user2 = User::create([
             'username' => 'ECH-25-DRV2M2',
-            'phone' => '0666222222',
+            'phone' => '+213666222222',
             'password' => Hash::make('password'),
             'status' => UserStatus::ACTIVE,
         ]);
@@ -148,7 +148,7 @@ class DriverSeeder extends Seeder
         // Create driver 3 - International trips (MRT/ESP)
         $user3 = User::create([
             'username' => 'ECH-25-DRV3N3',
-            'phone' => '0666333333',
+            'phone' => '+213666333333',
             'password' => Hash::make('password'),
             'status' => UserStatus::ACTIVE,
         ]);
@@ -208,7 +208,7 @@ class DriverSeeder extends Seeder
         // Create driver 4 - Water transport service
         $user4 = User::create([
             'username' => 'ECH-25-DRV4P4',
-            'phone' => '0666444444',
+            'phone' => '+213666444444',
             'password' => Hash::make('password'),
             'status' => UserStatus::ACTIVE,
         ]);

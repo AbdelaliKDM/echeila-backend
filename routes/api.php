@@ -124,6 +124,7 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('driver')->group(function () {
             Route::get('/trips/{type}', [TripController::class, 'index']);
+            Route::post('/income', [DriverController::class,'income']);
 
         });
 

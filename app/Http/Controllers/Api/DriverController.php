@@ -9,6 +9,7 @@ use App\Models\Service;
 use App\Models\Vehicle;
 use App\Constants\CardType;
 use App\Traits\ImageUpload;
+use Illuminate\Http\Request;
 use App\Constants\DriverStatus;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
@@ -156,6 +157,27 @@ class DriverController extends Controller
             $driver->load(['subscription', 'federation', 'vehicle.model.brand', 'vehicle.color', 'services', 'cards']);
 
             return $this->successResponse(new DriverResource($driver));
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function income(Request $request){
+        $this->validateRequest($request, [
+            'period' => 'required|in:day,week,month,year'
+        ]);
+
+        try {
+
+            $user = auth()->user();
+            $driver = $user->driver;
+
+            if (!$driver) {
+                throw new Exception('Driver not found',404);
+            }
+
+            $income = $driver->income($request->period) ?? 0;
+            return $this->successResponse(['income' => $income]);
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), $e->getCode());
         }

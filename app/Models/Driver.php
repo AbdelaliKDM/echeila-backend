@@ -125,4 +125,34 @@ class Driver extends Model implements HasMedia
     {
         return $this->morphMany(AdminAction::class, 'target');
     }
+
+
+    public function income($period = 'month')
+    {
+        $query = $this->trips();
+
+        // Filter by period
+        match ($period) {
+            'day' => $query->whereDate('created_at', now()->toDateString()),
+            'week' => $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]),
+            'month' => $query->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year),
+            'year' => $query->whereYear('created_at', now()->year),
+            default => $query->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year),
+        };
+
+        $trips = $query->with('clients', 'cargos')->get();
+
+        // Calculate income from trip clients (passengers)
+        $clientsIncome = $trips->flatMap(function ($trip) {
+            return $trip->clients;
+        })->sum('total_fees');
+
+        // Calculate income from trip cargos
+        $cargosIncome = $trips->flatMap(function ($trip) {
+            return $trip->cargos;
+        })->sum('total_fees');
+
+        // Total income = trips clients total fees + trips cargos total fees
+        return $clientsIncome + $cargosIncome;
+    }
 }
