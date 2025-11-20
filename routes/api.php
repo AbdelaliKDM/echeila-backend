@@ -100,6 +100,7 @@ Route::prefix('v1')->group(function () {
             Route::patch('/{id}', [TripController::class, 'update']);
             Route::delete('/{id}', [TripController::class, 'destroy']);
             //Route::post('/available', [TripController::class, 'available']);
+            Route::get('/{id}/reviews', [TripReviewController::class, 'tripReviews']);
         });
 
         Route::post('/available-trips', [TripController::class, 'available']);
@@ -124,8 +125,13 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('driver')->group(function () {
             Route::get('/trips/{type}', [TripController::class, 'index']);
-            Route::post('/income', [DriverController::class,'income']);
+            Route::post('/income', [DriverController::class, 'income']);
+            Route::get('/stats', [DriverController::class, 'stats']);
+            Route::get('/reviews', [TripReviewController::class, 'driverReviews']);
+        });
 
+        Route::prefix('passenger')->group(function () {
+            Route::get('/reviews', [TripReviewController::class, 'passengerReviews']);
         });
 
         // Lost and Found routes

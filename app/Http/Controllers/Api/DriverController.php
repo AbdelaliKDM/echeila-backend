@@ -182,4 +182,37 @@ class DriverController extends Controller
             return $this->errorResponse($e->getMessage(), $e->getCode());
         }
     }
+
+    /**
+     * Get driver statistics
+     */
+    public function stats(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $driver = $user->driver;
+
+            if (!$driver) {
+                throw new Exception('Driver not found', 404);
+            }
+
+            // Get total trips count
+            $tripsCount = $driver->trips()->count();
+
+            // Get reviews received count
+            $reviewsReceivedCount = $driver->reviewsReceived()->count();
+
+            // Get average rating
+            $avgRating = $driver->reviewsReceived()->avg('rating') ?? 0;
+
+            return $this->successResponse([
+                'trips_count' => $tripsCount,
+                'reviews_received_count' => $reviewsReceivedCount,
+                'avg_rating' => round($avgRating, 2),
+            ]);
+
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
 }

@@ -17,6 +17,94 @@ class TripReviewController extends Controller
 {
     use ApiResponseTrait;
 
+    /**
+     * Get reviews for a specific trip
+     */
+    public function tripReviews(Request $request, $tripId)
+    {
+        try {
+            $trip = Trip::findOrFail($tripId);
+
+            $reviews = $trip->reviews()
+                ->with(['reviewer', 'reviewee'])
+                ->latest()
+                ->paginate(10);
+
+            return $this->successResponse(TripReviewResource::collection($reviews));
+
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Get reviews for the authenticated driver
+     */
+    public function driverReviews(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $driver = $user->driver;
+
+            if (!$driver) {
+                throw new Exception('Driver profile not found', 404);
+            }
+
+            $type = $request->query('type', 'received'); // 'received' or 'given'
+
+            if ($type === 'given') {
+                $reviews = $driver->reviewsGiven()
+                    ->with(['trip', 'reviewee'])
+                    ->latest()
+                    ->paginate(10);
+            } else {
+                $reviews = $driver->reviewsReceived()
+                    ->with(['trip', 'reviewer'])
+                    ->latest()
+                    ->paginate(10);
+            }
+
+            return $this->successResponse(TripReviewResource::collection($reviews));
+
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Get reviews for the authenticated passenger
+     */
+    public function passengerReviews(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $passenger = $user->passenger;
+
+            if (!$passenger) {
+                throw new Exception('Passenger profile not found', 404);
+            }
+
+            $type = $request->query('type', 'received'); // 'received' or 'given'
+
+            if ($type === 'given') {
+                $reviews = $passenger->reviewsGiven()
+                    ->with(['trip', 'reviewee'])
+                    ->latest()
+                    ->paginate(10);
+            } else {
+                $reviews = $passenger->reviewsReceived()
+                    ->with(['trip', 'reviewer'])
+                    ->latest()
+                    ->paginate(10);
+            }
+
+            return $this->successResponse(TripReviewResource::collection($reviews));
+
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
     public function store(Request $request)
     {
         $validated = $this->validateRequest($request, [
