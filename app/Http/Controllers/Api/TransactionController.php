@@ -24,7 +24,30 @@ class TransactionController extends Controller
         throw new Exception('Wallet not found', 404);
       }
 
-      $transactions = $wallet->transactions()->latest()->paginate(10);
+      $query = $wallet->transactions();
+
+      // Filter by period
+      $period = $request->query('period');
+      if ($period) {
+        match ($period) {
+          'today' => $query->whereDate('created_at', now()->toDateString()),
+          'last_week' => $query->whereBetween('created_at', [now()->subWeek(), now()]),
+          'last_month' => $query->whereBetween('created_at', [now()->subMonth(), now()]),
+          default => null,
+        };
+      }
+
+      // Filter by direction
+      $direction = $request->query('direction');
+      if ($direction) {
+        if ($direction === 'in') {
+          $query->where('amount', '>', 0);
+        } elseif ($direction === 'out') {
+          $query->where('amount', '<', 0);
+        }
+      }
+
+      $transactions = $query->latest()->paginate(10);
 
       return $this->successResponse(
         data: TransactionResource::collection($transactions),
