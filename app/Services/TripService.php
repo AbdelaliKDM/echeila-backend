@@ -776,7 +776,7 @@ class TripService
                     // Notify driver of status change
                     $trip->passenger?->user->notify(new NewMessageNotification(
                         match($trip->status) {
-                            TripStatus::CANCELED => NotificationMessages::TRIP_CANCELED,
+                            TripStatus::CANCELED => NotificationMessages::TRIP_CANCELLED,
                             TripStatus::ONGOING => NotificationMessages::TRIP_ONGOING,
                             TripStatus::COMPLETED => NotificationMessages::TRIP_COMPLETED,
                         },

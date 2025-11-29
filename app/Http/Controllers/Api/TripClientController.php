@@ -10,6 +10,7 @@ use App\Models\TripClient;
 use App\Constants\TripType;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Constants\TripStatus;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
 use App\Constants\TransactionType;
@@ -241,6 +242,23 @@ class TripClientController extends Controller
 
         
             $tripClient->delete();
+
+            if ($trip->clients()->count() === 0) {
+                $trip->update(['status' => TripStatus::CANCELED]);
+
+                $notification = new NewMessageNotification(
+                            key: NotificationMessages::TRIP_CANCELLED,
+                            data: ['trip_id' => $trip->id]
+                    );
+
+                if ($isDriver) {
+                    if ($tripClient->client_type === Passenger::class) {
+                        $tripClient->client->user->notify($notification);
+                    }
+                } elseif ($isClient) {
+                    $trip->driver->user->notify($notification);
+                }
+            }
 
             DB::commit();
 
