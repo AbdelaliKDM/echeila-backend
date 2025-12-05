@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Dashboard\Documentation;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Support\Enum\Permissions;
 use App\Models\Documentation;
+use App\Support\Enum\Permissions;
+use App\Constants\DocumentationKey;
+use App\Http\Controllers\Controller;
 
 class DocumentationController extends Controller
 {
@@ -31,7 +32,7 @@ class DocumentationController extends Controller
 
     $request->validate([
       'documentations' => 'required|array',
-      'documentations.*.key' => 'required|in:about_us,privacy_policy,delete_account',
+      'documentations.*.key' => 'required|in:'. implode(',', array_keys(DocumentationKey::all())),
       'documentations.*.value' => 'required|string'
     ]);
 
