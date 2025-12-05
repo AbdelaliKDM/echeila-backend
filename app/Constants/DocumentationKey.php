@@ -9,12 +9,16 @@ class DocumentationKey
   const about_us = 'about_us';
   const privacy_policy = 'privacy_policy';
   const delete_account = 'delete_account';
+  const terms_of_use = 'terms_of_use';
+  const safety = 'safety';
   public static function all($translated = false):array
   {
     return [
       self::about_us => $translated ? __('app.about_us') : 'about_us',
       self::privacy_policy => $translated ? __('app.privacy_policy') : 'privacy_policy',
       self::delete_account => $translated ? __('app.delete_account') : 'delete_account',
+      self::terms_of_use => $translated ? __('app.terms_of_use') : 'terms_of_use',
+      self::safety => $translated ? __('app.safety') : 'safety',
     ];
   }
 
@@ -24,6 +28,8 @@ class DocumentationKey
       self::about_us => 'info',
       self::privacy_policy => 'secondary',
       self::delete_account => 'danger',
+      self::terms_of_use => 'primary',
+      self::safety => 'warning',
     ];
   }
 

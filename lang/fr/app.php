@@ -212,6 +212,8 @@ return [
     'about_us' => 'À Propos',
     'privacy_policy' => 'Politique de Confidentialité',
     'delete_account' => 'Supprimer Compte',
+    'terms_of_use' => 'Conditions d\'Utilisation',
+    'safety' => 'Sécurité',
     'reset_password' => 'Réinitialiser Mot de Passe',
 
     // Général

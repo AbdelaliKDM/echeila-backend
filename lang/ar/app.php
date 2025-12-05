@@ -211,6 +211,8 @@ return [
     'about_us' => 'من نحن',
     'privacy_policy' => 'سياسة الخصوصية',
     'delete_account' => 'حذف الحساب',
+    'terms_of_use' => 'شروط الاستخدام',
+    'safety' => 'السلامة',
     'reset_password' => 'إعادة تعيين كلمة المرور',
 
     // عام

@@ -213,6 +213,8 @@ return [
     'about_us' => 'About Us',
     'privacy_policy' => 'Privacy Policy',
     'delete_account' => 'Delete Account',
+    'terms_of_use' => 'Terms of Use',
+    'safety' => 'Safety',
     'reset_password' => 'Reset Password',
 
     // General

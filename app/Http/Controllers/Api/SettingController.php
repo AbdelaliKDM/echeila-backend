@@ -34,6 +34,7 @@ class SettingController extends Controller
                 'contact_email',
                 'contact_facebook',
                 'contact_instagram',
+                'emergency_number',
                 'subscription_month_price',
                 'water_price_per_litre',
                 'cargo_price_per_kg',
