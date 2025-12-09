@@ -845,7 +845,7 @@ class TripService
                 case TripType::ESP_TRIP:
                     $trip->load([
                         'driver',
-                        'clients.client.user',
+                        'clients.client',
                         'cargos.cargo',
                         'detailable'
                     ]);
