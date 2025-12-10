@@ -400,7 +400,8 @@ class TripService
             TripType::CARGO_TRANSPORT => $this->getCargoTransportTrips($filters, $driverId),
             TripType::WATER_TRANSPORT => $this->getWaterTransportTrips($filters, $driverId),
             TripType::PAID_DRIVING => $this->getPaidDrivingTrips($filters, $driverId),
-            TripType::MRT_TRIP, TripType::ESP_TRIP => $this->getInternationalTrips($filters, $driverId),
+            TripType::MRT_TRIP => $this->getMrtTrips($filters, $driverId),
+            TripType::ESP_TRIP => $this->getEspTrips($filters, $driverId),
         };
     }
 
@@ -415,7 +416,8 @@ class TripService
             TripType::CARGO_TRANSPORT => $this->getCargoTransportTripsForPassenger($filters, $passengerId),
             TripType::WATER_TRANSPORT => $this->getWaterTransportTripsForPassenger($filters, $passengerId),
             TripType::PAID_DRIVING => $this->getPaidDrivingTripsForPassenger($filters, $passengerId),
-            TripType::MRT_TRIP, TripType::ESP_TRIP => $this->getInternationalTripsForPassenger($filters, $passengerId),
+            TripType::MRT_TRIP => $this->getMrtTripsForPassenger($filters, $passengerId),
+            TripType::ESP_TRIP => $this->getEspTripsForPassenger($filters, $passengerId),
         };
     }
 
@@ -531,12 +533,44 @@ class TripService
     }
 
     /**
-     * Get international trips for drivers (MRT_TRIP and ESP_TRIP)
+     * Get MRT trips for drivers
      */
-    protected function getInternationalTrips(array $filters, int $driverId)
+    protected function getMrtTrips(array $filters, int $driverId)
     {
         $query = Trip::where('driver_id', $driverId)
-            ->whereIn('type', [TripType::MRT_TRIP, TripType::ESP_TRIP])
+            ->where('type', TripType::MRT_TRIP)
+            ->with([
+                'driver',
+            ]);
+
+        // Apply common filters
+        $query = $this->applyCommonFilters($query, $filters);
+
+        // Apply international-specific filters
+        if (isset($filters['direction'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('direction', $filters['direction']);
+            });
+        }
+
+        if (isset($filters['type']) && in_array($filters['type'], ['cargo', 'client'])) {
+            if ($filters['type'] === 'cargo') {
+                $query->whereHas('cargos');
+            } elseif ($filters['type'] === 'client') {
+                $query->whereHas('clients');
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * Get ESP trips for drivers
+     */
+    protected function getEspTrips(array $filters, int $driverId)
+    {
+        $query = Trip::where('driver_id', $driverId)
+            ->where('type', TripType::ESP_TRIP)
             ->with([
                 'driver',
             ]);
@@ -689,11 +723,61 @@ class TripService
     }
 
     /**
-     * Get international trips for passengers
+     * Get MRT trips for passengers
      */
-    protected function getInternationalTripsForPassenger(array $filters, int $passengerId)
+    protected function getMrtTripsForPassenger(array $filters, int $passengerId)
     {
-        $query = Trip::whereIn('type', [TripType::MRT_TRIP, TripType::ESP_TRIP]);
+        $query = Trip::where('type', TripType::MRT_TRIP);
+
+        // Apply type-specific filtering first
+        if (isset($filters['type']) && in_array($filters['type'], ['cargo', 'client'])) {
+            if ($filters['type'] === 'cargo') {
+                // Only trips where passenger is cargo owner
+                $query->whereHas('cargos.cargo', function ($q) use ($passengerId) {
+                    $q->where('passenger_id', $passengerId);
+                });
+            } elseif ($filters['type'] === 'client') {
+                // Only trips where passenger is a client
+                $query->whereHas('clients', function ($q) use ($passengerId) {
+                    $q->where('client_id', $passengerId)
+                      ->where('client_type', Passenger::class);
+                });
+            }
+        } else {
+            // No type filter - show trips where passenger is either client or cargo owner
+            $query->where(function ($q) use ($passengerId) {
+                $q->whereHas('clients', function ($subQ) use ($passengerId) {
+                    $subQ->where('client_id', $passengerId)
+                         ->where('client_type', Passenger::class);
+                })->orWhereHas('cargos.cargo', function ($subQ) use ($passengerId) {
+                    $subQ->where('passenger_id', $passengerId);
+                });
+            });
+        }
+
+        $query->with([
+            'driver'
+        ]);
+
+        // Apply common filters
+        $query = $this->applyCommonFilters($query, $filters);
+
+        // Apply international-specific filters
+        if (isset($filters['direction'])) {
+            $query->whereHas('detailable', function ($q) use ($filters) {
+                $q->where('direction', $filters['direction']);
+            });
+        }
+
+        return $query;
+    }
+
+    /**
+     * Get ESP trips for passengers
+     */
+    protected function getEspTripsForPassenger(array $filters, int $passengerId)
+    {
+        $query = Trip::where('type', TripType::ESP_TRIP);
 
         // Apply type-specific filtering first
         if (isset($filters['type']) && in_array($filters['type'], ['cargo', 'client'])) {
