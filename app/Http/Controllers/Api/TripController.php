@@ -289,7 +289,7 @@ class TripController extends Controller
             $availableTrips = $this->tripService->getAvailableInternationalTrips(
                 $validated['trip_type'],
                 $validated['starting_time'],
-                $validated['number_of_seats']
+                $validated['number_of_seats'] ?? null
             );
 
             return $this->successResponse(
