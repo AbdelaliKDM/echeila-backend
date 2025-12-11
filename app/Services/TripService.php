@@ -963,7 +963,7 @@ class TripService
     /**
      * Get available international trips based on criteria
      */
-    public function getAvailableInternationalTrips(string $tripType, string $startingTime, int $requiredSeats)
+    public function getAvailableInternationalTrips(string $tripType, string $startingTime, ?int $requiredSeats = null)
     {
         return Trip::where('type', $tripType)
             ->where('status', TripStatus::PENDING)
@@ -973,6 +973,19 @@ class TripService
                 'detailable'
             ])
             ->get()
+            ->map(function ($trip) {
+                // Calculate available seats for all trips
+                if ($trip->detailable) {
+                    $totalSeats = $trip->detailable->total_seats;
+                    $bookedSeats = $trip->clients->sum('number_of_seats');
+                    $availableSeats = $totalSeats - $bookedSeats;
+                    
+                    // Add available_seats to the trip object for response
+                    $trip->available_seats = $availableSeats;
+                }
+                
+                return $trip;
+            })
             ->filter(function ($trip) use ($startingTime, $requiredSeats) {
                 // Check if trip has detailable (international trip details)
                 if (!$trip->detailable) {
@@ -985,16 +998,12 @@ class TripService
                     return false;
                 }
                 
-                // Calculate available seats
-                $totalSeats = $trip->detailable->total_seats;
-                $bookedSeats = $trip->clients->sum('number_of_seats');
-                $availableSeats = $totalSeats - $bookedSeats;
+                // Check if enough seats are available (only if requiredSeats is provided)
+                if ($requiredSeats !== null) {
+                    return $trip->available_seats >= $requiredSeats;
+                }
                 
-                // Add available_seats to the trip object for response
-                $trip->available_seats = $availableSeats;
-                
-                // Check if enough seats are available
-                return $availableSeats >= $requiredSeats;
+                return true;
             });
     }
 }

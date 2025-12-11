@@ -20,10 +20,13 @@ class InternationalTripDetailResource extends JsonResource
             'starting_place' => $this->starting_place,
             'starting_time' => $this->starting_time,
             'arrival_time' => $this->arrival_time,
+            'duration_minutes' => $this->starting_time && $this->arrival_time
+                ? $this->starting_time->diffInMinutes($this->arrival_time)
+                : null,
             'total_seats' => $this->total_seats,
             'seat_price' => $this->seat_price,
-            //'created_at' => $this->created_at,
-            //'updated_at' => $this->updated_at,
+            // 'created_at' => $this->created_at,
+            // 'updated_at' => $this->updated_at,
         ];
     }
 }

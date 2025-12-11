@@ -22,6 +22,7 @@ class DriverResource extends JsonResource
             'last_name' => $this->last_name,
             'birth_date' => $this->birth_date,
             'email' => $this->email,
+            'phone' => $this->user->phone,
             'status' => $this->status,
             'image' => $this->getFirstMediaUrl('image'),
             'federation' => new FederationResource($this->whenLoaded('federation')),
