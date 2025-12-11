@@ -36,9 +36,9 @@ class TripResource extends JsonResource
             // Include driver information
             'driver' => new DriverResource($this->whenLoaded('driver')),
 
-            // Include passenger for all trip types except international trips
+            // Include client when relation is loaded
             'client' => $this->when(
-                !in_array($this->type, [TripType::MRT_TRIP, TripType::ESP_TRIP]) && $this->relationLoaded('client'),
+                $this->relationLoaded('client'),
                 new TripClientResource($this->client)
             ),
             

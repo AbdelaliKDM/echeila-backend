@@ -756,7 +756,12 @@ class TripService
         }
 
         $query->with([
-            'driver'
+            'driver',
+            'client' => function ($q) use ($passengerId) {
+                $q->where('client_id', $passengerId)
+                  ->where('client_type', Passenger::class)
+                  ->with('client.user');
+            }
         ]);
 
         // Apply common filters
@@ -806,7 +811,12 @@ class TripService
         }
 
         $query->with([
-            'driver'
+            'driver',
+            'client' => function ($q) use ($passengerId) {
+                $q->where('client_id', $passengerId)
+                  ->where('client_type', Passenger::class)
+                  ->with('client.user');
+            }
         ]);
 
         // Apply common filters
