@@ -761,6 +761,11 @@ class TripService
                 $q->where('client_id', $passengerId)
                   ->where('client_type', Passenger::class)
                   ->with('client.user');
+            },
+            'cargo' => function ($q) use ($passengerId) {
+                $q->whereHas('cargo', function ($subQ) use ($passengerId) {
+                    $subQ->where('passenger_id', $passengerId);
+                })->with('cargo');
             }
         ]);
 
@@ -816,6 +821,11 @@ class TripService
                 $q->where('client_id', $passengerId)
                   ->where('client_type', Passenger::class)
                   ->with('client.user');
+            },
+            'cargo' => function ($q) use ($passengerId) {
+                $q->whereHas('cargo', function ($subQ) use ($passengerId) {
+                    $subQ->where('passenger_id', $passengerId);
+                })->with('cargo');
             }
         ]);
 

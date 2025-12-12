@@ -42,10 +42,10 @@ class TripResource extends JsonResource
                 new TripClientResource($this->client)
             ),
             
-            // Include cargos only for cargo transport trips
+            // Include cargo when relation is loaded
             'cargo' => $this->when(
-                $this->type === TripType::CARGO_TRANSPORT,
-                new TripCargoResource($this->whenLoaded('cargo'))
+                $this->relationLoaded('cargo'),
+                new TripCargoResource($this->cargo)
             ),
         ];
     }
