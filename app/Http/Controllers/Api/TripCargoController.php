@@ -42,7 +42,7 @@ class TripCargoController extends Controller
             }
 
             $tripCargos = $trip->cargos()
-                ->with(['cargo.passenger'])
+                ->with(['cargo.passenger.user'])
                 ->paginate(10);
 
             return $this->successResponse(
@@ -133,7 +133,7 @@ class TripCargoController extends Controller
                 data: ['amount' => $driverTransaction->amount, 'balance' => $driver->user->wallet->balance]
             ));
     
-            $tripCargo->load(['trip', 'cargo.passenger']);
+            $tripCargo->load(['trip', 'cargo.passenger.user']);
     
             DB::commit();
     

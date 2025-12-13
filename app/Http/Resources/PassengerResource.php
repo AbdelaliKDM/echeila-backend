@@ -21,6 +21,7 @@ class PassengerResource extends JsonResource
             'last_name' => $this->last_name,
             'birth_date' => $this->birth_date,
             'image' => $this->getFirstMediaUrl('image'),
+            'phone' => $this->user->number,
             //'created_at' => $this->created_at,
             //'updated_at' => $this->updated_at,
         ];

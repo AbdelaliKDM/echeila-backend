@@ -26,6 +26,7 @@ class TripCargoResource extends JsonResource
             'images' => $this->cargo->getMedia('images')->map(function ($item) {
                 return $item->getUrl();
             }),
+            'passenger' => $this->when($this->cargo->relationLoaded('passenger'), new PassengerResource($this->cargo->passenger)),
             
             // Include cargo information
             //'cargo' => new CargoResource($this->whenLoaded('cargo')),
